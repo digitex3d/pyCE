@@ -22,7 +22,7 @@ cards.append(Card("k","red","s"))
 cards.append(Card("j","red","c"))
 cards.append(Card(3,"red","h"))
 cards.append(Card(9,"red","h"))
-
+cards.append(Card(10,"red","h"))
 
 
 
