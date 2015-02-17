@@ -15,13 +15,18 @@ class SpriteFactory():
 
     card_factory = staticmethod(card_factory)
 
-    def deck_factory(cards,x=0,y=0):
-        dcards_list = []
-        batch = pyglet.graphics.Batch()
-
+    def deck_factory(cards,x=0,y=0, dir="h"):
+        """
+        :param cards: Card Stack
+        :param x: La position x de la main
+        :param y: La position y de la main
+        :param dir: La direction de l'affichage
+        :return: un CardStackDrawable
+        """
+        deck = CardStackDrawable(x,y,dir)
         for card in cards:
-            dcards_list.append(SpriteFactory.card_factory(card,batch=batch))
-        return CardStackDrawable(dcards_list,batch,x,y)
+            deck.append(SpriteFactory.card_factory(card))
+        return deck
 
 
 
