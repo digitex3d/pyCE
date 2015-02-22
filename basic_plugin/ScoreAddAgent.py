@@ -16,6 +16,6 @@ class ScoreAddAgent():
 
     def getAction(self, agent_state, game_state):
         inputt = input("increment score?")
-        self.answer = (input == "yes")
-        action = AgentAction(True)
+        self.answer = (inputt == "yes")
+        action = AgentAction(self.answer)
         return action

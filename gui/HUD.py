@@ -8,13 +8,13 @@ class HUD:
 
     def __init__(self, window):
         # La liste des Sprites qui composent le HUD
-        self.hud_components = []
+        self.sprites = []
 
         # On initialise un ScoreLabel avec la valeur de l'état de jeu initial et la fenetre
         self.score_label = ScoreLabel(window)
 
         # On ajoute le score au hud
-        self.hud_components.append(self.score_label)
+        self.sprites.append(self.score_label)
 
     def update(self, game_state):
         """ Fonction qui va mettre à jour les composants du HUD quand l'état de jeu change
@@ -34,13 +34,10 @@ class ScoreLabel(Label):
 
     #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
     def __init__(self, window):
-        self.text = "0"
-        self.font_name='Times New Roman'
-        self.font_size=36
-        self.x=window.width//2
-        self.y=window.height-20
-        self.anchor_x='center'
-        self.anchor_y='center'
+        super(ScoreLabel, self).__init__('0',
+                          font_name='Times New Roman',
+                          font_size=36,
+                          x=100, y=100)
 
 
     def update(self, score):

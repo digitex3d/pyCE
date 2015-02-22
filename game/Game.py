@@ -34,7 +34,7 @@ class Game:
 
             # On met à jour tous les observateurs du jeu
             for observer in self.observers:
-                observer.update(self.state)
+                observer.update(self.game_state)
 
             # On incrèmente le id du tour de l'agent
             turn_agent_id = i % self.game_state.nb_agents

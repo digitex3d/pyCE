@@ -9,24 +9,12 @@ from game.GameState import GameState
 from game.Game import Game
 from basic_plugin.ScoreAddAgent import ScoreAddAgent
 from gui.HUD import HUD
-window = pyglet.window.Window(800, 600)
+from gui.MainGameWindow import MainGameWindow
 
-
-
-
-cards = []
-
-cards.append(Card(7,"red","h"))
-cards.append(Card("k","red","s"))
-cards.append(Card("j","red","c"))
-cards.append(Card(3,"red","h"))
-cards.append(Card(9,"red","h"))
-cards.append(Card(10,"red","h"))
-
-deck = SpriteFactory.deck_factory(cards,0,0,"v")
-deck.set_up()
-
+window = MainGameWindow()
 hud = HUD(window)
+
+window.add_component(hud)
 
 init_state = InitState()
 player_state = AgentState(0,1)
@@ -35,29 +23,6 @@ game_state = GameState(init_state)
 game = Game(game_state)
 agent = ScoreAddAgent()
 game.addAgent(agent)
-game.addObserver(hud)
+game.addObserver(window)
 game.run()
 
-
-
-def update(dt):
-    deck[3].switch_side()
-pyglet.clock.schedule_interval(update, 1)
-
-@window.event
-def on_key_press(symbol, modifiers):
-    print("A key was pressed")
-
-@window.event
-def on_draw():
-    print("Drawing screen")
-    window.clear()
-    # Afficher une main
-    for card in deck:
-        card.draw()
-    for component in hud.hud_components:
-        component.draw()
-
-
-if __name__ == '__main__':
-    pyglet.app.run()
