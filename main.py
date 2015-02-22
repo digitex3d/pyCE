@@ -6,13 +6,8 @@ from gui.CardStackDrawable import CardStackDrawable
 
 window = pyglet.window.Window(800, 600)
 
-pos = 50
-label = pyglet.text.Label('Hello, world',
-                          font_name='Times New Roman',
-                          font_size=36,
-                          x=window.width//2, y=window.height//2,
-                          anchor_x='center', anchor_y='center')
 
+game_state = GameState()
 cards = []
 
 cards.append(Card(7,"red","h"))
