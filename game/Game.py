@@ -5,32 +5,39 @@ class Game:
     def __init__(self, state):
         # Les observeurs du jeu
         self.observers = []
-        self.state = state
-        self.player_agent = None
+        self.game_state = state
+        self.agents = []
 
-    def addPlayerAgent(self, player_agent):
-        """ On ajoute l'agent du joueur ici
+    def addAgent(self, agent):
+        """ On ajoute un agent ici
         """
-        self.player_agent = player_agent
+        self.agents.append(agent)
 
-    def addOpponent(self, opponent_agent):
-        """ On ajoute un adversaire
+    def addObserver(self, observer):
+        """ Ajoute des observateurs à la liste des observateurs
         """
+        self.observers.append(observer)
 
 
     def run(self):
-        isPlayerTurn = True
-        while((self.state.isLose()==False) and
-                  (self.isWin()==False)):
-            pactions = []
+        i = 0
+        turn_agent_id = i
+        while( self.game_state.win == False):
 
-            # Le tourn du joueur
-            if(isPlayerTurn):
-                a_state = self.state.playerState
-                pactions.append( self.humanPlayer.getAction(a_state, self.state) )
+            # Un cylce du jeu
+            a_state = self.game_state.agentsStates[turn_agent_id]
+
+            agent_action = self.agents[turn_agent_id].getAction(a_state, self.game_state)
+
+            # Effectue l'action et met à jour l'état du jeu
+            self.game_state = self.game_state.nextState(agent_action)
 
             # On met à jour tous les observateurs du jeu
             for observer in self.observers:
                 observer.update(self.state)
+
+            # On incrèmente le id du tour de l'agent
+            turn_agent_id = i % self.game_state.nb_agents
+            i += 1
 
         return self.state

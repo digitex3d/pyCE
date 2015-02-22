@@ -3,11 +3,17 @@ import basic_plugin
 from environment.Card import Card
 from basic_plugin.SpriteFactory import SpriteFactory
 from gui.CardStackDrawable import CardStackDrawable
-
+from game.InitState import InitState
+from game.agents.AgentState import AgentState
+from game.GameState import GameState
+from game.Game import Game
+from basic_plugin.ScoreAddAgent import ScoreAddAgent
+from gui.HUD import HUD
 window = pyglet.window.Window(800, 600)
 
 
-game_state = GameState()
+
+
 cards = []
 
 cards.append(Card(7,"red","h"))
@@ -19,6 +25,20 @@ cards.append(Card(10,"red","h"))
 
 deck = SpriteFactory.deck_factory(cards,0,0,"v")
 deck.set_up()
+
+hud = HUD(window)
+
+init_state = InitState()
+player_state = AgentState(0,1)
+init_state.addAgentState(player_state)
+game_state = GameState(init_state)
+game = Game(game_state)
+agent = ScoreAddAgent()
+game.addAgent(agent)
+game.addObserver(hud)
+game.run()
+
+
 
 def update(dt):
     deck[3].switch_side()
@@ -32,10 +52,11 @@ def on_key_press(symbol, modifiers):
 def on_draw():
     print("Drawing screen")
     window.clear()
-    label.draw()
     # Afficher une main
     for card in deck:
         card.draw()
+    for component in hud.hud_components:
+        component.draw()
 
 
 if __name__ == '__main__':

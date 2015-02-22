@@ -1,30 +1,29 @@
+from game.InitState import InitState
 
 
 class GameState:
-    """ Cette classe représente un état de jeu
+    """ Cette classe représente un état de jeu, elle nécessite une classe qui contient les informations
+    de l'état initiale du jeu ( numero de joueurs et ses etats initiaux )
     """
 
-    def __init__(self):
+    def __init__(self, init_state):
         self.win = False
-        self.players_in_game = 0
-        self.playerState = None
-        self.opponents = []
-        # L'agent du joueur principal
-        self.player_agent = None
-
-
-    def add_player(self, pstate):
-        """ On ajoute l'état initial de l'agent
-        """
-        self.player_state = pstate
+        self.nb_agents = init_state.nb_agents
+        self.agentsStates = init_state.agentsStates
 
     def nextState(self, agent_action):
         #TODO: à implémenter
+        """  Renvoie le prochain etat du jeu etant donnée une action
         """
-        Renvoie le prochain etat du jeu etant donnée une action
-        :param agent_action:
-        :return:
-        """
+
+        new_state = self.copy()
+        if(agent_action.carte_jouee == True):
+            new_state.agentsStates[0].score += 1
+
+        if(new_state.agentsStates[0].score > 10):
+            self.win = True
+
+        return new_state
 
         """new_state = self.copy()
         if( isLegalMove(agent_action) )
@@ -46,3 +45,10 @@ class GameState:
         """
         return True
 
+    def copy(self):
+        new_init = InitState()
+        for agent in  self.agentsStates:
+            new_init.addAgentState(agent)
+
+        state_copy = GameState( new_init )
+        return state_copy

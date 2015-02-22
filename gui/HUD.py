@@ -6,12 +6,12 @@ class HUD:
     """ Cette classe représente un HUD 
     """
 
-    def __init__(self, initial_state, window):
+    def __init__(self, window):
         # La liste des Sprites qui composent le HUD
         self.hud_components = []
 
         # On initialise un ScoreLabel avec la valeur de l'état de jeu initial et la fenetre
-        self.score_label = ScoreLabel(initial_state, window)
+        self.score_label = ScoreLabel(window)
 
         # On ajoute le score au hud
         self.hud_components.append(self.score_label)
@@ -21,7 +21,7 @@ class HUD:
         """
 
         # On met à jour le ScoreLabel avec le score courant
-        score = game_state.playerState.score
+        score = game_state.agentsStates[0].score
         self.score_label.update(score)
 
 
@@ -33,7 +33,7 @@ class ScoreLabel(Label):
     """
 
     #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
-    def __init__(self, initial_score, window):
+    def __init__(self, window):
         self.text = "0"
         self.font_name='Times New Roman'
         self.font_size=36
