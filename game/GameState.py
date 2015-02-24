@@ -8,8 +8,10 @@ class GameState:
 
     def __init__(self, init_state):
         self.win = False
-        self.nb_agents = init_state.nb_agents
+        self.nb_players = init_state.nb_agents
         self.agentsStates = init_state.agentsStates
+        # l'id du premier joueur à jouer
+        self.turn = init_state.turn
 
     def nextState(self, agent_action):
         #TODO: à implémenter
@@ -44,6 +46,14 @@ class GameState:
         :return:
         """
         return True
+
+    def next_turn(self):
+        """ Fonction qui passe le tourne
+        """
+        self.turn = ++self.turn % self.nb_players
+
+    def isPlayerTurn(self):
+        return self.turn == 0
 
     def copy(self):
         new_init = InitState()

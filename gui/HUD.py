@@ -41,4 +41,4 @@ class ScoreLabel(Label):
 
 
     def update(self, score):
-        self.text = str(score)
+        self.text = "Score:" + str(score)

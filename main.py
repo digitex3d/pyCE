@@ -11,10 +11,6 @@ from basic_plugin.ScoreAddAgent import ScoreAddAgent
 from gui.HUD import HUD
 from gui.MainGameWindow import MainGameWindow
 
-window = MainGameWindow()
-hud = HUD(window)
-
-window.add_component(hud)
 
 init_state = InitState()
 player_state = AgentState(0,1)
@@ -23,6 +19,13 @@ game_state = GameState(init_state)
 game = Game(game_state)
 agent = ScoreAddAgent()
 game.addAgent(agent)
+
+
+window = MainGameWindow(game)
+hud = HUD(window)
+window.add_component(hud)
+
 game.addObserver(window)
-game.run()
+
+window.main_loop()
 

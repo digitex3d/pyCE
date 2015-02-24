@@ -19,25 +19,27 @@ class Game:
         self.observers.append(observer)
 
 
-    def run(self):
-        i = 0
-        turn_agent_id = i
-        while( self.game_state.win == False):
+    def eventHandler(self, event):
+        """ Cette classe va gérer tous les événements
+        """
 
-            # Un cylce du jeu
-            a_state = self.game_state.agentsStates[turn_agent_id]
+        # Si ce n'est pas le tourne du joueur on a rien à gerer
+        if( not self.game_state.isPlayerTurn()): return
 
-            agent_action = self.agents[turn_agent_id].getAction(a_state, self.game_state)
+        # Fonction qui va gerer un click
+        if(event.type == "mouse_click"):
+            self.handleClick(event)
 
-            # Effectue l'action et met à jour l'état du jeu
-            self.game_state = self.game_state.nextState(agent_action)
+        # On met à jour tous les observateurs du jeu
+        for observer in self.observers:
+            observer.update(self.game_state)
 
-            # On met à jour tous les observateurs du jeu
-            for observer in self.observers:
-                observer.update(self.game_state)
+    def handleClick(self, event):
+        turn = self.game_state.turn
+        # Un cylce du jeu
+        a_state = self.game_state.agentsStates[turn]
 
-            # On incrèmente le id du tour de l'agent
-            turn_agent_id = i % self.game_state.nb_agents
-            i += 1
+        agent_action = self.agents[turn].getAction(a_state, self.game_state)
 
-        return self.state
+        # Effectue l'action et met à jour l'état du jeu
+        self.game_state = self.game_state.nextState(agent_action)

@@ -10,6 +10,7 @@ class InitState:
     def __init__(self):
         self.nb_agents = 0
         self.agentsStates = []
+        self.turn = 0
 
     def addAgentState(self, agent_state):
         self.agentsStates.append( agent_state)
