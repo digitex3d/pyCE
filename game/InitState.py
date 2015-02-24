@@ -13,5 +13,7 @@ class InitState:
         self.turn = 0
 
     def addAgentState(self, agent_state):
+        """ Ajoute un joueur au jeu
+        """
         self.agentsStates.append( agent_state)
         self.nb_agents += 1

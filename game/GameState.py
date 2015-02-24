@@ -23,7 +23,8 @@ class GameState:
             new_state.agentsStates[0].score += 1
 
         if(new_state.agentsStates[0].score > 10):
-            self.win = True
+            new_state.win = True
+
 
         return new_state
 

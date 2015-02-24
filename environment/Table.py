@@ -1,8 +1,8 @@
 """ Cette classe représente une Table """
 
 
-class Table(list):
-    """ Nombre de joue de cartes dans une table"""
+class Table():
+    """ Cette classe représésente une table"""
     def size(self):
         return len(self)
 

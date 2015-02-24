@@ -1,7 +1,6 @@
-""" Cette classe représente une CardSpriteFactory pour génerer des sprites"""
-
 from gui.CardSprite import CardSprite
 from gui.CardStackDrawable import CardStackDrawable
+from environment.CardStack import CardStack
 import pyglet
 IMG_FORMAT="gif"
 DATA_PATH="data"
@@ -15,18 +14,22 @@ class SpriteFactory():
 
     card_factory = staticmethod(card_factory)
 
-    def deck_factory(cards,x=0,y=0, dir="h"):
+    def deck_factory(cards):
+        """ Renvoie une liste de CardSprite
         """
-        :param cards: Card Stack
-        :param x: La position x de la main
-        :param y: La position y de la main
-        :param dir: La direction de l'affichage
-        :return: un CardStackDrawable
-        """
-        deck = CardStackDrawable(x,y,dir)
+        cardSprites = []
         for card in cards:
-            deck.append(SpriteFactory.card_factory(card))
-        return deck
+            cardSprites.append(SpriteFactory.card_factory(card))
+        return cardSprites
+
+        """ Fonction accessoire qui génere une main aléatoire
+
+        #TODO: Terminer d'implementer et déplacer
+        randDeck = CardStack()
+
+        for i in range(nb_cards):
+            randDeck.append( Card())
+            """
 
 
 

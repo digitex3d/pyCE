@@ -6,12 +6,15 @@ from pyglet import clock
 from pyglet import font
 from game.Event import Event
 
+
 class MainGameWindow(window.Window):
-    def __init__(self,  game, *args, **kwargs):
+    def __init__(self, game, height=768, width=1024, *args, **kwargs):
         #Let all of the standard stuff pass through
-        window.Window.__init__(self, *args, **kwargs)
+        window.Window.__init__(self, height=768, width=1024, *args, **kwargs)
         self.components = []
         self.game = game
+        self.height = height
+        self.width = width
 
     def add_component(self, component):
         self.components.append(component)
@@ -24,12 +27,11 @@ class MainGameWindow(window.Window):
         ft = font.load('Arial', 28)
         fps_text = font.Text(ft, y=10)
 
-        while not self.has_exit:
+        while not (self.has_exit or self.game.game_state.win):
             self.dispatch_events()
             self.clear()
 
             self.draw()
-
             #Tick the clock
             clock.tick()
             #Gets fps and draw it
@@ -59,5 +61,5 @@ class MainGameWindow(window.Window):
 
     def draw(self):
         for component in self.components:
-            for sprite in component.sprites:
+            for sprite in component.getSprites():
                 sprite.draw()

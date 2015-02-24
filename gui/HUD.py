@@ -1,6 +1,11 @@
 """ Autheur Giuseppe Federico 
 """
 from pyglet.text import Label
+from pyglet.sprite import Sprite
+import pyglet
+
+
+DATA_PATH = "data/"
 
 class HUD:
     """ Cette classe représente un HUD 
@@ -12,9 +17,15 @@ class HUD:
 
         # On initialise un ScoreLabel avec la valeur de l'état de jeu initial et la fenetre
         self.score_label = ScoreLabel(window)
+        # Fond vert
+        self.background = pyglet.image.load(DATA_PATH + "table/table.jpg")
+        self.background = Sprite(self.background,0,0)
+        self.sprites.append(self.background)
 
         # On ajoute le score au hud
         self.sprites.append(self.score_label)
+
+
 
     def update(self, game_state):
         """ Fonction qui va mettre à jour les composants du HUD quand l'état de jeu change
@@ -24,7 +35,8 @@ class HUD:
         score = game_state.agentsStates[0].score
         self.score_label.update(score)
 
-
+    def getSprites(self):
+        return  self.sprites
 
 
 class ScoreLabel(Label):
