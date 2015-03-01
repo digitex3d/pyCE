@@ -7,4 +7,9 @@ class Agent:
         self.id = id
 
     def getAction(self, agent_state, game_state, event=None):
-        print(str(event))
+        """ Renvoie une action de l'agent
+        """
+        action = AgentAction(0, "move")
+        action.origin = event.card_clicked
+        action.dest = event.cardStack_released
+        return action;

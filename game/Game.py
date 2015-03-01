@@ -34,6 +34,7 @@ class Game:
         for observer in self.observers:
             observer.update(self.game_state)
 
+
     def handleClick(self, event):
         turn = self.game_state.turn
 

@@ -15,6 +15,7 @@ class MainGameWindow(window.Window):
         self.game = game
         self.height = height
         self.width = width
+        self.last_event = None
 
     def add_component(self, component):
         self.components.append(component)
@@ -55,29 +56,38 @@ class MainGameWindow(window.Window):
     """ ############	Event Handlers      ############
     """
     def on_mouse_press(self, x, y, dx, dy):
-        event = Event("mouse_click")
-        event.add_mouse_coords(x,y)
+        self.last_event = Event("mouse_click")
+        self.last_event.add_mouse_coords(x,y)
         for component in self.components:
             if("get_hands" in dir(component)):
                 for hand in component.get_hands():
                     if(hand.isClicked(x,y)):
-                        event.cardStack_clicked = hand
+                        self.last_event.cardStack_clicked = hand
 
             for sprite in component.getSprites():
                 if("isClicked" in dir(sprite) ):
                     if(sprite.isClicked(x,y)):
-                        event.card_clicked = sprite
+                        self.last_event.card_clicked = sprite
+
+    def on_mouse_release(self, x, y, button, modifiers):
+        self.last_event.add_mouse_coords(x,y)
+        for component in self.components:
+            if("get_hands" in dir(component)):
+                for hand in component.get_hands():
+                    if(hand.isClicked(x,y)):
+                        self.last_event.cardStack_released = hand
+
+            for sprite in component.getSprites():
+                if("isClicked" in dir(sprite) ):
+                    if(sprite.isClicked(x,y)):
+                        self.last_event.card_released = sprite
 
 
-        self.game.eventHandler(event)
-
-    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
-        event = Event("mouse_drag")
-        event.add_mouse_coords(x,y)
-        event.add_mouse_coords(dx,dy)
-        self.game.eventHandler(event)
+        self.game.eventHandler(self.last_event)
+        self.last_event = None
 
     def draw(self):
         for component in self.components:
             for sprite in component.getSprites():
-                sprite.draw()
+                if("draw" in dir(sprite) ):
+                    sprite.draw()

@@ -15,7 +15,7 @@ class CardStackDrawable():
     """ Une représentation graphique des cartes ( main )
     """
 
-    def __init__(self, cardsSprites,proprietary ,x=0, y=0, dir="h", batch=None):
+    def __init__(self, cardsSprites=[],proprietary=0 ,x=0, y=0, dir="h", batch=None):
         self.x = x
         self.y = y
         self.dir = dir
@@ -62,10 +62,6 @@ class CardStackDrawable():
             self.height = theight
 
     def isClicked(self, x,y):
-        print( self.width )
-        print( self.height )
-        print( self.x)
-        print(self.y)
         return x > self.x and \
                x < self.x+ self.width and \
                y > self.y and \

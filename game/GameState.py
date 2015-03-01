@@ -19,7 +19,8 @@ class GameState:
         """
 
         new_state = self.copy()
-
+        if(agent_action.type = "move"):
+            
 
         if(new_state.agentsStates[0].score > 10):
             new_state.win = True
@@ -27,14 +28,6 @@ class GameState:
 
         return new_state
 
-        """new_state = self.copy()
-        if( isLegalMove(agent_action) )
-            updateGame(agent_action)
-        else
-            return self
-
-            renvoie le prochain etat etant donn
-        """
 
 
     def isLegalMove(self, agent_action, plugin):

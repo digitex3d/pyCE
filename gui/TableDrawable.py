@@ -2,6 +2,7 @@
 """
 from gui.SpriteFactory import SpriteFactory
 from gui.CardStackDrawable import CardStackDrawable
+from environment.CardStack import CardStack
 class TableDrawable:
     """ Cette classe représente un TableDrawable 
     """
@@ -11,6 +12,7 @@ class TableDrawable:
         self.game_state = game_state
         self.drawableHands = []
         self.setUp()
+        self.tableStack = CardStackDrawable()
 
 
     def setUp(self):
@@ -33,7 +35,7 @@ class TableDrawable:
         sprites = []
         for drawableHand in self.drawableHands:
             sprites.extend(drawableHand.cardSprites)
-
+        sprites.append( self.tableStack.cardSprites)
         return sprites
 
     def get_hands(self):
