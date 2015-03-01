@@ -6,5 +6,5 @@ class Agent:
     def __init__(self, id=0):
         self.id = id
 
-    def getAction(self, agent_state, game_state):
-        return AgentAction()
+    def getAction(self, agent_state, game_state, event=None):
+        print(str(event))

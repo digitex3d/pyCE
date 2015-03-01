@@ -1,8 +1,4 @@
-import pyglet
-import basic_plugin
 from environment.Card import Card
-from basic_plugin.SpriteFactory import SpriteFactory
-from gui.CardStackDrawable import CardStackDrawable
 from game.InitState import InitState
 from game.agents.AgentState import AgentState
 from game.GameState import GameState
@@ -28,7 +24,7 @@ hand_player1 = CardStack()
 hand_player1.append(carte1)
 hand_player1.append(carte2)
 
-player1_state = AgentState(1,hand_player1)
+player1_state = AgentState(0,hand_player1)
 init_state.addAgentState(player1_state)
 
 # On initialise le jeu

@@ -1,13 +1,15 @@
 """ Cette classe représente une main affichable"""
 
+from gui.SpriteFactory import SpriteFactory
 from gui.CardSprite import CardSprite
 from environment import CardStack
 from pyglet.sprite import Sprite
 import pyglet.image
-import basic_plugin
+
 
 DISTANCE_CARTES = 70
-
+IMG_FORMAT="gif"
+DATA_PATH="data"
 
 class CardStackDrawable():
     """ Une représentation graphique des cartes ( main )
@@ -20,14 +22,24 @@ class CardStackDrawable():
         self.batch = batch
         self.proprietary = proprietary
         self.cardSprites = cardsSprites
+        self.width = None
+        self.height = None
         self.set_up()
 
+
+
     def update(self, cards):
-        self.cardSprites = basic_plugin.SpriteFactory.deck_factory(cards)
+        """ On met à jour la main avec les nouveaux cartes
+        """
+
+        self.cardSprites = SpriteFactory.deck_factory(cards)
+        self.set_up()
 
     def set_up(self):
-        """ Toujours appeler cette fonction avant d'afficher la main
+        """ Toujours appeler cette fonction avant d'afficher la main modifié
         """
+        theight = 0
+        twidth = 0
         if( self.dir == "v" ):
             # Affichage vertical
             dy=0
@@ -39,8 +51,22 @@ class CardStackDrawable():
         if( self.dir == "h" ):
             # Affichage horizontal
             dx=0
-            for card in self.cardSprites:
 
+            for card in self.cardSprites:
                 card.x = self.x + dx
                 card.y = self.y
                 dx = dx + DISTANCE_CARTES
+                twidth += card.width
+                theight = card.height
+            self.width = twidth
+            self.height = theight
+
+    def isClicked(self, x,y):
+        print( self.width )
+        print( self.height )
+        print( self.x)
+        print(self.y)
+        return x > self.x and \
+               x < self.x+ self.width and \
+               y > self.y and \
+               y < self.y + self.height

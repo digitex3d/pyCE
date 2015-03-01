@@ -1,6 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
-from basic_plugin.SpriteFactory import SpriteFactory
+from gui.SpriteFactory import SpriteFactory
 from gui.CardStackDrawable import CardStackDrawable
 class TableDrawable:
     """ Cette classe représente un TableDrawable 
@@ -36,6 +36,8 @@ class TableDrawable:
 
         return sprites
 
+    def get_hands(self):
+        return self.drawableHands
 
 
     def update(self, game_state):

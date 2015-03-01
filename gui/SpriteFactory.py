@@ -1,7 +1,5 @@
 from gui.CardSprite import CardSprite
-from gui.CardStackDrawable import CardStackDrawable
-from environment.CardStack import CardStack
-import pyglet
+
 IMG_FORMAT="gif"
 DATA_PATH="data"
 
@@ -30,6 +28,7 @@ class SpriteFactory():
         for i in range(nb_cards):
             randDeck.append( Card())
             """
+    deck_factory = staticmethod(deck_factory)
 
 
 

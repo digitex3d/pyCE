@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
+from xxsubtype import spamdict
 
 
 class Event:
@@ -9,6 +10,14 @@ class Event:
     def __init__(self, type):
         self.type = type
         self.mouse_coords = []
+        self.card_clicked = None
+        self.cardStack_clicked = None
 
     def add_mouse_coords(self, x , y):
         self.mouse_coords.append((x,y))
+
+    def __str__(self):
+        return "[type=" + self.type + "\n" + \
+                 "coords=" + str(self.mouse_coords) + "\n" +\
+                 "card_clicked=" + str(self.card_clicked) + "\n" +\
+                 "cardStack_clicked=" + str(self.cardStack_clicked) + "]\n"

@@ -19,8 +19,7 @@ class GameState:
         """
 
         new_state = self.copy()
-        if(agent_action.carte_jouee == True):
-            new_state.agentsStates[0].score += 1
+
 
         if(new_state.agentsStates[0].score > 10):
             new_state.win = True

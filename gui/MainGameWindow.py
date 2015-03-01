@@ -57,6 +57,24 @@ class MainGameWindow(window.Window):
     def on_mouse_press(self, x, y, dx, dy):
         event = Event("mouse_click")
         event.add_mouse_coords(x,y)
+        for component in self.components:
+            if("get_hands" in dir(component)):
+                for hand in component.get_hands():
+                    if(hand.isClicked(x,y)):
+                        event.cardStack_clicked = hand
+
+            for sprite in component.getSprites():
+                if("isClicked" in dir(sprite) ):
+                    if(sprite.isClicked(x,y)):
+                        event.card_clicked = sprite
+
+
+        self.game.eventHandler(event)
+
+    def on_mouse_drag(self, x, y, dx, dy, buttons, modifiers):
+        event = Event("mouse_drag")
+        event.add_mouse_coords(x,y)
+        event.add_mouse_coords(dx,dy)
         self.game.eventHandler(event)
 
     def draw(self):

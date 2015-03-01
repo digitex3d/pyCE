@@ -27,3 +27,11 @@ class CardSprite(Sprite):
             self.image = self.card_image
 
 
+    def isClicked(self, x,y):
+        return x > self.x and \
+               x < self.x+ self.width and \
+               y > self.y and \
+               y < self.y + self.height
+
+
+

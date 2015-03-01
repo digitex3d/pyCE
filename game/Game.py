@@ -36,10 +36,12 @@ class Game:
 
     def handleClick(self, event):
         turn = self.game_state.turn
-        # Un cylce du jeu
+
+        # L'etat de l'agent qui doit jouer
         a_state = self.game_state.agentsStates[turn]
 
-        agent_action = self.agents[turn].getAction(a_state, self.game_state)
+
+        agent_action = self.agents[turn].getAction(a_state, self.game_state, event)
 
         # Effectue l'action et met à jour l'état du jeu
         self.game_state = self.game_state.nextState(agent_action)
