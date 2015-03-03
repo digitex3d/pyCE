@@ -11,8 +11,10 @@ class TableDrawable:
         # La liste des Sprites qui composent la table
         self.game_state = game_state
         self.drawableHands = []
-        self.setUp()
+        self.nb_hands = 0
         self.tableStack = CardStackDrawable()
+        self.setUp()
+
 
 
     def setUp(self):
@@ -23,13 +25,19 @@ class TableDrawable:
     def addHand(self, cardStack, proprietary):
         """ This is a function
         """
-
-        drawableHand =  CardStackDrawable(SpriteFactory.deck_factory(cardStack),
-                                          proprietary,
-                                          500 ,
-                                          500)
+        if( self.nb_hands == 0):
+            drawableHand =  CardStackDrawable(cardStack,
+                                              proprietary,
+                                              500 ,
+                                              500)
+        if( self.nb_hands == 1):
+            drawableHand =  CardStackDrawable(cardStack,
+                                              proprietary,
+                                              100 ,
+                                              100)
 
         self.drawableHands.append(drawableHand)
+        self.nb_hands += 1;
 
     def getSprites(self):
         sprites = []

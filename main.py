@@ -17,6 +17,7 @@ init_state = InitState()
 
 # On initialise la main initiale
 
+##### INIT PLAYER 1 ######
 carte1 = Card(1, "red", "c")
 carte2 = Card(2, "red", "c")
 
@@ -26,6 +27,19 @@ hand_player1.append(carte2)
 
 player1_state = AgentState(0,hand_player1)
 init_state.addAgentState(player1_state)
+###########################
+
+##### INIT PLAYER 2 ######
+carte1 = Card(1, "red", "c")
+carte2 = Card(4, "red", "c")
+
+hand_player2 = CardStack()
+hand_player2.append(carte1)
+hand_player2.append(carte2)
+
+player2_state = AgentState(1,hand_player2)
+init_state.addAgentState(player2_state)
+###########################
 
 # On initialise le jeu
 game_state = GameState(init_state)

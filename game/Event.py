@@ -18,6 +18,12 @@ class Event:
     def add_mouse_coords(self, x , y):
         self.mouse_coords.append((x,y))
 
+    def isFull(self):
+        return  self.card_clicked != None and \
+        self.cardStack_clicked != None and \
+        self.card_released != None and \
+        self.cardStack_released != None
+
     def __str__(self):
         return "[type=" + self.type + "\n" + \
                "coords=" + str(self.mouse_coords) + "\n" + \

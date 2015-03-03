@@ -19,12 +19,19 @@ class GameState:
         """
 
         new_state = self.copy()
-        if(agent_action.type = "move"):
-            
+
+        # Boujer une carte
+        if(agent_action.type == "move"):
+            oc = agent_action.origin_card;
+            od = agent_action.origin_deck;
+            dd = agent_action.dest_deck;
+
+            od.remove(oc);
+            dd.append(oc);
+
 
         if(new_state.agentsStates[0].score > 10):
             new_state.win = True
-
 
         return new_state
 

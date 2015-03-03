@@ -15,13 +15,14 @@ class CardStackDrawable():
     """ Une représentation graphique des cartes ( main )
     """
 
-    def __init__(self, cardsSprites=[],proprietary=0 ,x=0, y=0, dir="h", batch=None):
+    def __init__(self, cardStack=[],proprietary=0 ,x=0, y=0, dir="h", batch=None):
         self.x = x
         self.y = y
         self.dir = dir
         self.batch = batch
         self.proprietary = proprietary
-        self.cardSprites = cardsSprites
+        self.cardSprites = None
+        self.cardStack = cardStack
         self.width = None
         self.height = None
         self.set_up()
@@ -32,12 +33,14 @@ class CardStackDrawable():
         """ On met à jour la main avec les nouveaux cartes
         """
 
-        self.cardSprites = SpriteFactory.deck_factory(cards)
+        self.cardStack = cards;
         self.set_up()
 
     def set_up(self):
-        """ Toujours appeler cette fonction avant d'afficher la main modifié
+        """ Toujours appeler cette fonction avant d'afficher la main nouvelle/modifié
         """
+        self.cardSprites = SpriteFactory.deck_factory(self.cardStack)
+
         theight = 0
         twidth = 0
         if( self.dir == "v" ):
