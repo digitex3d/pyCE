@@ -1,3 +1,4 @@
+from basic_plugin.PluginBataille import PluginBataille
 from environment.Card import Card
 from game.InitState import InitState
 from game.agents.PlayerState import PlayerState
@@ -14,41 +15,11 @@ import logging
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-# Initialisation du jeu
-init_state = InitState()
 
-# Initialisation du joueur1
 
-# On initialise la main initiale
-
-##### INIT PLAYER 1 ######
-carte1 = Card(1, "red", "c")
-carte2 = Card(2, "red", "c")
-
-hand_player1 = CardStack()
-hand_player1.append(carte1)
-hand_player1.append(carte2)
-
-init_state.addPlayerState(hand_player1)
-###########################
-
-##### INIT PLAYER 2 ######
-carte1 = Card(1, "red", "c")
-carte2 = Card(4, "red", "c")
-
-hand_player2 = CardStack()
-hand_player2.append(carte1)
-hand_player2.append(carte2)
-
-init_state.addPlayerState(hand_player2)
-###########################
-
-######## INIT TABLE ########
-init_state.table.table.append(carte1)
-############################
-
+plugin = PluginBataille()
 # On initialise le jeu
-game_state = GameState(init_state)
+game_state = GameState(plugin)
 game = Game(game_state)
 
 agent = Agent(0)

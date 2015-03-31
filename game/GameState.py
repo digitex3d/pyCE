@@ -6,30 +6,23 @@ class GameState:
     de l'état initiale du jeu ( numero de joueurs et ses etats initiaux )
     """
 
-    def __init__(self, init_state):
+    def __init__(self, plugin):
         self.win = False
+
+        init_state = plugin.initGameState()
         # L'état initial de la table
         self.table = init_state.table
         # l'id du premier joueur qui joue
         self.turn = init_state.turn
+        self.plugin = plugin
 
     def nextState(self, agent_action):
-        #TODO: à implémenter
-        """  Renvoie le prochain etat du jeu etant donnée une action
         """
-
-        new_state = self.copy()
-
-        # Boujer une carte
-        if(agent_action.type == "move"):
-            oc = agent_action.origin_card;
-            od = agent_action.origin_deck;
-            dd = agent_action.dest_deck;
-
-            self.moveCard(oc, od, dd)
-
-
-        return new_state
+        Renvoie l'état de jeu étant donné une action
+        :param agent_action: AgentAction l'action du joueur
+        :return:
+        """
+        return self.plugin.nextState(self, agent_action)
 
     def getPlayerHand(self, pid):
         """
@@ -61,7 +54,7 @@ class GameState:
 
 
 
-    def isLegalMove(self, agent_action, plugin):
+    def isLegalMove(self, agent_action):
         #TODO: à implémenter
         """
         Renvoie True si l'action est legale dans l'état courant
@@ -69,7 +62,7 @@ class GameState:
         :param plugin:
         :return:
         """
-        return True
+        return self.plugin.isLegalMove(self, agent_action)
 
     def next_turn(self):
         """ Fonction qui passe le tourne

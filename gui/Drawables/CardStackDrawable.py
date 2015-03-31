@@ -1,5 +1,6 @@
 """ Cette classe représente une main affichable"""
 from gui.Drawables.Drawable import Drawable
+from gui.Drawables.Utils import Utils
 
 from gui.SpriteFactory import SpriteFactory
 from gui.Sprites.ClickableSprite import ClickableSprite
