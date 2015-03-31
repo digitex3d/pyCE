@@ -3,7 +3,10 @@
 from basic_plugin.Plugin import Plugin
 from environment.Card import Card
 from environment.CardStack import CardStack
+from environment.DeckGenerator import DeckGenerator
 from game.InitState import InitState
+from game.agents.Agent import Agent
+from game.agents.AgentAction import AgentAction
 
 
 class PluginBataille(Plugin):
@@ -28,30 +31,39 @@ class PluginBataille(Plugin):
         # On initialise la main initiale
 
         ##### INIT PLAYER 1 ######
-        carte1 = Card(1, "red", "c")
-        carte2 = Card(2, "red", "c")
+        deck_player1 = DeckGenerator.deckFactory()
+        deck_player1.shuffle()
 
         hand_player1 = CardStack()
-        hand_player1.append(carte1)
-        hand_player1.append(carte2)
+        for i in range(4):
+            hand_player1.append(deck_player1.pop())
 
-        init_state.addPlayerState(hand_player1)
+
+        init_state.addPlayerState(hand_player1, deck_player1)
         ###########################
 
         ##### INIT PLAYER 2 ######
         carte1 = Card(1, "red", "c")
         carte2 = Card(4, "red", "c")
 
-        hand_player2 = CardStack()
-        hand_player2.append(carte1)
-        hand_player2.append(carte2)
 
-        init_state.addPlayerState(hand_player2)
+        deck_player2 = DeckGenerator.deckFactory()
+        deck_player2.shuffle()
+        hand_player2 = CardStack()
+        for i in range(4):
+            hand_player2.append(deck_player2.pop())
+
+        init_state.addPlayerState(hand_player2, deck_player2)
         ###########################
 
         ######## INIT TABLE ########
         init_state.table.table.append(carte1)
         ############################
+
+        ######## INIT OPPONENT ##########
+        self.opponents.append( IABataille() )
+        #################################
+
 
         return init_state
 
@@ -72,6 +84,7 @@ class PluginBataille(Plugin):
 
             new_state.moveCard(oc, od, dd)
 
+
         return new_state
 
 
@@ -85,4 +98,33 @@ class PluginBataille(Plugin):
         """
 
 
+
+        # Cas d'un move
+        if( agent_action.type == "move"):
+            if( agent_action.dest_deck != self.TABLE_PID ):
+                print("Mauvaise destination")
+                return False
+            if( agent_action.origin_deck != gameState.currentTurn() ):
+                print("C'est pas le tourn de " + str(agent_action.origin_deck))
+                return False
+
         return True
+
+class IABataille(Agent):
+    def __init__(self):
+        Agent.__init__(self, 1)
+
+    def getAction(self, agent_state, game_state, event=None):
+        hand = game_state.table.getPlayerHand(self.id)
+
+
+        card = hand[0]
+
+
+        action = AgentAction(0, "move")
+        action.origin_card = card
+        action.origin_deck = game_state.turn
+        action.dest_deck = -1
+
+        return action
+

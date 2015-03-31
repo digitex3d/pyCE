@@ -22,8 +22,10 @@ plugin = PluginBataille()
 game_state = GameState(plugin.initGameState(), plugin)
 game = Game(game_state)
 
-agent = Agent(0)
-game.addAgent(agent)
+player = Agent(0)
+game.addAgent(player)
+ia = plugin.opponents[0]
+game.addAgent(ia)
 
 # On initialise la fenetre principale
 window = MainGameWindow(game, 1024, 768)

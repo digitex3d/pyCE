@@ -22,8 +22,10 @@ class GameState:
         :return:
         """
         if( self.plugin.isLegalMove(self, agent_action)):
+
             return self.plugin.nextState(self, agent_action)
         else:
+            logging.debug("Illegal move")
             return self.copy()
 
     def getPlayerHand(self, pid):
@@ -55,13 +57,23 @@ class GameState:
         self.getPlayerHand(dest).append(card)
 
 
+    def currentTurn(self):
+        """
+        Renvoie le tour courrant
+        :return:
+        """
+        return self.turn
 
-
+    def getnbPlayers(self):
+        return self.table.nbPlayers
 
     def next_turn(self):
         """ Fonction qui passe le tourne
         """
-        self.turn = ++self.turn % self.nb_players
+        nb = self.getnbPlayers()
+        tmp = (self.turn+1)
+        resu = tmp % nb
+        self.turn = resu
 
     def isPlayerTurn(self):
         return self.turn == 0

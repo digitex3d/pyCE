@@ -38,11 +38,27 @@ class Game:
     def handleClick(self, event):
         turn = self.game_state.turn
 
+
         # L'etat de l'agent qui doit jouer
         a_state = self.game_state.table.players[turn]
 
 
-        agent_action = self.agents[turn].getAction(a_state, self.game_state, event)
+        agent_action = self.agents[self.game_state.turn].getAction(a_state, self.game_state, event)
 
         # Effectue l'action et met à jour l'état du jeu
         self.game_state = self.game_state.nextState(agent_action)
+
+        self.game_state.next_turn()
+
+        agent_action = self.agents[self.game_state.turn].getAction(a_state, self.game_state, event)
+
+         # Effectue l'action et met à jour l'état du jeu
+        self.game_state = self.game_state.nextState(agent_action)
+        self.game_state.next_turn()
+
+
+
+
+
+    def isPlayerTourn(self):
+        return (self.game_state.turn == 0)

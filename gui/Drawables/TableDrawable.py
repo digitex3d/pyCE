@@ -46,4 +46,3 @@ class TableDrawable(Drawable):
             cardSprite.x = self.x + dx
             cardSprite.y = self.y
             dx = dx + DISTANCE_CARTES
-
