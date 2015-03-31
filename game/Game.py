@@ -39,7 +39,7 @@ class Game:
         turn = self.game_state.turn
 
         # L'etat de l'agent qui doit jouer
-        a_state = self.game_state.agentsStates[turn]
+        a_state = self.game_state.table.players[turn]
 
 
         agent_action = self.agents[turn].getAction(a_state, self.game_state, event)

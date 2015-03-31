@@ -1,20 +1,20 @@
 """ Autheur Giuseppe Federico 
 """
 
+#TODO: TERMINER
+
 from pyglet import window
 from pyglet import clock
 from pyglet import font
 from game.Event import Event
-
+import logging
 
 class MainGameWindow(window.Window):
-    def __init__(self, game, height=768, width=1024, *args, **kwargs):
+    def __init__(self, game, *args, **kwargs):
         #Let all of the standard stuff pass through
-        window.Window.__init__(self, height=768, width=1024, *args, **kwargs)
+        window.Window.__init__(self, *args, **kwargs)
         self.components = []
         self.game = game
-        self.height = height
-        self.width = width
         self.last_event = None
 
     def add_component(self, component):
@@ -58,36 +58,40 @@ class MainGameWindow(window.Window):
     def on_mouse_press(self, x, y, dx, dy):
         self.last_event = Event("mouse_click")
         self.last_event.add_mouse_coords(x,y)
-        for component in self.components:
-            if("get_hands" in dir(component)):
-                for hand in component.get_hands():
-                    if(hand.isClicked(x,y)):
-                        self.last_event.cardStack_clicked = hand
 
-            for sprite in component.getSprites():
-                if("isClicked" in dir(sprite) ):
-                    if(sprite.isClicked(x,y)):
-                        self.last_event.card_clicked = sprite
+        for component in self.components:
+            if component.isClicked(x,y):
+                self.last_event.componentClicked = component
+            for drawable in component.getDrawables():
+                if drawable.isClicked(x,y):
+                    self.last_event.drawableClicked = drawable
+                for sprite in drawable.getSprites():
+                    if("isClicked" in dir(sprite) and
+                           sprite.isClicked(x,y)):
+                        self.last_event.spriteClicked = sprite
+
+        logging.info("Mouse press: X: " + str(x) + "Y" + str(y))
 
     def on_mouse_release(self, x, y, button, modifiers):
-        self.last_event.add_mouse_coords(x,y)
         for component in self.components:
-            if("get_hands" in dir(component)):
-                for hand in component.get_hands():
-                    if(hand.isClicked(x,y)):
-                        self.last_event.cardStack_released = hand
+            if component.isClicked(x,y):
+                self.last_event.componentReleased = component
+            for drawable in component.getDrawables():
+                if drawable.isClicked(x,y):
+                    self.last_event.drawableReleased = drawable
+                for sprite in drawable.getSprites():
+                    if("isClicked" in dir(sprite) and
+                           sprite.isClicked(x,y)):
+                        self.last_event.spriteReleased = sprite
 
-            for sprite in component.getSprites():
-                if("isClicked" in dir(sprite) ):
-                    if(sprite.isClicked(x,y)):
-                        self.last_event.card_released = sprite
 
-
+        logging.info("Mouse release: X: " + str(x) + "Y" + str(y))
         self.game.eventHandler(self.last_event)
         self.last_event = None
 
     def draw(self):
         for component in self.components:
-            for sprite in component.getSprites():
-                if("draw" in dir(sprite) ):
+            for drawable in component.getDrawables():
+                for sprite in drawable.getSprites():
                     sprite.draw()
+

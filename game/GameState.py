@@ -8,9 +8,9 @@ class GameState:
 
     def __init__(self, init_state):
         self.win = False
-        self.nb_players = init_state.nb_agents
-        self.agentsStates = init_state.agentsStates
-        # l'id du premier joueur à jouer
+        # L'état initial de la table
+        self.table = init_state.table
+        # l'id du premier joueur qui joue
         self.turn = init_state.turn
 
     def nextState(self, agent_action):
@@ -26,16 +26,34 @@ class GameState:
             od = agent_action.origin_deck;
             dd = agent_action.dest_deck;
 
-            od.remove(oc);
-            dd.append(oc);
+            self.moveCard(oc, od, dd)
 
-
-        if(new_state.agentsStates[0].score > 10):
-            new_state.win = True
 
         return new_state
 
+    def getPlayerHand(self, pid):
+        """
+        Cette fonction renvoie ma main du joueur à partir d'un pid
+        :param pid: int
+        :return: CardStack
+        """
+        if (pid == 0 ): return self.table.table
+        return self.table.getPlayerHand(pid)
 
+    def moveCard(self, card, orig, dest):
+        """
+        Bouge une carte d'un CardStack initial dans un CardStack finale
+        :param card: Card
+        :param orig: int pid
+        :param dest: int pid
+        :return:
+        """
+
+        origStack = self.getPlayerHand(orig)
+        destStack = self.getPlayerHand(dest)
+
+        origStack.remove(card);
+        destStack.append(card);
 
     def isLegalMove(self, agent_action, plugin):
         #TODO: à implémenter
@@ -57,8 +75,9 @@ class GameState:
 
     def copy(self):
         new_init = InitState()
-        for agent in  self.agentsStates:
-            new_init.addAgentState(agent)
+        new_init.turn = self.turn
+        new_init.table = self.table
+        new_init.win = self.win
 
         state_copy = GameState( new_init )
         return state_copy

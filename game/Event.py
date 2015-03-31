@@ -10,24 +10,26 @@ class Event:
     def __init__(self, type):
         self.type = type
         self.mouse_coords = []
-        self.card_clicked = None
-        self.cardStack_clicked = None
-        self.card_released = None
-        self.cardStack_released = None
+        self.spriteClicked = None
+        self.drawableClicked = None
+        self.componentClicked = None
+        self.spriteReleased = None
+        self.drawableReleased = None
+        self.componentReleased = None
 
     def add_mouse_coords(self, x , y):
         self.mouse_coords.append((x,y))
 
     def isFull(self):
-        return  self.card_clicked != None and \
-        self.cardStack_clicked != None and \
-        self.card_released != None and \
-        self.cardStack_released != None
+        return  self.spriteClicked != None and \
+        self.drawableClicked != None and \
+        self.spriteReleased != None and \
+        self.drawableReleased != None
 
     def __str__(self):
         return "[type=" + self.type + "\n" + \
                "coords=" + str(self.mouse_coords) + "\n" + \
-               "card_clicked=" + str(self.card_clicked) + "\n" + \
-               "cardStack_clicked=" + str(self.cardStack_clicked) + "\n" + \
-               "card_released=" + str(self.card_released) + "\n" + \
-               "cardStack_released=" + str(self.cardStack_released) + "]\n"
+               "card_clicked=" + str(self.spriteClicked) + "\n" + \
+               "cardStack_clicked=" + str(self.drawableClicked) + "\n" + \
+               "card_released=" + str(self.spriteReleased) + "\n" + \
+               "cardStack_released=" + str(self.drawableReleased) + "]\n"

@@ -18,9 +18,9 @@ class Agent:
             return action
 
         action = AgentAction(0, "move")
-        action.origin_card = event.card_clicked.card
-        action.origin_deck = event.cardStack_clicked.cardStack
-        action.dest_deck = event.cardStack_released.cardStack
+        action.origin_card = event.spriteClicked.card
+        action.origin_deck = event.drawableClicked.pid
+        action.dest_deck = event.drawableReleased.pid
 
         return action
 

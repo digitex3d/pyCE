@@ -1,4 +1,4 @@
-from gui.CardSprite import CardSprite
+from gui.Sprites.CardSprite import CardSprite
 
 IMG_FORMAT="gif"
 DATA_PATH="data"

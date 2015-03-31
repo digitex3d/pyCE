@@ -1,14 +1,16 @@
 from environment.Card import Card
 from game.InitState import InitState
-from game.agents.AgentState import AgentState
+from game.agents.PlayerState import PlayerState
 from game.GameState import GameState
 from game.Game import Game
-
+from gui.Components.HUDComponent import HUDComponent
+from gui.Components.TableComponent import TableComponent
 from game.agents.Agent import  Agent
-from gui.HUD import HUD
 from gui.MainGameWindow import MainGameWindow
 from environment.CardStack import *
-from gui.TableDrawable import TableDrawable
+from gui.Drawables import TableDrawable
+
+
 
 # Initialisation du jeu
 init_state = InitState()
@@ -25,8 +27,8 @@ hand_player1 = CardStack()
 hand_player1.append(carte1)
 hand_player1.append(carte2)
 
-player1_state = AgentState(0,hand_player1)
-init_state.addAgentState(player1_state)
+player1_state = PlayerState(1,hand_player1)
+init_state.addPlayerState(player1_state)
 ###########################
 
 ##### INIT PLAYER 2 ######
@@ -37,9 +39,13 @@ hand_player2 = CardStack()
 hand_player2.append(carte1)
 hand_player2.append(carte2)
 
-player2_state = AgentState(1,hand_player2)
-init_state.addAgentState(player2_state)
+player2_state = PlayerState(2,hand_player2)
+init_state.addPlayerState(player2_state)
 ###########################
+
+######## INIT TABLE ########
+init_state.table.table.append(carte1)
+############################
 
 # On initialise le jeu
 game_state = GameState(init_state)
@@ -49,13 +55,15 @@ agent = Agent(0)
 game.addAgent(agent)
 
 # On initialise la fenetre principale
-window = MainGameWindow(game)
-hud = HUD(window)
-table = TableDrawable(game.game_state)
+window = MainGameWindow(game, 1024, 768)
+hud = HUDComponent(window)
+table = TableComponent(window)
 
 window.add_component(hud)
 window.add_component(table)
+table.setUp(game_state)
 game.addObserver(window)
+table.update(game_state)
 
 window.main_loop()
 
