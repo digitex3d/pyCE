@@ -24,7 +24,7 @@ class TableDrawable(Drawable):
 
         self.pid = -1
 
-          # Fond vert
+        # Fond vert
         table_image = pyglet.image.load(DATA_PATH + "table/green.jpg")
         self.table_sprite = ClickableSprite(table_image,x,y)
         self.sprites.append(self.table_sprite)

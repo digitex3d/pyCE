@@ -41,14 +41,14 @@ class TableComponent(Component):
 
             # La position de la main du joueur principal
             if( pid == 0):
-                x = 350
-                y = 40
+                x = 0
+                y = 0
                 dir = "h"
 
              # La position des autre joueurs
             if( pid == 1):
-                x = 350
-                y = 690
+                x = 0
+                y = h-160
                 dir = "h"
 
              # La position des autre joueurs

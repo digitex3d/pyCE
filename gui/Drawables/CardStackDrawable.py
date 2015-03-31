@@ -2,11 +2,13 @@
 from gui.Drawables.Drawable import Drawable
 
 from gui.SpriteFactory import SpriteFactory
+from gui.Sprites.ClickableSprite import ClickableSprite
 
 
 DISTANCE_CARTES = 70
 IMG_FORMAT="gif"
-DATA_PATH="data"
+DATA_PATH="data/"
+import pyglet
 
 class CardStackDrawable(Drawable):
     """ Une représentation graphique des cartes ( main )
@@ -24,12 +26,21 @@ class CardStackDrawable(Drawable):
         self.pid = pid
         self.dir = dir
 
+         # Fond gris
+        space_image = pyglet.image.load(DATA_PATH + "table/playerSpace"+dir+".png")
+        self.space_sprite = ClickableSprite(space_image,x,y)
+
+
     def update(self, gameState):
         """ On met à jour la main avec les nouveaux cartes
         """
 
         cards = gameState.table.players[self.pid].hand
-        self.sprites = SpriteFactory.deck_factory(cards)
+
+        self.sprites = []
+        self.sprites.append(self.space_sprite)
+        self.sprites.extend(SpriteFactory.deck_factory(cards))
+
         #TODO: resoudre probleme rotation
         theight = 0
         twidth = 0
