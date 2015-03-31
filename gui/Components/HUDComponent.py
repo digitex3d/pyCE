@@ -49,4 +49,4 @@ class ScoreLabel(Drawable):
         self.sprites.append(label)
 
     def update(self, gameState):
-        self.text = "Score:" + str(gameState.table.players[0].score)
+        self.text = "0"

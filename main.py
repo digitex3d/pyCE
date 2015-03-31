@@ -19,7 +19,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 plugin = PluginBataille()
 # On initialise le jeu
-game_state = GameState(plugin)
+game_state = GameState(plugin.initGameState(), plugin)
 game = Game(game_state)
 
 agent = Agent(0)

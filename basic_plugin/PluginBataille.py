@@ -70,8 +70,19 @@ class PluginBataille(Plugin):
             od = agent_action.origin_deck
             dd = agent_action.dest_deck
 
-            gameState.moveCard(oc, od, dd)
+            new_state.moveCard(oc, od, dd)
+
+        return new_state
 
 
-    def isLegalMove(self,gameState, agent_action):
-         return True
+    def isLegalMove(self, gameState, agent_action):
+        #TODO: à implémenter
+        """
+        Renvoie True si l'action est legale dans l'état courant
+        :param agent_action:
+        :param plugin:
+        :return:
+        """
+
+
+        return True
