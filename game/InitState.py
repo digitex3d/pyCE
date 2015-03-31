@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
+from environment.CardStack import CardStack
 from environment.Table import Table
 
 from game.agents import PlayerState
@@ -13,7 +14,11 @@ class InitState:
         self.table = Table()
         self.win = False
 
-    def addPlayerState(self, player_state):
+    def addPlayerState(self, hand=CardStack(), deck=CardStack()):
         """ Ajoute un joueur au jeu
+        :param hand: CardStack() la main initiale
+        :param deck: CardStack() le jeu initial
+        :return:
         """
-        self.table.addPlayer(player_state)
+
+        self.table.addPlayer( hand, deck)

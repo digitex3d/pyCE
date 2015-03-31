@@ -10,7 +10,9 @@ from gui.MainGameWindow import MainGameWindow
 from environment.CardStack import *
 from gui.Drawables import TableDrawable
 
+import logging
 
+logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 # Initialisation du jeu
 init_state = InitState()
@@ -27,8 +29,7 @@ hand_player1 = CardStack()
 hand_player1.append(carte1)
 hand_player1.append(carte2)
 
-player1_state = PlayerState(1,hand_player1)
-init_state.addPlayerState(player1_state)
+init_state.addPlayerState(hand_player1)
 ###########################
 
 ##### INIT PLAYER 2 ######
@@ -39,8 +40,7 @@ hand_player2 = CardStack()
 hand_player2.append(carte1)
 hand_player2.append(carte2)
 
-player2_state = PlayerState(2,hand_player2)
-init_state.addPlayerState(player2_state)
+init_state.addPlayerState(hand_player2)
 ###########################
 
 ######## INIT TABLE ########

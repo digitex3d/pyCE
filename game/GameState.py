@@ -1,5 +1,5 @@
 from game.InitState import InitState
-
+import logging
 
 class GameState:
     """ Cette classe représente un état de jeu, elle nécessite une classe qui contient les informations
@@ -37,7 +37,7 @@ class GameState:
         :param pid: int
         :return: CardStack
         """
-        if (pid == 0 ): return self.table.table
+        if (pid == -1 ): return self.table.table
         return self.table.getPlayerHand(pid)
 
     def moveCard(self, card, orig, dest):
@@ -49,11 +49,17 @@ class GameState:
         :return:
         """
 
-        origStack = self.getPlayerHand(orig)
-        destStack = self.getPlayerHand(dest)
+        logging.debug("Origin pid: %s", orig)
+        logging.debug("Destination pid: %s", dest)
 
-        origStack.remove(card);
-        destStack.append(card);
+        logging.debug("Origin: %s",  self.table.players[orig].hand)
+        logging.debug("Destination: %s", self.table.players[dest].hand)
+        logging.debug("Card: %s", card)
+
+        self.getPlayerHand(orig).remove(card)
+        self.getPlayerHand(dest).append(card)
+
+
 
     def isLegalMove(self, agent_action, plugin):
         #TODO: à implémenter

@@ -1,6 +1,7 @@
 """ Cette classe représente une Table """
 
 from environment.CardStack import CardStack
+from game.agents.PlayerState import PlayerState
 
 
 class Table():
@@ -15,12 +16,15 @@ class Table():
         self.table = CardStack()
         self.nbPlayers = 0
 
-    def addPlayer(self, playerState):
+    def addPlayer(self, hand=CardStack(), deck=CardStack()):
         """
         Fonction qui ajoute un joueur à la table
-        :param playerState: PlayerState
-        :return:
+        :param hand: CardStack la main du joueur à ajouter
+        :param deck: CardStack le je du joueur initial
         """
+
+        num = self.nbPlayers
+        playerState = PlayerState(num, hand, deck)
         self.nbPlayers += 1
         self.players.append(playerState)
 

@@ -9,6 +9,7 @@ from pyglet import font
 from game.Event import Event
 import logging
 
+
 class MainGameWindow(window.Window):
     def __init__(self, game, *args, **kwargs):
         #Let all of the standard stuff pass through
@@ -70,7 +71,8 @@ class MainGameWindow(window.Window):
                            sprite.isClicked(x,y)):
                         self.last_event.spriteClicked = sprite
 
-        logging.info("Mouse press: X: " + str(x) + "Y" + str(y))
+        logging.info('Mouse press: X:%s Y:%s',x ,y )
+        logging.debug(self.last_event)
 
     def on_mouse_release(self, x, y, button, modifiers):
         for component in self.components:
@@ -84,8 +86,8 @@ class MainGameWindow(window.Window):
                            sprite.isClicked(x,y)):
                         self.last_event.spriteReleased = sprite
 
-
-        logging.info("Mouse release: X: " + str(x) + "Y" + str(y))
+        logging.debug(self.last_event)
+        logging.info('Mouse release: X:%s Y:%s',x ,y )
         self.game.eventHandler(self.last_event)
         self.last_event = None
 

@@ -22,7 +22,7 @@ class TableDrawable(Drawable):
         self.width = w
 
 
-        self.pid = 0
+        self.pid = -1
 
           # Fond vert
         table_image = pyglet.image.load(DATA_PATH + "table/green.jpg")

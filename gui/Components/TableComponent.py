@@ -20,7 +20,7 @@ class TableComponent(Component):
         # Ajout de la table ( conteneur des cartes )
         rw = 1/3*w
         rh = 1/3*h
-        tableDrawable = TableDrawable(rw,rh,w-2*rw,h-2*rh)
+        tableDrawable = TableDrawable(240,180,500,500)
         self.addDrawable(tableDrawable)
 
     def setUp(self, gameState):
@@ -37,27 +37,28 @@ class TableComponent(Component):
         y = 0
         dir = "h"
 
-        for pid in range(1,gameState.table.nbPlayers):
+        for pid in range(gameState.table.nbPlayers):
+
             # La position de la main du joueur principal
+            if( pid == 0):
+                x = 350
+                y = 40
+                dir = "h"
+
+             # La position des autre joueurs
             if( pid == 1):
-                x = w/2
-                y = h/8
+                x = 350
+                y = 690
                 dir = "h"
 
              # La position des autre joueurs
             if( pid == 2):
-                x = w/2
-                y = h*7/8
-                dir = "h"
-
-             # La position des autre joueurs
-            if( pid == 3):
                 x = w*7/8
                 y = h/2
                 dir = "v"
 
             # La position des autre joueurs
-            if( pid == 4):
+            if( pid == 3):
                 x = w*7/8
                 y = h/2
                 dir = "v"

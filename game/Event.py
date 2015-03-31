@@ -29,7 +29,7 @@ class Event:
     def __str__(self):
         return "[type=" + self.type + "\n" + \
                "coords=" + str(self.mouse_coords) + "\n" + \
-               "card_clicked=" + str(self.spriteClicked) + "\n" + \
-               "cardStack_clicked=" + str(self.drawableClicked) + "\n" + \
-               "card_released=" + str(self.spriteReleased) + "\n" + \
-               "cardStack_released=" + str(self.drawableReleased) + "]\n"
+               "spriteClicked=" + str(self.spriteClicked) + "\n" + \
+               "drawableclicked=" + str(self.drawableClicked) + "\n" + \
+               "spritereleased=" + str(self.spriteReleased) + "\n" + \
+               "Drawablereleased=" + str(self.drawableReleased) + "]\n"
