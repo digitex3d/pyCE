@@ -48,13 +48,12 @@ class Game:
         # Effectue l'action et met à jour l'état du jeu
         self.game_state = self.game_state.nextState(agent_action)
 
-        self.game_state.next_turn()
 
         agent_action = self.agents[self.game_state.turn].getAction(a_state, self.game_state, event)
 
          # Effectue l'action et met à jour l'état du jeu
         self.game_state = self.game_state.nextState(agent_action)
-        self.game_state.next_turn()
+
 
 
 

@@ -84,6 +84,8 @@ class PluginBataille(Plugin):
 
             new_state.moveCard(oc, od, dd)
 
+        new_state.next_turn()
+
 
         return new_state
 
@@ -117,7 +119,7 @@ class IABataille(Agent):
     def getAction(self, agent_state, game_state, event=None):
         hand = game_state.table.getPlayerHand(self.id)
 
-
+        #TODO: à terminer
         card = hand[0]
 
 
