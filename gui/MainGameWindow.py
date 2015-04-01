@@ -46,8 +46,10 @@ class MainGameWindow(window.Window):
         self.dispatch_events()
         self.clear()
 
+
         for component in self.components:
             component.update(game_state)
+
 
         self.draw()
         #Tick the clock

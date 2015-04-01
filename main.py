@@ -32,8 +32,9 @@ window = MainGameWindow(game, 1024, 768)
 hud = HUDComponent(window)
 table = TableComponent(window)
 
-window.add_component(hud)
 window.add_component(table)
+window.add_component(hud)
+
 table.setUp(game_state)
 game.addObserver(window)
 table.update(game_state)
