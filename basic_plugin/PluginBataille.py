@@ -26,39 +26,31 @@ class PluginBataille(Plugin):
         # Initialisation du jeu
         init_state = InitState()
 
+
+        deck = DeckGenerator.deckFactory()
+        deck.shuffle()
+
         # Initialisation du joueur1
 
-        # On initialise la main initiale
 
         ##### INIT PLAYER 1 ######
-        deck_player1 = DeckGenerator.deckFactory()
-        deck_player1.shuffle()
+        deck1 = deck[0:int(len(deck)/2)]
+        deck2 = deck[int(len(deck)/2):len(deck) ]
 
-        hand_player1 = CardStack()
-        for i in range(4):
-            hand_player1.append(deck_player1.pop())
-
-
-        init_state.addPlayerState(hand_player1, deck_player1)
+        init_state.addPlayerState(CardStack(), deck1)
         ###########################
 
         ##### INIT PLAYER 2 ######
-        carte1 = Card(1, "red", "c")
-        carte2 = Card(4, "red", "c")
 
 
-        deck_player2 = DeckGenerator.deckFactory()
-        deck_player2.shuffle()
+
+
+
         hand_player2 = CardStack()
-        for i in range(4):
-            hand_player2.append(deck_player2.pop())
 
-        init_state.addPlayerState(hand_player2, deck_player2)
+
+        init_state.addPlayerState(hand_player2, deck2)
         ###########################
-
-        ######## INIT TABLE ########
-        init_state.table.table.append(carte1)
-        ############################
 
         ######## INIT OPPONENT ##########
         self.opponents.append( IABataille() )
@@ -68,24 +60,34 @@ class PluginBataille(Plugin):
         return init_state
 
     def nextState(self, gameState, agent_action):
-        """ This is a function
-        """
-          #TODO: à implémenter
         """  Renvoie le prochain etat du jeu etant donnée une action
         """
 
+
         new_state = gameState.copy()
 
-        # Boujer une carte
-        if(agent_action.type == "move"):
-            oc = agent_action.originSprite
-            od = agent_action.originDrawable
-            dd = agent_action.dest_deck
+        table = gameState.getTable()
+        if(len(table) == 2):
+            carte1 = table[0]
+            carte2 = table[1]
+            if(carte1.value > carte2.value):
 
-            new_state.moveCard(oc, od, dd)
+                gameState.table.players[0].score += carte1.value +carte2.value
+            else:
+                gameState.table.players[1].score += carte1.value +carte2.value
+            gameState.table.flush()
+            deck = gameState.getCurrentPlayerDeck()
+            if( len(deck) == 0):
+                if( gameState.getPlayer(0).score > gameState.getPlayer(1).score  ):
+                    gameState.win()
 
-        new_state.next_turn()
-
+        for action in agent_action:
+            # Tirer une carte
+            if( action.type == "pick"):
+                gameState.pickCard(gameState.currentTurn())
+                hand = gameState.getCurrentPlayerHand()
+                gameState.playCard(hand[0])
+                new_state.next_turn()
 
         return new_state
 
@@ -99,16 +101,12 @@ class PluginBataille(Plugin):
         :return:
         """
 
-
-        #TODO: vérifier que ce soit une carte qu'on clicque
-        # Cas d'un move
-        if( agent_action.type == "move"):
-            #if( agent_action.dest_deck != self.TABLE_PID ):
-            #    print("Mauvaise destination")
-            #    return False
-            if( agent_action.originDrawable != gameState.currentTurn() ):
-                print("C'est pas le tourn de " + str(agent_action.origin_deck))
+        for action in agent_action:
+            if(action.type == "move"):
                 return False
+            if(action.type == "pick"):
+                return len(gameState.getCurrentPlayerDeck()) > 0
+
 
         return True
 
@@ -116,17 +114,9 @@ class IABataille(Player):
     def __init__(self):
         Player.__init__(self, 1)
 
-    def getAction(self, agent_state, game_state, event=None):
-        hand = game_state.table.getPlayerHand(self.id)
-
-        #TODO: à terminer
-        card = hand[0]
-
-
-        action = AgentAction(0, "move")
-        action.originSprite = card
-        action.origin_deck = game_state.turn
-        action.dest_deck = -1
-
-        return action
+    def getAction(self, agent_state, gameState, event=None):
+        actions = []
+        pick = AgentAction(self.id, "pick")
+        actions.append(pick)
+        return actions
 

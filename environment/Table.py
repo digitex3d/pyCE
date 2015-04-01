@@ -36,7 +36,11 @@ class Table():
         """
         return self.players[pid].hand
 
-
+    def flush(self):
+        """ Efface le contenu de la table.
+        :return:
+        """
+        self.table = []
 
     def __str__(self):
         string = "["

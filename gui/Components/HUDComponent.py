@@ -37,7 +37,7 @@ class ScoreLabel(Drawable):
     #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
     def __init__(self, x , y ):
         Drawable.__init__(self, x , y)
-        label = Label('0',
+        self.label = Label('0',
                           font_name='Times New Roman',
                           font_size=36,
                           x=x, y=y)
@@ -46,7 +46,7 @@ class ScoreLabel(Drawable):
         self.height = 20
         self.width =20
 
-        self.sprites.append(label)
+        self.sprites.append(self.label)
 
     def update(self, gameState):
-        self.text = "0"
+        self.label.text = str(gameState.table.players[0].score)

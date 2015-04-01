@@ -11,7 +11,7 @@ class DeckGenerator:
     def deckFactory():
         deck = CardStack()
         for kind in ["c","d","h","s"]:
-            for value in range(1, 13):
+            for value in range(1, 14):
                 if(kind == "h" or kind=="d"):
                     deck.append(Card(value, "red", kind))
                 else:

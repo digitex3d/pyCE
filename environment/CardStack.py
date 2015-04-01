@@ -15,6 +15,17 @@ class CardStack(list):
     def size(self):
         return len(self)
 
+
+    def isEmpty(self):
+        """ Renvoie True si le CardStack est vide, false sinon.
+
+        :return (boolean):
+        """
+        if not self.table:
+            return True
+        else:
+            return False
+        
     def __str__(self):
         string = "["
         for index, item in enumerate(self):

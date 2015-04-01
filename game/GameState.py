@@ -1,5 +1,7 @@
 from game.InitState import InitState
 import logging
+from gui.Default import TABLE_PID
+
 
 class GameState:
     """ Cette classe représente un état de jeu, elle nécessite une classe qui contient les informations
@@ -21,12 +23,33 @@ class GameState:
         :param agent_action: AgentAction l'action du joueur
         :return:
         """
+
         if( self.plugin.isLegalMove(self, agent_action)):
 
             return self.plugin.nextState(self, agent_action)
         else:
             logging.debug("Illegal move")
             return self.copy()
+
+    def getCurrentPlayer(self):
+        """ Renvoie le joueur courant
+        :return:
+        """
+        self.getPlayer( self.currentTurn())
+
+    def getCurrentPlayerScore(self):
+        """ Renvoie le score du joueur
+        :return (int):
+        """
+
+        return self.getCurrentPlayer().score
+
+    def getTable(self):
+        """
+        Cette fonction renvoie la table de jeu
+        :return: CardStack
+        """
+        return self.table.table
 
     def getPlayerHand(self, pid):
         """
@@ -36,6 +59,19 @@ class GameState:
         """
         if (pid == -1 ): return self.table.table
         return self.table.getPlayerHand(pid)
+
+    def getCurrentPlayerDeck(self):
+        """ Renvoie le score du joueur
+        :return (int):
+        """
+
+        return self.table.players[ self.turn].deck
+
+    def win(self):
+        """ La partie est gangé
+        :return:
+        """
+        self.win = True
 
     def moveCard(self, card, orig, dest):
         """
@@ -49,8 +85,8 @@ class GameState:
         logging.debug("Origin pid: %s", orig)
         logging.debug("Destination pid: %s", dest)
 
-        logging.debug("Origin: %s",  self.table.players[orig].hand)
-        logging.debug("Destination: %s", self.table.players[dest].hand)
+        logging.debug("Origin: %s",  self.getPlayerHand(orig))
+        logging.debug("Destination: %s", self.getPlayerHand(dest))
         logging.debug("Card: %s", card)
 
         self.getPlayerHand(orig).remove(card)
@@ -75,8 +111,46 @@ class GameState:
         resu = tmp % nb
         self.turn = resu
 
+    def pickCard(self, pid):
+        """Déplace une carte du jeu de carte du joueur pid à sa main
+
+        :param pid (int): Le pid du joueur résponsable de l'action
+        :return:
+        """
+
+        card =  self.getPlayer(pid).deck.pop()
+        self.getPlayer(pid).hand.append(card)
+
     def isPlayerTurn(self):
         return self.turn == 0
+
+    def flushTable(self):
+        """ Efface le contenu de la table
+        """
+
+        self.table.flush()
+
+    def playCard(self, card):
+        oc = card
+        od = self.currentTurn()
+        dd = TABLE_PID
+
+        self.moveCard(oc, od, dd)
+
+    def getCurrentPlayerHand(self):
+        """ Retourne la main du joueur courant
+
+        :return: un CardStack
+        """
+        return self.getPlayerHand(self.currentTurn())
+
+    def getPlayer(self, pid):
+        """ Retourne un le PlayerState du joueur (pid)
+
+        :param pid (int): Le pid du joueur que l'on veut obtenir
+        :return: un PlayerState
+        """
+        return self.table.players[pid]
 
     def copy(self):
         new_init = InitState()
