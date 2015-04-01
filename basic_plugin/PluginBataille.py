@@ -5,7 +5,7 @@ from environment.Card import Card
 from environment.CardStack import CardStack
 from environment.DeckGenerator import DeckGenerator
 from game.InitState import InitState
-from game.agents.Agent import Agent
+from game.agents.Player import Player
 from game.agents.AgentAction import AgentAction
 
 
@@ -78,8 +78,8 @@ class PluginBataille(Plugin):
 
         # Boujer une carte
         if(agent_action.type == "move"):
-            oc = agent_action.origin_card
-            od = agent_action.origin_deck
+            oc = agent_action.originSprite
+            od = agent_action.originDrawable
             dd = agent_action.dest_deck
 
             new_state.moveCard(oc, od, dd)
@@ -100,21 +100,21 @@ class PluginBataille(Plugin):
         """
 
 
-
+        #TODO: vérifier que ce soit une carte qu'on clicque
         # Cas d'un move
         if( agent_action.type == "move"):
-            if( agent_action.dest_deck != self.TABLE_PID ):
-                print("Mauvaise destination")
-                return False
-            if( agent_action.origin_deck != gameState.currentTurn() ):
+            #if( agent_action.dest_deck != self.TABLE_PID ):
+            #    print("Mauvaise destination")
+            #    return False
+            if( agent_action.originDrawable != gameState.currentTurn() ):
                 print("C'est pas le tourn de " + str(agent_action.origin_deck))
                 return False
 
         return True
 
-class IABataille(Agent):
+class IABataille(Player):
     def __init__(self):
-        Agent.__init__(self, 1)
+        Player.__init__(self, 1)
 
     def getAction(self, agent_state, game_state, event=None):
         hand = game_state.table.getPlayerHand(self.id)
@@ -124,7 +124,7 @@ class IABataille(Agent):
 
 
         action = AgentAction(0, "move")
-        action.origin_card = card
+        action.originSprite = card
         action.origin_deck = game_state.turn
         action.dest_deck = -1
 

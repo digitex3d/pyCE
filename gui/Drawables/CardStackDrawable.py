@@ -26,7 +26,7 @@ class CardStackDrawable(Drawable):
         Drawable.__init__(self,x,y)
         self.pid = pid
         self.dir = dir
-
+        self.name = "CardStack"
          # Fond gris
         space_image = pyglet.image.load(DATA_PATH + "table/playerSpace"+dir+".png")
         self.space_sprite = ClickableSprite(space_image,x,y)

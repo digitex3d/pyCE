@@ -3,6 +3,7 @@
 from environment.Table import Table
 from gui.Components.Component import Component
 from gui.Drawables.CardStackDrawable import CardStackDrawable
+from gui.Drawables.DeckDrawable import DeckDrawable
 from gui.Drawables.TableDrawable import TableDrawable
 
 class TableComponent(Component):
@@ -65,3 +66,33 @@ class TableComponent(Component):
 
             drawableHand = CardStackDrawable(x,y,pid,dir)
             self.drawables.append(drawableHand)
+
+            # Position des decks
+
+        for pid in range(gameState.table.nbPlayers):
+              # La position de la main du joueur principal
+            if( pid == 0):
+                x = 500
+                y = 0
+                dir = "h"
+
+             # La position des autre joueurs
+            if( pid == 1):
+                x = 500
+                y = h-160
+                dir = "h"
+
+             # La position des autre joueurs
+            if( pid == 2):
+                x = w*7/8
+                y = h/2
+                dir = "v"
+
+            # La position des autre joueurs
+            if( pid == 3):
+                x = w*7/8
+                y = h/2
+                dir = "v"
+
+            drawableDeck = DeckDrawable(x,y,pid,dir)
+            self.drawables.append(drawableDeck)

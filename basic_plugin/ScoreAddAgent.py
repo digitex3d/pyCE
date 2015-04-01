@@ -1,10 +1,10 @@
 """ Autheur Giuseppe Federico 
 """
 
-from game.agents import Agent
+from game.agents import Player
 from game.agents.AgentAction import AgentAction
 
-class ScoreAddAgent(Agent):
+class ScoreAddAgent(Player):
     """ Un premier agent de test
     """
 

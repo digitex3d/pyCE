@@ -6,7 +6,7 @@ from game.GameState import GameState
 from game.Game import Game
 from gui.Components.HUDComponent import HUDComponent
 from gui.Components.TableComponent import TableComponent
-from game.agents.Agent import  Agent
+from game.agents.Player import  Player
 from gui.MainGameWindow import MainGameWindow
 from environment.CardStack import *
 from gui.Drawables import TableDrawable
@@ -22,7 +22,7 @@ plugin = PluginBataille()
 game_state = GameState(plugin.initGameState(), plugin)
 game = Game(game_state)
 
-player = Agent(0)
+player = Player(0)
 game.addAgent(player)
 ia = plugin.opponents[0]
 game.addAgent(ia)
