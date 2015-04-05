@@ -1,7 +1,6 @@
 class Card:
     """ Une carte
      """
-    KINDS = []
 
     def __init__(self, value="None", color="None", kind="None"):
         self.value = value

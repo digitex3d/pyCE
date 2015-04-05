@@ -62,10 +62,7 @@ class CardStackDrawable(Drawable):
                 theight = dy
             self.width = twidth
             self.height = theight
-            print(self.x)
-            print(self.y)
-            print(self.height)
-            print(self.width)
+
 
 
         if( self.dir == "h" ):

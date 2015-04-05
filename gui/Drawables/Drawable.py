@@ -30,8 +30,9 @@ class Drawable:
         """
 
         resu = False
-        for sprite in self.sprites:
-            if("isClicked" in dir(sprite) ):
+        if( self.visible):
+            for sprite in self.sprites:
+                if("isClicked" in dir(sprite) ):
                     resu = resu or  sprite.isClicked(x,y)
 
 

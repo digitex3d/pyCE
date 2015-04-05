@@ -17,6 +17,7 @@ class GameState:
         # l'id du premier joueur qui joue
         self.turn = init_state.turn
         self.plugin = plugin
+        self.cardValues = init_state.cardValues
 
     def nextState(self,agent_action):
         """

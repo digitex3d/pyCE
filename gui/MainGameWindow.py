@@ -29,7 +29,7 @@ class MainGameWindow(window.Window):
         ft = font.load('Arial', 28)
         fps_text = font.Text(ft, y=10)
 
-        while not (self.has_exit or self.game.game_state.win):
+        while not (self.has_exit):
             self.dispatch_events()
             self.clear()
 

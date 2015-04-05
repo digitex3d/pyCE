@@ -19,9 +19,7 @@ logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
 
 
-# On importe le plugin passé en argument, de cette façon
-# on pourra importer le plugin à tout moment au runtime
-# avec la fonction __import__
+
 
 if len(sys.argv) > 1:
     plugin_name = str(sys.argv[1])
@@ -29,9 +27,18 @@ else:
     print("Usage: pyCE plugin_name")
     exit(0)
 
-mod = __import__("plugin_%s" % plugin_name +".PluginInit")
-PluginInit = getattr(mod, "PluginInit")
-plugin = PluginInit.PluginInit()
+# On importe le plugin passé en argument, de cette façon
+# on pourra importer le plugin à tout moment au runtime
+# avec la fonction __import__
+def my_import(name):
+    mod = __import__(name)
+    components = name.split('.')
+    for comp in components[1:]:
+        mod = getattr(mod, comp)
+    return mod
+
+mod = my_import("plugins.%s" % plugin_name +".PluginInit")
+plugin = mod.PluginInit()
 
 
 

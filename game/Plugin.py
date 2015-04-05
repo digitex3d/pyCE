@@ -189,6 +189,9 @@ class Plugin:
         resu = tmp % nb
         self.gameState.turn = resu
 
+    def setCardValues(self, cardValues):
+        self.gameState.cardValues = cardValues
+
 
 class IAPlugin(Player):
     def __init__(self, id):
