@@ -1,6 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
-from environment import DeckGenerator
+from environment.DeckGenerator import DeckGenerator
 from environment.CardStack import CardStack
 from environment.Table import Table
 
@@ -32,3 +32,4 @@ class InitState:
 
         deck = DeckGenerator.deckFactory()
         deck.shuffle()
+        return deck

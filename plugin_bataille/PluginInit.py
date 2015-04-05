@@ -1,16 +1,11 @@
-""" Autheur Giuseppe Federico 
+""" Autheur Giuseppe Federico
 """
-from plugin_bataille.Plugin import Plugin
-from environment.Card import Card
-#from environment.CardStack import CardStack
-#from environment.DeckGenerator import DeckGenerator
-#from game.InitState import InitState
-#from game.agents.Player import Player
-#from game.agents.AgentAction import AgentAction
+from game.Plugin import Plugin
+from game.agents.Player import Player
+from game.agents.AgentAction import AgentAction
 
-
-class PluginInit(Plugin):
-    """ Cette classe représente un PluginBataille 
+class PluginInit():
+    """ Cette classe représente un PluginBataille
     """
 
     def __init__(self):
@@ -42,8 +37,9 @@ class PluginInit(Plugin):
         self.opponents.append( IABataille() )
         #################################
 
+        return self.initState
 
-        return init_state
+
 
     def nextState(self, gameState, agent_action):
         """  Renvoie le prochain etat du jeu etant donnée une action
@@ -52,16 +48,16 @@ class PluginInit(Plugin):
 
         new_state = gameState.copy()
 
-        table = gameState.getTable()
+        table = gameState.getTableCards()
         if(len(table) == 2):
             carte1 = table[0]
             carte2 = table[1]
             if(carte1.value > carte2.value):
 
-                gameState.table.players[0].score += carte1.value +carte2.value
+                gameState.getTable().players[0].score += carte1.value +carte2.value
             else:
-                gameState.table.players[1].score += carte1.value +carte2.value
-            gameState.table.flush()
+                gameState.getTable().players[1].score += carte1.value +carte2.value
+            gameState.flushTable()
             deck = gameState.getCurrentPlayerDeck()
             if( len(deck) == 0):
                 if( gameState.getPlayer(0).score > gameState.getPlayer(1).score  ):

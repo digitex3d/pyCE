@@ -50,6 +50,13 @@ class GameState:
         Cette fonction renvoie la table de jeu
         :return: CardStack
         """
+        return self.table
+
+    def getTableCards(self):
+        """
+        Cette fonction renvoie les cartes de la table
+        :return: CardStack
+        """
         return self.table.table
 
 
