@@ -26,6 +26,18 @@ class PublicGameState:
 
         return  self.gameState.getCurrentPlayer().score
 
+
+    def pid(self, object):
+        """ Renvoie le pid d'un objet
+        :param object:
+        :return: (int) pid
+        """
+        if( hasattr(object,"getPid()") ):
+            return object.getPid()
+
+        else:
+            print(object + " ne contient pas un pid.")
+
     def getTable(self):
         """
         Cette fonction renvoie la table de jeu

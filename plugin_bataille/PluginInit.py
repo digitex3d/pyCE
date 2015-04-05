@@ -1,10 +1,9 @@
 """ Autheur Giuseppe Federico
 """
-from game.Plugin import Plugin
-from game.agents.Player import Player
-from game.agents.AgentAction import AgentAction
+from game.Plugin import Plugin, IAPlugin
 
-class PluginInit():
+
+class PluginInit(Plugin):
     """ Cette classe représente un PluginBataille
     """
 
@@ -41,40 +40,37 @@ class PluginInit():
 
 
 
-    def nextState(self, gameState, agent_action):
+    def nextState(self):
         """  Renvoie le prochain etat du jeu etant donnée une action
         """
 
+        table = self.getTableCards()
 
-        new_state = gameState.copy()
-
-        table = gameState.getTableCards()
         if(len(table) == 2):
             carte1 = table[0]
             carte2 = table[1]
             if(carte1.value > carte2.value):
 
-                gameState.getTable().players[0].score += carte1.value +carte2.value
+                self.getPlayer(0).score += carte1.value +carte2.value
             else:
-                gameState.getTable().players[1].score += carte1.value +carte2.value
-            gameState.flushTable()
-            deck = gameState.getCurrentPlayerDeck()
+                self.getPlayer(1).score += carte1.value +carte2.value
+            self.flushTable()
+            deck = self.getCurrentPlayerDeck()
             if( len(deck) == 0):
-                if( gameState.getPlayer(0).score > gameState.getPlayer(1).score  ):
-                    gameState.win()
+                if( self.getCurrentPlayer.score > self.getPlayer(1).score  ):
+                    self.win()
 
-        for action in agent_action:
+        for action in self.getAction():
             # Tirer une carte
             if( action.type == "pick"):
-                gameState.pickCard(gameState.currentTurn())
-                hand = gameState.getCurrentPlayerHand()
-                gameState.playCard(hand[0])
-                new_state.next_turn()
-
-        return new_state
+                self.pickCard(self.currentTurn())
+                hand = self.getCurrentPlayerHand()
+                self.playCard(hand[0])
+                self.next_turn()
 
 
-    def isLegalMove(self, gameState, agent_action):
+
+    def isLegalMove(self):
         #TODO: à implémenter
         """
         Renvoie True si l'action est legale dans l'état courant
@@ -83,22 +79,23 @@ class PluginInit():
         :return:
         """
 
-        for action in agent_action:
+        for action in self.agentAction:
             if(action.type == "move"):
                 return False
             if(action.type == "pick"):
-                return len(gameState.getCurrentPlayerDeck()) > 0
+                return len(self.getCurrentPlayerDeck()) > 0
+
 
 
         return True
 
-class IABataille(Player):
+class IABataille(IAPlugin):
     def __init__(self):
-        Player.__init__(self, 1)
+        IAPlugin.__init__(self, 1)
 
     def getAction(self, agent_state, gameState, event=None):
         actions = []
-        pick = AgentAction(self.id, "pick")
+        pick = self.defAgentAction(self.id, "pick")
         actions.append(pick)
         return actions
 

@@ -31,6 +31,8 @@ class CardStackDrawable(Drawable):
         space_image = pyglet.image.load(DATA_PATH + "table/playerSpace"+dir+".png")
         self.space_sprite = ClickableSprite(space_image,x,y)
 
+    def getPid(self):
+        return self.pid
 
     def update(self, gameState):
         """ On met à jour la main avec les nouveaux cartes

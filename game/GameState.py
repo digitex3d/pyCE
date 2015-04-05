@@ -18,16 +18,16 @@ class GameState:
         self.turn = init_state.turn
         self.plugin = plugin
 
-    def nextState(self, agent_action):
+    def nextState(self,agent_action):
         """
         Renvoie l'état de jeu étant donné une action
         :param agent_action: AgentAction l'action du joueur
         :return:
         """
 
-        if( self.plugin.isLegalMove(self, agent_action)):
+        if( self.plugin.GisLegalMove(self, agent_action)):
 
-            return self.plugin.nextState(self, agent_action)
+            return self.plugin.GNextState(self, agent_action)
         else:
             logging.debug("Illegal move")
             return self.copy()
@@ -45,19 +45,7 @@ class GameState:
 
         return self.getCurrentPlayer().score
 
-    def getTable(self):
-        """
-        Cette fonction renvoie la table de jeu
-        :return: CardStack
-        """
-        return self.table
 
-    def getTableCards(self):
-        """
-        Cette fonction renvoie les cartes de la table
-        :return: CardStack
-        """
-        return self.table.table
 
 
     def getPlayerHand(self, pid):
