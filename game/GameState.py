@@ -1,3 +1,4 @@
+from environment.DeckGenerator import DeckGenerator
 from game.InitState import InitState
 import logging
 from gui.Default import TABLE_PID
@@ -50,6 +51,7 @@ class GameState:
         :return: CardStack
         """
         return self.table.table
+
 
     def getPlayerHand(self, pid):
         """

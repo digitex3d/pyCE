@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
+from game.InitState import InitState
 
 
 class Plugin:
@@ -12,6 +13,7 @@ class Plugin:
         self.TABLE_PID = -1
         self.PLAYER_PID = 0
         self.opponents = []
-
+        # Initialisation du jeu
+        self.initState = InitState()
 
 

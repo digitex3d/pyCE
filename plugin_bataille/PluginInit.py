@@ -1,15 +1,15 @@
 """ Autheur Giuseppe Federico 
 """
-from basic_plugin.Plugin import Plugin
+from plugin_bataille.Plugin import Plugin
 from environment.Card import Card
-from environment.CardStack import CardStack
-from environment.DeckGenerator import DeckGenerator
-from game.InitState import InitState
-from game.agents.Player import Player
-from game.agents.AgentAction import AgentAction
+#from environment.CardStack import CardStack
+#from environment.DeckGenerator import DeckGenerator
+#from game.InitState import InitState
+#from game.agents.Player import Player
+#from game.agents.AgentAction import AgentAction
 
 
-class PluginBataille(Plugin):
+class PluginInit(Plugin):
     """ Cette classe représente un PluginBataille 
     """
 
@@ -18,38 +18,24 @@ class PluginBataille(Plugin):
 
 
     def initGameState(self):
-        """
-        Cette fonction initialise l'état intitial du jeu
-        La table et les joueurs.
-        :return:
-        """
-        # Initialisation du jeu
-        init_state = InitState()
+        """ Cette fonction initialise l'état intitial du jeu
+            La table et les joueurs.
 
+        """
 
-        deck = DeckGenerator.deckFactory()
-        deck.shuffle()
+        deck = self.initState.generateShuffledDeck()
 
         # Initialisation du joueur1
-
-
         ##### INIT PLAYER 1 ######
         deck1 = deck[0:int(len(deck)/2)]
         deck2 = deck[int(len(deck)/2):len(deck) ]
 
-        init_state.addPlayerState(CardStack(), deck1)
+        self.initState.addPlayerState(deck=deck1)
         ###########################
 
         ##### INIT PLAYER 2 ######
 
-
-
-
-
-        hand_player2 = CardStack()
-
-
-        init_state.addPlayerState(hand_player2, deck2)
+        self.initState.addPlayerState(deck=deck2)
         ###########################
 
         ######## INIT OPPONENT ##########

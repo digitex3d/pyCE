@@ -29,6 +29,8 @@ class Player:
             move.originDrawable = event.drawableClicked.pid
             move.dest_deck = event.drawableReleased.pid
             actions.append(move)
+        else:
+            actions = []
         return actions
 
 

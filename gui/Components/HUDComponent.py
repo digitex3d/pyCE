@@ -25,7 +25,7 @@ class HUDComponent(Component):
 
         # On ajoute le score au hud
         self.drawables.append(ScoreLabel(100,100,0))
-        self.drawables.append(ScoreLabel(100,500,1))
+        self.drawables.append(ScoreLabel(100,500 ,1))
 
 
 

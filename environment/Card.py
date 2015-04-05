@@ -1,5 +1,6 @@
 class Card:
-    """ Ceci est une carte """
+    """ Une carte
+     """
     KINDS = []
 
     def __init__(self, value="None", color="None", kind="None"):

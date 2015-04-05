@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
+from environment import DeckGenerator
 from environment.CardStack import CardStack
 from environment.Table import Table
 
@@ -22,3 +23,12 @@ class InitState:
         """
 
         self.table.addPlayer( hand, deck)
+
+    def generateShuffledDeck(self):
+        """ Générer un jeu de cartes mélangé.
+
+        :return: (CardStack)
+        """
+
+        deck = DeckGenerator.deckFactory()
+        deck.shuffle()
