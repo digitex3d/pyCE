@@ -40,6 +40,11 @@ class Plugin:
         self.agentAction = agent_action
         return self.isLegalMove()
 
+    def lose(self):
+        """ La partie est perdue
+        :return:
+        """
+        self.gameState.lose = True
 
     def getAction(self):
         return self.agentAction
@@ -63,7 +68,7 @@ class Plugin:
         """ Renvoie le joueur courant
         :return:
         """
-        self.gameState.getPlayer( self.currentTurn())
+        return self.gameState.getPlayer(self.currentTurn())
 
     def getCurrentPlayerScore(self):
         """ Renvoie le score du joueur
@@ -151,6 +156,12 @@ class Plugin:
         dd = self.TABLE_PID
 
         self.gameState.moveCard(oc, od, dd)
+
+    def isLost(self):
+        return self.gameState.lose
+
+    def isWin(self):
+        return self.gameState.win
 
     def getCurrentPlayerHand(self):
         """ Retourne la main du joueur courant

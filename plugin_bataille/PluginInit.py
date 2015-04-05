@@ -17,24 +17,22 @@ class PluginInit(Plugin):
 
         """
 
+        # Renvoie un jeu de cartes mélangé
         deck = self.initState.generateShuffledDeck()
 
-        # Initialisation du joueur1
-        ##### INIT PLAYER 1 ######
+        # Initialisation des joueurs
+
         deck1 = deck[0:int(len(deck)/2)]
-        deck2 = deck[int(len(deck)/2):len(deck) ]
+        deck2 = deck[int(len(deck)/2):len(deck)]
 
+        #Player1 id=0
         self.initState.addPlayerState(deck=deck1)
-        ###########################
 
-        ##### INIT PLAYER 2 ######
-
+        #Player2 id=1
         self.initState.addPlayerState(deck=deck2)
-        ###########################
 
-        ######## INIT OPPONENT ##########
+        # Initialise un adversaire ( le premier adversaire a le pid = 1)
         self.opponents.append( IABataille() )
-        #################################
 
         return self.initState
 
@@ -42,23 +40,25 @@ class PluginInit(Plugin):
 
     def nextState(self):
         """  Renvoie le prochain etat du jeu etant donnée une action
+            getAction() pour récuperer une action
         """
 
-        table = self.getTableCards()
+        if( not self.isLost() and not self.isWin()):
+            table = self.getTableCards()
 
-        if(len(table) == 2):
-            carte1 = table[0]
-            carte2 = table[1]
-            if(carte1.value > carte2.value):
-
-                self.getPlayer(0).score += carte1.value +carte2.value
-            else:
-                self.getPlayer(1).score += carte1.value +carte2.value
-            self.flushTable()
-            deck = self.getCurrentPlayerDeck()
-            if( len(deck) == 0):
-                if( self.getCurrentPlayer.score > self.getPlayer(1).score  ):
-                    self.win()
+            if(len(table)!=0 and len(table)%2 == 0):
+                carte1 = table[len(table)-2]
+                carte2 = table[len(table)-1]
+                finalscore = 0
+                cards_index = 0
+                if((carte1.value != carte2.value)):
+                    if( carte1.value > carte2.value):
+                        self.getPlayer(0).score += carte1.value +carte2.value + finalscore
+                    else:
+                        self.getPlayer(1).score += carte1.value +carte2.value + finalscore
+                    self.flushTable()
+                else:
+                    finalscore += carte1.value +carte2.value
 
         for action in self.getAction():
             # Tirer une carte
@@ -67,6 +67,17 @@ class PluginInit(Plugin):
                 hand = self.getCurrentPlayerHand()
                 self.playCard(hand[0])
                 self.next_turn()
+
+        deck = self.getCurrentPlayerDeck()
+        if( len(deck) == 0):
+            if( self.getPlayer(0).score > self.getPlayer(1).score  ):
+                self.win()
+                return
+            elif ( self.getPlayer(0).score < self.getPlayer(1).score  ):
+                self.lose()
+                return
+            else:
+                return
 
 
 
@@ -79,11 +90,15 @@ class PluginInit(Plugin):
         :return:
         """
 
-        for action in self.agentAction:
+        for action in self.getAction():
             if(action.type == "move"):
                 return False
             if(action.type == "pick"):
-                return len(self.getCurrentPlayerDeck()) > 0
+                od = action.originDrawable
+                if( od != None and od.name == "CardStack"):
+                    if( action.originDrawable.pid != self.getCurrentPlayer()):
+                        return False
+
 
 
 

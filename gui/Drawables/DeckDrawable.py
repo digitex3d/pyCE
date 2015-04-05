@@ -29,7 +29,7 @@ class DeckDrawable(Drawable):
         self.sprites.append(ClickableSprite(deck_image,x,y))
 
     def update(self, gameState):
-        #TODO: Affiche le numero de cartes qui reste?
-        logging.debug("Implémenter")
+        if( len(gameState.table.players[self.pid].deck) == 0):
+            self.visible = False
 
 

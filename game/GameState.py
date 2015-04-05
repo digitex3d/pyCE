@@ -11,7 +11,7 @@ class GameState:
 
     def __init__(self, init_state, plugin):
         self.win = False
-
+        self.lose = False
         # L'état initial de la table
         self.table = init_state.table
         # l'id du premier joueur qui joue
@@ -69,6 +69,12 @@ class GameState:
         :return:
         """
         self.win = True
+
+    def lose(self):
+        """ La partie est perdue
+        :return:
+        """
+        self.lose = True
 
     def moveCard(self, card, orig, dest):
         """

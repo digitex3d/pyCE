@@ -17,6 +17,7 @@ class Drawable:
         self.height = h
         self.width = w
         self.showBorders = showBorders
+        self.visible = True
 
 
     def bordersVisible(self, value):
@@ -37,7 +38,10 @@ class Drawable:
         return resu
 
     def getSprites(self):
-        return self.sprites
+        if(self.visible):
+            return self.sprites
+        else:
+            return  []
 
     @abc.abstractmethod
     def update(self, gameState):

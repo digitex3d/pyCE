@@ -27,6 +27,9 @@ class HUDComponent(Component):
         self.drawables.append(ScoreLabel(100,100,0))
         self.drawables.append(ScoreLabel(100,500 ,1))
 
+        # On ajoute le label win
+        self.drawables.append(WinLabel(100,200))
+
 
 
 class ScoreLabel(Drawable):
@@ -50,3 +53,27 @@ class ScoreLabel(Drawable):
 
     def update(self, gameState):
         self.label.text = str(gameState.table.players[self.pid].score)
+
+class WinLabel(Drawable):
+    """ Cette classe représente une partie du HUD où le score du joueur sera
+        éventuelment affiché.
+    """
+
+    #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
+    def __init__(self, x , y):
+        Drawable.__init__(self, x , y)
+        self.label = Label('',
+                          font_name='Times New Roman',
+                          font_size=42,
+                          x=x, y=y)
+
+        #TODO: c'est pas la bonne taille
+        self.height = 20
+        self.width =20
+        self.sprites.append(self.label)
+
+    def update(self, gameState):
+        if( gameState.win):
+            self.label.text = "WIN!!"
+        if( gameState.lose):
+            self.label.text = "LOST!!"
