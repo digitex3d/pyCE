@@ -44,36 +44,39 @@ class CardStackDrawable(Drawable):
         self.sprites.append(self.space_sprite)
         self.sprites.extend(SpriteFactory.deck_factory(cards))
 
-        #TODO: resoudre probleme rotation
-        theight = 0
-        twidth = 0
+
         if( self.dir == "v" ):
             # Affichage vertical
-            dy=0
-            for cardSprite in self.sprites:
-                # set it so it will rotate around the center
-                #cardSprite.image.anchor_x = cardSprite.image.width / 2
-                #cardSprite.image.anchor_y = cardSprite.image.height / 2
-                cardSprite.rotation = 90.0
-                cardSprite.x = self.x
-                cardSprite.y = self.y + dy
-                dy = dy - DISTANCE_CARTES
-                twidth = cardSprite.width
-                theight = dy
-            self.width = twidth
-            self.height = theight
+            nb_c = len(self.sprites)
+            distance_y = DISTANCE_CARTES * 1/(nb_c/5)
+
+            dy = 0
+            for sprite in self.sprites:
+                if( sprite == self.space_sprite):
+                    sprite.x = self.x
+                    sprite.y = self.y
+                else:
+                    sprite.rotate(90)
+                    sprite.x = self.x
+                    sprite.y = self.y + dy
+                    dy = dy + distance_y
+
 
 
 
         if( self.dir == "h" ):
             # Affichage horizontal
-            dx=0
+            nb_c = len(self.sprites)
+            distance_x = DISTANCE_CARTES * 1/(nb_c/5)
 
-            for cardSprite in self.sprites:
-                cardSprite.x = self.x + dx
-                cardSprite.y = self.y
-                dx = dx + DISTANCE_CARTES
-                twidth = dx
-                theight = cardSprite.height
-            self.width = twidth
-            self.height = theight + cardSprite.height
+            dx = 0
+
+
+            for sprite in self.sprites:
+                if( sprite == self.space_sprite):
+                    sprite.x = self.x
+                    sprite.y = self.y
+                else:
+                    sprite.x = self.x + dx
+                    sprite.y = self.y
+                    dx = dx + distance_x

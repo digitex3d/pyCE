@@ -52,3 +52,10 @@ class InitState:
 
     def setCardValues(self, vals):
         self.cardValues = vals
+
+    def setTableDeck(self, deck):
+        """ Initialise le jeu de cartes de la table
+        :param deck (CartStack):
+        :return:
+        """
+        self.table.deck = deck

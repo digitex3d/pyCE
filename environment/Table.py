@@ -15,6 +15,7 @@ class Table():
         self.players = []
         self.table = CardStack()
         self.nbPlayers = 0
+        self.deck = CardStack()
 
     def addPlayer(self, hand=CardStack(), deck=CardStack()):
         """

@@ -11,6 +11,9 @@ class ClickableSprite(Sprite):
     def __init__(self, *args, **kwargs):
         Sprite.__init__(self, *args, **kwargs)
 
+    def rotate(self, degree):
+        self.rotation = degree
+
     def isClicked(self, x,y):
         """Renvoi True si le sprite a reçu un click; False sinon.
 

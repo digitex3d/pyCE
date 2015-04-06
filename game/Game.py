@@ -42,12 +42,10 @@ class Game:
         # L'etat de l'agent qui doit jouer
         a_state = self.game_state.table.players[turn]
 
+        agent_action = self.agents[self.game_state.turn].getAction(a_state, self.game_state, event)
 
-        for turn in range(self.game_state.table.nbPlayers):
-            agent_action = self.agents[self.game_state.turn].getAction(a_state, self.game_state, event)
-
-            # Effectue l'action et met à jour l'état du jeu
-            self.game_state = self.game_state.nextState(agent_action)
+        # Effectue l'action et met à jour l'état du jeu
+        self.game_state = self.game_state.nextState(agent_action)
 
     def isPlayerTourn(self):
         return (self.game_state.turn == 0)

@@ -29,7 +29,11 @@ class DeckDrawable(Drawable):
         self.sprites.append(ClickableSprite(deck_image,x,y))
 
     def update(self, gameState):
-        if( len(gameState.table.players[self.pid].deck) == 0):
-            self.visible = False
+        if( self.pid != -1):
+            if( len(gameState.table.players[self.pid].deck) == 0):
+                self.visible = False
+        else:
+            if( len(gameState.table.deck) == 0):
+                self.visible = False
 
 

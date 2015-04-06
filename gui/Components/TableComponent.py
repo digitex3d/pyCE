@@ -38,60 +38,65 @@ class TableComponent(Component):
         y = 0
         dir = "h"
 
+        # La position des mains des joueurs principal
         for pid in range(gameState.table.nbPlayers):
 
-            # La position de la main du joueur principal
+
             if( pid == 0):
-                x = 0
+                x = 200
                 y = 0
                 dir = "h"
 
              # La position des autre joueurs
             if( pid == 1):
                 x = 0
-                y = h-160
-                dir = "h"
+                y = 400
+                dir = "v"
 
              # La position des autre joueurs
             if( pid == 2):
-                x = w*7/8
-                y = h/2
-                dir = "v"
+                x = 300
+                y = h-100
+                dir = "h"
 
             # La position des autre joueurs
             if( pid == 3):
-                x = w*7/8
-                y = h/2
+                x = w-100
+                y = h-500
                 dir = "v"
 
             drawableHand = CardStackDrawable(x,y,pid,dir)
             self.drawables.append(drawableHand)
 
-            # Position des decks
 
+
+        drawableDeck = DeckDrawable(500, 500,-1,"h")
+        self.drawables.append(drawableDeck)
+
+        # Position des decks
         for pid in range(gameState.table.nbPlayers):
               # La position de la main du joueur principal
             if( pid == 0):
-                x = 500
+                x = w-200
                 y = 0
                 dir = "h"
 
              # La position des autre joueurs
             if( pid == 1):
-                x = 500
-                y = h-160
-                dir = "h"
+                x = 0
+                y = 200
+                dir = "v"
 
              # La position des autre joueurs
             if( pid == 2):
-                x = w*7/8
-                y = h/2
-                dir = "v"
+                x = 100
+                y = h-100
+                dir = "h"
 
             # La position des autre joueurs
             if( pid == 3):
-                x = w*7/8
-                y = h/2
+                x = w-100
+                y = h-200
                 dir = "v"
 
             drawableDeck = DeckDrawable(x,y,pid,dir)

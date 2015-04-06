@@ -3,9 +3,11 @@
 from environment import Card
 from pyglet.sprite import Sprite
 import pyglet.image
+from gui.Sprites.ClickableSprite import ClickableSprite
+
 BACK_SIDE_IMAGE = pyglet.image.load("data/cards/b.gif")
 
-class CardSprite(Sprite):
+class CardSprite(ClickableSprite):
     """ Cette classe représente le Sprite d'une carte"""
 
     def __init__(self, card, img, x=0, y=0, blend_src=770, blend_dest=771, batch=None, group=None, usage='dynamic'):
@@ -25,13 +27,6 @@ class CardSprite(Sprite):
         else:
             self.side = 1
             self.image = self.card_image
-
-
-    def isClicked(self, x,y):
-        return x > self.x and \
-               x < self.x+ self.width and \
-               y > self.y and \
-               y < self.y + self.height
 
 
 

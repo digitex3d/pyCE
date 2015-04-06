@@ -121,6 +121,13 @@ class Plugin:
 
         return  self.gameState.table.players[self.currentTurn()].deck
 
+    def getTableDeck(self):
+        """ Retour le jeu de cartes principal
+        :return:
+        """
+
+        return self.gameState.table.deck
+
     def win(self):
         """ La partie est gangé
         :return:
@@ -145,8 +152,11 @@ class Plugin:
         :param pid (int): Le pid du joueur résponsable de l'action
         :return:
         """
+        if(pid != -1):
+            card =   self.gameState.getPlayer(pid).deck.pop()
+        else:
+            card =   self.gameState.table.deck.pop()
 
-        card =   self.gameState.getPlayer(pid).deck.pop()
         self.gameState.getPlayer(pid).hand.append(card)
 
     def isPlayerTurn(self):
@@ -204,6 +214,22 @@ class Plugin:
         tmp = (self.gameState.turn+1)
         resu = tmp % nb
         self.gameState.turn = resu
+
+    def dealCards(self, deck_pid, nb_cards):
+        """ Distribution de nb_cards en sens antihoraire
+        :param nb_cards:
+        :param deck_pid:
+        """
+
+        if( deck_pid != -1):
+            deck = self.gameState.getPlayer(deck_pid).deck
+        else:
+            deck = self.gameState.table.deck
+
+        for i in range(self.gameState.getnbPlayers()):
+            carte = deck.pop()
+            self.gameState.getPlayer(i).hand.append(carte)
+
 
     def setCardValues(self, cardValues):
         """ Set the value of every card
