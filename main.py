@@ -51,8 +51,10 @@ game = Game(game_state)
 
 player = Player(0)
 game.addAgent(player)
-ia = plugin.opponents[0]
-game.addAgent(ia)
+
+for i in range(plugin.initState.table.nbPlayers-1):
+    ia = plugin.opponents[0]
+    game.addAgent(ia)
 
 # On initialise la fenetre principale
 window = MainGameWindow(game, 1024, 768)

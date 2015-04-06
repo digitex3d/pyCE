@@ -49,12 +49,5 @@ class Game:
             # Effectue l'action et met à jour l'état du jeu
             self.game_state = self.game_state.nextState(agent_action)
 
-
-
-
-
-
-
-
     def isPlayerTourn(self):
         return (self.game_state.turn == 0)

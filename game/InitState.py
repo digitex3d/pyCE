@@ -7,7 +7,7 @@ from environment.Table import Table
 from game.agents import PlayerState
 
 class InitState:
-    """ Cette classe va servir pour initialiser le jeu
+    """ Fonctions pour l'initialisation du jeu.
     """
 
     def __init__(self):

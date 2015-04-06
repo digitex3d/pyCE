@@ -15,22 +15,20 @@ class Player:
 
         actions = []
 
-        #TODO: modifier l'id
         if( not event.isFull() ):
             action = AgentAction(0, "none")
             return []
 
-        if( event.drawableClicked.name == "Deck" ):
-            actions.append(AgentAction(0, "pick"))
-
-        elif ( event.drawableClicked.name == "CardStack" ):
+        if hasattr(event.spriteClicked, 'card'):
             move = AgentAction(0, "move")
             move.originSprite = event.spriteClicked.card
             move.originDrawable = event.drawableClicked.pid
             move.dest_deck = event.drawableReleased.pid
             actions.append(move)
-        else:
-            actions = []
+
+        if( event.drawableClicked.name == "Deck" ):
+            actions.append(AgentAction(0, "pick"))
+
         return actions
 
 

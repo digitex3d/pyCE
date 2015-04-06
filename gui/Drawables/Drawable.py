@@ -18,6 +18,7 @@ class Drawable:
         self.width = w
         self.showBorders = showBorders
         self.visible = True
+        self.name = None
 
 
     def bordersVisible(self, value):
