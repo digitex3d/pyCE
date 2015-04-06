@@ -161,6 +161,7 @@ class GameState:
         new_init.turn = self.turn
         new_init.table = self.table
         new_init.win = self.win
+        new_init.cardValues = self.cardValues
 
         state_copy = GameState(  new_init , self.plugin)
         return state_copy

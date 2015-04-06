@@ -1,7 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
 from game.InitState import InitState
-from game.PublicGameState import PublicGameState
 from game.agents.AgentAction import AgentAction
 from game.agents.Player import Player
 
@@ -27,7 +26,16 @@ class Plugin:
         """
         return None
 
+
     def GNextState(self, gameState, agent_action):
+        """ Cette fonction fait une copie de l'état de jeu , affecte le gamestate et
+            l'action au plugin puis apelle la fonction nextState du plugin.
+            actuel au plugin.
+
+        :param gameState (GameState): game state courant
+        :param agent_action: Action courante
+        :return: Le nextState calculé par le plugin
+        """
         new_state = gameState.copy()
         self.gameState = new_state
         self.agentAction = agent_action
@@ -178,6 +186,14 @@ class Plugin:
         """
         return  self.gameState.table.players[pid]
 
+    def getValeurCarte(self, carte):
+        """ Renvoie la valeur de la carte selon les régles du jeu.
+
+        :param carte (Card):
+        :return: (int)
+        """
+        return self.gameState.cardValues[carte.value]
+
     def getAction(self):
         return self.agentAction
 
@@ -190,6 +206,11 @@ class Plugin:
         self.gameState.turn = resu
 
     def setCardValues(self, cardValues):
+        """ Set the value of every card
+
+        :param cardValues {card:value}
+        :return: None
+        """
         self.gameState.cardValues = cardValues
 
 

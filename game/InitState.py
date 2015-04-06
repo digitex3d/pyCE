@@ -50,4 +50,5 @@ class InitState:
         deck.shuffle()
         return deck
 
-
+    def setCardValues(self, vals):
+        self.cardValues = vals
