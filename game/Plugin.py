@@ -146,8 +146,8 @@ class Plugin:
         return  self.gameState.table.nbPlayers
 
 
-    def pickCard(self, pid):
-        """Déplace une carte du jeu de carte du joueur pid à sa main
+    def pickCardFrom(self, pid):
+        """Déplace une carte du jeu de carte  pid à sa main
 
         :param pid (int): Le pid du joueur résponsable de l'action
         :return:
@@ -157,7 +157,7 @@ class Plugin:
         else:
             card =   self.gameState.table.deck.pop()
 
-        self.gameState.getPlayer(pid).hand.append(card)
+        self.gameState.getCurrentPlayerHand().append(card)
 
     def isPlayerTurn(self):
         return  self.gameState.turn == 0

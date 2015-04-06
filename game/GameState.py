@@ -58,6 +58,9 @@ class GameState:
         if (pid == -1 ): return self.table.table
         return self.table.getPlayerHand(pid)
 
+    def getCurrentPlayerHand(self):
+        return self.table.getPlayerHand(self.currentTurn()).hand
+
     def getCurrentPlayerDeck(self):
         """ Renvoie le score du joueur
         :return (int):

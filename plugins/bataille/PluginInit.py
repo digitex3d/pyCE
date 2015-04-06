@@ -90,7 +90,7 @@ class PluginInit(Plugin):
         for action in self.getAction():
             # Tirer une carte
             if( action.type == "pick"):
-                self.pickCard(self.currentTurn())
+                self.pickCardFrom(self.currentTurn())
                 hand = self.getCurrentPlayerHand()
                 self.playCard(hand[0])
                 self.next_turn()
