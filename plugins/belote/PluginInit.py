@@ -26,7 +26,6 @@ class PluginInit(Plugin):
 
 
     def initialPhase(self):
-
         self.dealCards(5)
         self.dealToTable(1)
         self.showDialogMessage("Take", "Take? ", "No" )
@@ -38,8 +37,18 @@ class PluginInit(Plugin):
             card = self.getSelectedCard()
             self.atout = card.kind
             self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
-            self.dealCards(3)
+
+            # Distribution du reste des cartes
+            for i in range(self.getnbPlayers()):
+                if (i != self.currentTurn()):
+                    self.dealTo(i, 4)
+                else:
+                    self.dealTo(i, 3)
+                    card = self.getTable().pop()
+                    self.appendCardToMyHand(card)
+
             self.setCurrentPhase("Play")
+            self.next_turn()
         if(action.type == "dialog"):
             if(self.lastPlayerToPlay()):
                 self.showDialogMessage("Info", "Trump has not been chosen, restarting.", "Ok")

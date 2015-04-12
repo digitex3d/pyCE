@@ -251,19 +251,34 @@ class Plugin:
     def isDeckEmpty(self):
         return not len(self.getTableDeck())
 
-    def dealToTable(self, nbCards):
-        """ Déplace nbCards cartes du jeu de carte principale à la table
-        :return: None
-        """
 
-        for i in range(nbCards):
-            card = self.getTableDeck().pop()
-            self.appendCardToTable(card)
 
 
 
     ######################### /Deck Functions ##################################
 
+    ######################## Hand Functions ##################################
+    def appendCardToHand(self, pid,card):
+        """ Ajoute card à la main du joueur pid.
+
+        :param pid (int):
+        :param card( Card):
+        :return:
+        """
+        if( pid != 0 ):
+            card.flipCard()
+        self.getPlayerHand(pid).append(card)
+
+    def appendCardToMyHand(self, card):
+        """ Ajoute card à la main du joueur courant
+
+        :param pid (int):
+        :param card( Card):
+        :return:
+        """
+        self.appendCardToHand(self.currentTurn(), card)
+
+    ######################## /Hand Functions ##################################
     def getTableCards(self):
         """
         Cette fonction renvoie les cartes de la table
@@ -410,6 +425,33 @@ class Plugin:
         tmp = (self.gameState.turn+1)
         resu = tmp % nb
         self.gameState.turn = resu
+    ############################### Dealing functions ##########################
+
+    def dealToTable(self, nbCards):
+        """ Déplace nbCards cartes du jeu de carte principale à la table
+        :return: None
+        """
+
+        for i in range(nbCards):
+            card = self.getTableDeck().pop()
+            self.appendCardToTable(card)
+
+    def dealTo(self, pid, nbCards):
+        """ Ditribue nbCards au joueur (pid)
+        :param pid (int):
+        :param nbCards (int):
+        :return: None
+        """
+
+        for i in range(nbCards):
+            if( self.isDeckEmpty()):
+                    raise PluginException("Cannot pick, deck is empty")
+            card = self.getTableDeck().pop()
+
+            # On cache la carte si c'est un opposant
+            if(pid != 0):
+                card.flipCard()
+            self.getPlayerHand(pid).append(card)
 
     def dealCards(self, nb_cards):
         """ Distribution de nb_cards en sens antihoraire
@@ -420,15 +462,9 @@ class Plugin:
         deck = self.gameState.table.deck
 
         for pid in range(self.gameState.getnbPlayers()):
-            for i in range(nb_cards):
-                if( self.isDeckEmpty()):
-                    raise PluginException("Cannot pick, deck is empty")
-                carte = deck.pop()
-                # On cache la carte si c'est un opposant
-                if(pid != 0):
-                    carte.flipCard()
+            self.dealTo(pid, nb_cards)
 
-                self.gameState.getPlayer(pid).hand.append(carte)
+    ############################## Dealing functions ##########################
 
 ###################### Score Functions #####################
     def getPlayerScore(self, pid):
@@ -529,9 +565,6 @@ class Plugin:
         return action
 
 ######################      /IA      #######################
-
-
-
     def setCardValues(self, cardValues):
         """ Set the value of every card
 
