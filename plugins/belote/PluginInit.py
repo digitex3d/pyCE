@@ -4,45 +4,100 @@ from game.Plugin import Plugin, IAPlugin
 
 
 class PluginInit(Plugin):
-    """ Cette classe représente un Plugin pour jouer à la belote
+    """ Cette classe représente un PluginBataille
     """
 
     def __init__(self):
-        Plugin.__init__(self)
-        self.isFirstTurn = True
+        Plugin.__init__(self, "La Belote")
+        self.atout=None
 
 
-    def initGameState(self):
+
+    def pluginInit(self):
         """ Cette fonction initialise l'état intitial du jeu
             La table et les joueurs.
 
+            Toutes les initialisations doivent modifier l'objet
+            initState.
         """
 
-        # Renvoie un jeu de cartes mélangé
-        deck = self.initState.generateShuffledDeck()
+        self.initPlayers(4)
+        self.opponents.append(IABelote())
 
 
-        self.initState.setTableDeck(deck)
-        # Initialisation des joueurs
+    def initialPhase(self):
 
-        #Player1 id=0
-        self.initState.addPlayerState()
+        self.dealCards(5)
+        self.dealToTable(1)
+        self.showDialogMessage("Take", "Take? ", "No" )
+        self.setCurrentPhase("Take")
 
-        #Player2 id=1
-        self.initState.addPlayerState()
+    def takePhase(self):
+        action = self.getAction()
+        if(action.type == "move"):
+            card = self.getSelectedCard()
+            self.atout = card.kind
+            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.dealCards(3)
+            self.setCurrentPhase("Play")
+        if(action.type == "dialog"):
+            if(self.lastPlayerToPlay()):
+                self.showDialogMessage("Info", "Trump has not been chosen, restarting.", "Ok")
+                self.resetTable()
+                self.initialPhase()
+        self.next_turn()
 
-        #Player3 id=2
-        self.initState.addPlayerState()
 
-        #Player4 id=3
-        self.initState.addPlayerState()
 
-        # Initialise les adversaires
-        self.opponents.append( IABelote(1) )
-        self.opponents.append( IABelote(2) )
-        self.opponents.append( IABelote(3) )
+    def playPhase(self):
+        self.flushTable()
+        self.playSelectedCard()
+        if(self.lastPlayerToPlay()):
+            self.endTurnPhase()
+        else:
+            self.setCurrentPhase("Play")
 
-        return self.initState
+        self.next_turn()
+
+    def dealPhase(self):
+        self.dealCards(1)
+        self.setCurrentPhase("Play")
+
+    def isWin(self):
+        if( self.isDeckEmpty() and self.IHaveBestScore()):
+            return True
+        else: False
+
+
+    def isLost(self):
+        if( self.isDeckEmpty() and not self.IHaveBestScore()):
+            return True
+        else: False
+
+    def endTurnPhase(self):
+        lastCards = self.getLastCards(2)
+
+        carte1Val = self.getValeurCarte(lastCards[0])
+        carte2Val = self.getValeurCarte(lastCards[1])
+
+        if((carte1Val != carte2Val)):
+            score = self.getTableSumCardScore()
+            if( carte1Val > carte2Val):
+                self.addPlayerScore(0, score)
+                self.showDialogMessage("End Turn", "Player 1 win turn. Points:"
+                                       + str(score), "Ok" )
+            else:
+                self.addPlayerScore(1, score)
+                self.showDialogMessage("End Turn", "Player 2 win turn. Points: "
+                                       + str( score ), "Ok" )
+            self.setCurrentPhase("Start")
+
+        else:
+            self.showDialogMessage("End Turn", "Draw", "Ok" )
+            self.setCurrentPhase("Deal")
+
+
+
 
 
 
@@ -51,18 +106,21 @@ class PluginInit(Plugin):
             getAction() pour récuperer une action
         """
 
-        #if(self.isFirstTurn):
-        #    self.dealCards(self.TABLE_PID, 10)
-        #    self.isFirstTurn=False
+        # On récupere la phase de jeu actuelle
+        phase = self.getCurrentPhase()
 
-        for action in self.getAction():
-            # Tirer une carte
-            if( action.type == "pick"):
-                self.pickCardFrom(self.TABLE_PID)
-            if( action.type == "move"):
-                self.playCard(action.originSprite)
-                self.next_turn()
+        # Le jeu commence toujours par la phase Start
+        if( phase == "Start"):
+            self.initialPhase()
 
+        if( phase == "Take"):
+            self.takePhase()
+
+        if( phase == "EndTurn"):
+            self.endTurnPhase()
+
+        if( phase == "Deal"):
+            self.dealPhase()
 
     def isLegalMove(self):
         #TODO: à implémenter
@@ -73,25 +131,21 @@ class PluginInit(Plugin):
         :return:
         """
 
-        for action in self.getAction():
-            if(action.type == "pick"):
-                od = action.originDrawable
-                if( od != None and od.name == "CardStack"):
-                    if( action.originDrawable.pid != self.getCurrentPlayer()):
-                        return False
-
-
-
-
         return True
 
 class IABelote(IAPlugin):
-    def __init__(self, id ):
-        IAPlugin.__init__(self, id)
+    def __init__(self):
+        IAPlugin.__init__(self, 1)
 
-    def getAction(self, agent_state, gameState, event=None):
-        actions = []
-        pick = self.defAgentAction(self.id, "pick")
-        actions.append(pick)
-        return actions
 
+    def getAction(self, plugin):
+        if(plugin.getCurrentPhase() == "Take"):
+            return self.takePhase(plugin)
+
+    def takePhase(self, plugin):
+        card = plugin.getCardFromTable(0)
+        cardValue = plugin.getValeurCarte(card)
+        if( cardValue > 11 ):
+            return plugin.defAgentAction("move", card)
+        else:
+            return plugin.defAgentAction("dialog", card)

@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
+from environment.Card import Card
 from environment.CardStack import CardStack
 from environment.DeckGenerator import DeckGenerator
 from environment.Dialog import Dialog
@@ -92,7 +93,7 @@ class Plugin:
         self.agentAction = agent_action
 
 
-        if(  self.agentAction.type == "None" ):
+        if(  self.agentAction == None ):
             return self.gameState
         else:
             if( not self.isLost() and not self.isWin()):
@@ -144,7 +145,17 @@ class Plugin:
 
     ############################################################
 
+    ######################### Hands Functions #################################
+
+
+
+    ######################### /Hands Functions ################################
+
     ########################## Fonctions de Jeu ###############################
+
+    def restartGame(self):
+        self.gameState.restart(self.initGameState())
+
     def playSelectedCard(self):
         action = self.getAction()
         card = action.originSprite
@@ -191,11 +202,65 @@ class Plugin:
 
         return len(self.getTable())
 
+    def appendCardToTable(self, card):
+        """
+        Ajoute la carte card à la table.
+
+        :param card (Card):
+        :return: None
+        """
+
+        self.getTable().append(card)
+
+    def getCardFromTable(self, index):
+        return self.getTable()[index]
+
+    def resetTable(self):
+        """ Fonction qui reset la table.
+
+        :return: None
+        """
+        # Reinit Deck
+        deck = self.initState.generateShuffledDeck()
+        self.gameState.table.deck = deck
+
+        # Reinit Table
+        for i in range(self.getnbPlayers()):
+            self.getPlayer(i).hand = CardStack()
+
+        self.flushTable()
+
     ######################### /Table Functions #################################
+
+    #########################        Actions          ##########################
+
+    def getSelectedCard(self):
+        """ Renvoie la carte selectionné
+        :return: (Card)
+        """
+
+        sprite = self.getAction().originSprite
+        if( not isinstance(sprite, Card) ):
+            raise PluginException("I can select only cards.")
+        else:
+            return sprite
+
+    #########################        /Actions          ##########################
 
     ######################### Deck Functions ##################################
     def isDeckEmpty(self):
         return not len(self.getTableDeck())
+
+    def dealToTable(self, nbCards):
+        """ Déplace nbCards cartes du jeu de carte principale à la table
+        :return: None
+        """
+
+        for i in range(nbCards):
+            card = self.getTableDeck().pop()
+            self.appendCardToTable(card)
+
+
 
     ######################### /Deck Functions ##################################
 
@@ -355,12 +420,15 @@ class Plugin:
         deck = self.gameState.table.deck
 
         for pid in range(self.gameState.getnbPlayers()):
-            carte = deck.pop()
-            # On cache la carte si c'est un opposant
-            if(pid != 0):
-                carte.flipCard()
+            for i in range(nb_cards):
+                if( self.isDeckEmpty()):
+                    raise PluginException("Cannot pick, deck is empty")
+                carte = deck.pop()
+                # On cache la carte si c'est un opposant
+                if(pid != 0):
+                    carte.flipCard()
 
-            self.gameState.getPlayer(pid).hand.append(carte)
+                self.gameState.getPlayer(pid).hand.append(carte)
 
 ###################### Score Functions #####################
     def getPlayerScore(self, pid):

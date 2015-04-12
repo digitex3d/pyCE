@@ -19,9 +19,10 @@ class Player:
             move.originDrawable = event.drawableClicked.pid
             move.dest_deck = event.drawableReleased.pid
             return move
-        elif ( event.drawableClicked.name == "Dialog" ):
-            start = AgentAction("dialog")
-            return start
+        elif (hasattr(event.drawableClicked, 'name')):
+            if ( event.drawableClicked.name == "Dialog" ):
+                dialog = AgentAction("dialog")
+                return dialog
         else:
             return AgentAction("None")
 
