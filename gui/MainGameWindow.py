@@ -6,8 +6,11 @@
 from pyglet import window
 from pyglet import clock
 from pyglet import font
+import pyglet
+from pyglet.sprite import Sprite
 from game.Event import Event
 import logging
+from gui.Default import DATA_PATH
 
 
 class MainGameWindow(window.Window):
@@ -94,8 +97,18 @@ class MainGameWindow(window.Window):
         self.last_event = None
 
     def draw(self):
+        # Background
+        background = pyglet.image.load(DATA_PATH + "table/table.jpg")
+        Sprite(background,0,0).draw()
+
         for component in self.components:
             for drawable in component.getDrawables():
                 for sprite in drawable.getSprites():
                     sprite.draw()
+
+
+
+
+
+
 

@@ -5,6 +5,7 @@ from pyglet.sprite import Sprite
 import pyglet
 from gui.Components.Component import Component
 from gui.Drawables.Drawable import Drawable
+from gui.Sprites.ClickableSprite import ClickableSprite
 
 
 DATA_PATH = "data/"
@@ -17,18 +18,18 @@ class HUDComponent(Component):
         Component.__init__(self, window)
 
 
-        # Fond vert
-        self.background = pyglet.image.load(DATA_PATH + "table/table.jpg")
-        back_drawable = Drawable(0,0)
-        back_drawable.sprites.append(Sprite(self.background,0,0))
-        self.drawables.append(back_drawable)
-
         # On ajoute le score au hud
         self.drawables.append(ScoreLabel(100,100,0))
         self.drawables.append(ScoreLabel(100,500 ,1))
 
         # On ajoute le label win
         self.drawables.append(WinLabel(100,200))
+
+        # On ajoute le dialog
+        self.drawables.append(DialogDrawable(330,320))
+
+
+
 
 
 
@@ -55,8 +56,7 @@ class ScoreLabel(Drawable):
         self.label.text = str(gameState.table.players[self.pid].score)
 
 class WinLabel(Drawable):
-    """ Cette classe représente une partie du HUD où le score du joueur sera
-        éventuelment affiché.
+    """ Le label Win/Lose
     """
 
     #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
@@ -77,3 +77,44 @@ class WinLabel(Drawable):
             self.label.text = "WIN!!"
         if( gameState.lose):
             self.label.text = "LOST!!"
+
+class DialogDrawable(Drawable):
+    """ Le bouton Start/End game.
+    """
+
+    def __init__(self, x, y):
+        Drawable.__init__(self,x,y)
+        self.name = "Dialog"
+
+
+        dialogImage = pyglet.image.load(DATA_PATH + "HUD/dialog.png")
+        self.sprites.append(ClickableSprite(dialogImage,x,y))
+
+        self.labelTitle = Label('PyCE',
+                          font_name='Times New Roman',
+                          font_size=38,
+                          x=x+(dialogImage.width)/3 ,
+                          y=y+(dialogImage.height) - 48)
+        self.sprites.append(self.labelTitle)
+
+        self.labelMsg = Label('Start a new game',
+                          font_name='Times New Roman',
+                          font_size=28,
+                          x=x+10, y=y+(dialogImage.height)-100)
+        self.sprites.append(self.labelMsg)
+
+        self.labelButton = Label('Start',
+                          font_name='Times New Roman',
+                          font_size=28,
+                          x=x+(dialogImage.width)/3, y=y+45)
+        self.sprites.append(self.labelButton)
+
+
+
+
+    def update(self, gameState):
+        self.visible = gameState.dialog.visible
+        self.labelTitle.text = gameState.dialog.title
+        self.labelMsg.text = gameState.dialog.message
+        self.labelButton.text = gameState.dialog.textButton
+

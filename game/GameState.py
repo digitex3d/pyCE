@@ -1,6 +1,7 @@
-from environment.DeckGenerator import DeckGenerator
-from game.InitState import InitState
 import logging
+from environment.Dialog import Dialog
+
+from game.Plugin import InitState
 from gui.Default import TABLE_PID
 
 
@@ -18,6 +19,9 @@ class GameState:
         self.turn = init_state.turn
         self.plugin = plugin
         self.cardValues = init_state.cardValues
+        # Jeu en pause?
+        self.paused = True
+        self.dialog = init_state.dialog
 
     def nextState(self,agent_action):
         """
@@ -45,8 +49,6 @@ class GameState:
         """
 
         return self.getCurrentPlayer().score
-
-
 
 
     def getPlayerHand(self, pid):

@@ -1,3 +1,6 @@
+import time
+
+
 class Game:
     """ Cette classe représente un jeu
         humanPlayer: Agent du joueur humain
@@ -36,18 +39,30 @@ class Game:
 
 
     def handleClick(self, event):
-        turn = self.game_state.turn
-
-
-        # L'etat de l'agent qui doit jouer
-        a_state = self.game_state.table.players[turn]
-
-        for i in range( self.game_state.table.nbPlayers):
-
+            turn = self.game_state.turn
+            # L'etat de l'agent qui doit jouer
+            a_state = self.game_state.table.players[turn]
             agent_action = self.agents[self.game_state.turn].getAction(a_state, self.game_state, event)
 
             # Effectue l'action et met à jour l'état du jeu
             self.game_state = self.game_state.nextState(agent_action)
+
+            # On laisse jouer les opposants
+            while( self.game_state.turn !=0  ):
+                turn = self.game_state.turn
+                # L'etat de l'agent qui doit jouer
+                a_state = self.game_state.table.players[turn]
+                agent_action = self.agents[self.game_state.turn].PgetAction(a_state, self.game_state.plugin, event)
+
+                # Effectue l'action et met à jour l'état du jeu
+                self.game_state = self.game_state.nextState(agent_action)
+
+                # On met à jour tous les observateurs du jeu
+                for observer in self.observers:
+                    observer.update(self.game_state)
+
+
+
 
     def isPlayerTourn(self):
         return (self.game_state.turn == 0)

@@ -10,15 +10,14 @@ class Drawable:
     """ Cette classe représente un Drawable 
     """
 
-    def __init__(self, x, y,h=0,w=0, showBorders=False):
+    def __init__(self, x, y,h=0,w=0, name=None):
         self.sprites = []
         self.x = x
         self.y = y
         self.height = h
         self.width = w
-        self.showBorders = showBorders
         self.visible = True
-        self.name = None
+        self.name = name
 
 
     def bordersVisible(self, value):
@@ -50,23 +49,6 @@ class Drawable:
         """ Mettre à jour le drawable au changement du gamestate
         """
 
-    def drawableBorders(self):
-        """ Cette fonction renvoie les points de la zone qui peut recevoir un click.
-        """
 
-
-
-        bl = (self.x, self.y)
-        br = (self.x + self.width, self.y)
-        tl = (self.x, self.y + self.height)
-        tr = (self.x + self.width , self.y+self.height)
-
-
-        vl = [bl[0], bl[1],
-                br[0], br[1],
-                tl[0], tl[1],
-                tr[0], tr[1]]
-
-        return vl
 
 
