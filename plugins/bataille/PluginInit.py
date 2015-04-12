@@ -41,11 +41,13 @@ class PluginInit(Plugin):
     def isWin(self):
         if( self.isDeckEmpty() and self.IHaveBestScore()):
             return True
+        else: False
 
 
     def isLost(self):
         if( self.isDeckEmpty() and not self.IHaveBestScore()):
             return True
+        else: False
 
     def endTurnPhase(self):
         finalscore = 0
@@ -58,17 +60,24 @@ class PluginInit(Plugin):
 
         if((carte1Val != carte2Val)):
             if( carte1Val > carte2Val):
-                self.getCardsPoints(0,lastCards)
+                self.addPlayerScore(0, finalscore + self.getCardsValueSum(lastCards))
                 self.showDialogMessage("End Turn", "Player 1 win turn"
                                        + str(self.getCardsValueSum(lastCards)), "Ok" )
+                self.setCurrentPhase("Start")
             else:
-                self.getCardsPoints(1,lastCards)
+                self.addPlayerScore(1, finalscore + self.getCardsValueSum(lastCards))
                 self.showDialogMessage("End Turn", "Player 2 win turn"
                                        + str( self.getCardsValueSum(lastCards)), "Ok" )
+                self.setCurrentPhase("Start")
 
         else:
             finalscore += self.getCardsValueSum(lastCards)
-        self.setCurrentPhase("Start")
+            self.showDialogMessage("End Turn", "Draw", "Ok" )
+            self.setCurrentPhase("Deal")
+
+    def dealPhase(self):
+        self.dealCards(1)
+        self.setCurrentPhase("Play")
 
 
 

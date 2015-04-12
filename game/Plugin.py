@@ -99,6 +99,11 @@ class Plugin:
                 if(  self.agentAction.type == "dialog" ):
                     self.gameState.dialog.hideDialog()
                 self.nextState()
+            else:
+                if(self.isWin()):
+                    self.showDialogMessage("Win", "You won", "Ok")
+                else:
+                    self.showDialogMessage("Lose", "You lost", "Ok")
         return self.gameState
 
     def GisLegalMove(self, gameState, agent_action):
