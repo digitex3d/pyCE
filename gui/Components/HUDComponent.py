@@ -26,7 +26,7 @@ class HUDComponent(Component):
         self.drawables.append(WinLabel(100,200))
 
         # On ajoute le dialog
-        self.drawables.append(DialogDrawable(330,320))
+        self.drawables.append(DialogDrawable(330, 20))
 
 
 

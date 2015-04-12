@@ -147,6 +147,9 @@ class Plugin:
     ########################## Fonctions de Jeu ###############################
     def playSelectedCard(self):
         action = self.getAction()
+        card = action.originSprite
+        if( card.hidden ):
+            card.flipCard()
         self.playCard(action.originSprite)
 
     def getCurrentPlayerFirstCard(self):
@@ -186,7 +189,7 @@ class Plugin:
         :return (int):
         """
 
-        return len(self.getTableDeck())
+        return len(self.getTable())
 
     ######################### /Table Functions #################################
 
@@ -351,9 +354,13 @@ class Plugin:
 
         deck = self.gameState.table.deck
 
-        for i in range(self.gameState.getnbPlayers()):
+        for pid in range(self.gameState.getnbPlayers()):
             carte = deck.pop()
-            self.gameState.getPlayer(i).hand.append(carte)
+            # On cache la carte si c'est un opposant
+            if(pid != 0):
+                carte.flipCard()
+
+            self.gameState.getPlayer(pid).hand.append(carte)
 
 ###################### Score Functions #####################
     def getPlayerScore(self, pid):
@@ -388,7 +395,7 @@ class Plugin:
         """
         if ( sup == None):
             sup=self.getNbTableCards()
-        sum = self.getSumCardScore(inf, sup)
+        sum = self.getTableSumCardScore(inf, sup)
         self.addPlayerScore(self.getCurrentPlayerPID(), sum)
 
 
@@ -428,7 +435,7 @@ class Plugin:
 
 
         for i in range( inf, sup):
-            resu += self.getValeurCarte(self.getTableDeck()[i])
+            resu += self.getValeurCarte(self.getTable()[i])
 
         return resu
 

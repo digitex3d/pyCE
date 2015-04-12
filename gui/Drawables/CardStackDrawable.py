@@ -64,6 +64,7 @@ class CardStackDrawable(Drawable):
 
 
 
+
         if( self.dir == "h" ):
             # Affichage horizontal
             nb_c = len(self.sprites)

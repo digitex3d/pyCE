@@ -18,11 +18,13 @@ class SpriteFactory():
         :param y (int): Coordonné y du coin bas-gauche de la nouvelle carte.
         :return:
         """
-
-        if(card.value <= 10):
-            file_name = str(card.value) + str(card.kind) + "." + IMG_FORMAT
+        if( not card.hidden ):
+            if(card.value <= 10):
+                file_name = str(card.value) + str(card.kind) + "." + IMG_FORMAT
+            else:
+                file_name = CARDS[card.value] + str(card.kind) + "." + IMG_FORMAT
         else:
-            file_name = CARDS[card.value] + str(card.kind) + "." + IMG_FORMAT
+             file_name ="b.gif"
 
         img = DATA_PATH+"/cards/"+file_name
 
