@@ -26,6 +26,8 @@ class PluginInit(Plugin):
 
 
     def initialPhase(self):
+        # Enlève les cartes qui sont pas utilisées
+        self.removeRangeOfCards(self.getTableDeck(), 2,6, ['h','c','s','d'] )
         self.dealCards(5)
         self.dealToTable(1)
         self.showDialogMessage("Take", "Take? ", "No" )

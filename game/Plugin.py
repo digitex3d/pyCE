@@ -251,9 +251,34 @@ class Plugin:
     def isDeckEmpty(self):
         return not len(self.getTableDeck())
 
+    def removeRangeOfCards(self, cardStack, inf=0, sup=13, kinds=[]):
+        """ Supprime les cartes de 'cardStack' qui ont une valeur comprise entre
+        [inf, sup] et qui font partie de un des types de la liste 'kind' parmi
+        h, c, s et d.
+
+        :param inf (int): borne inferieure (comprise) (default = 13).
+        :param sup (int): borne superieure (comprise) (default = 0).
+        :param cardStack (CardStack):
+        :param kind (list of String): une liste de types parmi h, c, s et d.
+        :return: Un CardStack modifié.
+        """
 
 
+        if( cardStack.isEmpty()):
+            raise PluginException("CardStack is empty, cannot remove cards.")
 
+        toRemove = []
+        for card in cardStack:
+            if( card.value <= sup and
+                card.value >= inf):
+                for kind in kinds:
+                    if( card.kind == kind):
+                        toRemove.append(card)
+
+        for card in toRemove:
+            cardStack.remove(card)
+
+        return cardStack
 
     ######################### /Deck Functions ##################################
 
@@ -648,6 +673,7 @@ class InitState:
         deck = DeckGenerator.deckFactory()
         deck.shuffle()
         return deck
+
 
     def setCardValues(self, vals):
         self.cardValues = vals

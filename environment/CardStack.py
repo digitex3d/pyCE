@@ -21,7 +21,7 @@ class CardStack(list):
 
         :return (boolean):
         """
-        if not self.table:
+        if not len(self):
             return True
         else:
             return False
