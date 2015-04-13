@@ -524,7 +524,7 @@ class Plugin:
 
     ############################## Dealing functions ##########################
 
-###################### Score Functions #####################
+    ###################### Score Functions #####################
     def getPlayerScore(self, pid):
         return self.getPlayer(pid).score
 
@@ -603,6 +603,31 @@ class Plugin:
 
     def addPlayerScore(self, pid, score):
          self.getPlayer(pid).score += score
+    ###################### /Score Functions #####################
+
+    ###################### Turn Functions #######################
+    def setCurrentTurn(self, turn):
+        """ Change current turn
+
+        :param turn (int):
+        :return: None
+        """
+        self.gameState.turn = turn
+
+    def getLeftPlayerOf(self, pid):
+        """ Renvoie le pid du joueur à la gauche de pid
+        :param pid (int):
+        :return:
+        """
+        return pid+1 % self.getnbPlayers()
+
+    def getRightPlayerOf(self, pid):
+        """ Renvoie le pid du joueur à la droite de pid
+        :param pid (int):
+        :return:
+        """
+        return pid-1 % self.getnbPlayers()
+    ###################### /Turn Functions #######################
 
 ######################      IA      ########################
 

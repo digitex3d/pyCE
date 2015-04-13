@@ -62,8 +62,16 @@ class PluginInit(Plugin):
         # Une carte est placée, face découverte, au milieu de la table de jeu.
         self.dealToTable(1)
 
+        # Choisit le joueur à la gauche du dealer comme prochain joueur
+        self.setCurrentTurn(
+            self.getLeftPlayerOf(
+                self.getDealerPID()))
+
         self.showDialogMessage("Info", "End first dealing phase ", "Ok" )
-        self.setCurrentPhase("Take")
+        self.setCurrentPhase("ChoseTrump")
+
+    def choseTrumpPhase(self):
+
 
     def takePhase(self):
         action = self.getAction()
