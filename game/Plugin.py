@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
+from random import randint
 from environment.Card import Card
 from environment.CardStack import CardStack
 from environment.DeckGenerator import DeckGenerator
@@ -451,6 +452,38 @@ class Plugin:
         resu = tmp % nb
         self.gameState.turn = resu
     ############################### Dealing functions ##########################
+
+    def choseRandomDealer(self):
+        """ Fonction qui choisi un dealer au hazard.
+        :return: None
+        """
+
+        self.setDealer(randint(0,self.getnbPlayers()-1))
+
+    def setDealer(self, pid):
+        """ Designe le distributeur des cartes (pid).
+        :param pid (int):
+        :return: None.
+        """
+
+        for i in range(self.getnbPlayers()):
+            if ( i != pid):
+                self.getPlayer(i).dealer = False
+            else:
+                self.getPlayer(pid).dealer = True
+
+    def getDealerPID(self):
+        """ Retourne le pid du distributeur des cartes.
+
+        :return (int): -1 si le dealer n'est pas defini.
+        """
+
+        for i in range(self.getnbPlayers()):
+            if (self.getPlayer(i).dealer):
+                return i
+        raise PluginException("No dealer defined")
+
+        return -1
 
     def dealToTable(self, nbCards):
         """ Déplace nbCards cartes du jeu de carte principale à la table

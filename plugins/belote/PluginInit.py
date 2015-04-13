@@ -11,6 +11,27 @@ class PluginInit(Plugin):
         Plugin.__init__(self, "La Belote")
         self.atout=None
 
+        self.cartesAtout = {
+            1:11,
+            7:0,
+            8:0,
+            9:14,
+            10:10,
+            11:20,
+            12:3,
+            13:4,
+        }
+
+        self.cartesNAtout = {
+            1:11,
+            7:0,
+            8:0,
+            9:0,
+            10:10,
+            11:2,
+            12:3,
+            13:4,
+        }
 
 
     def pluginInit(self):
@@ -28,9 +49,20 @@ class PluginInit(Plugin):
     def initialPhase(self):
         # Enlève les cartes qui sont pas utilisées
         self.removeRangeOfCards(self.getTableDeck(), 2,6, ['h','c','s','d'] )
+
+        # Affecte la valeur des cartes
+        self.setCardValues(self.cartesNAtout)
+
+        # Choisir un dealer au hazard
+        self.choseRandomDealer()
+
+        # Les joueurs reçoivent chacun 5 cartes.
         self.dealCards(5)
+
+        # Une carte est placée, face découverte, au milieu de la table de jeu.
         self.dealToTable(1)
-        self.showDialogMessage("Take", "Take? ", "No" )
+
+        self.showDialogMessage("Info", "End first dealing phase ", "Ok" )
         self.setCurrentPhase("Take")
 
     def takePhase(self):

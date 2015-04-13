@@ -18,3 +18,4 @@ class PlayerState:
         self.score = 0
         self.hand = hand
         self.deck = deck
+        self.dealer = False
