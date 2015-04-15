@@ -94,12 +94,11 @@ class PluginInit(Plugin):
             self.atout = card.kind
             self.dealTrumpCards()
             self.initPlayPhase()
-            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.showDialogMessage("Info", "Trump has been chosen." + self.atout, "Ok" )
             print("Atout choisi" + self.atout)
 
         if(action.type == "pass"):
             if(self.iAmLastPlayerToPlay()):
-                self.showDialogMessage("Info", "Chose trump manual", "ok" )
                 print("Choix manual attout")
                 self.initTake2phase()
                 return
@@ -149,7 +148,7 @@ class PluginInit(Plugin):
 
         self.playSelectedCard()
         if(self.iAmLastPlayerToPlay()):
-            self.endTurnPhase()
+            self.setCurrentPhase("EndTurn")
             return
         self.next_turn()
 
@@ -243,12 +242,22 @@ class PluginInit(Plugin):
         :param plugin:
         :return:
         """
-        #
-        # if(self.getCurrentPhase() == "Play"):
-        #     action = self.getAction()
-        #     card = action.originSprite
-        #     if(card.kind != self.atout):
-        #         return False
+
+        if(self.getCurrentPhase() == "Play"):
+            if(len(self.getTable()) > 0):
+                action = self.getAction()
+                if(action.type == "move"):
+                    hand = self.getCurrentPlayerHand()
+
+                    turnKind = self.getTable()[0].kind
+                    selectedCard=action.originSprite
+
+                    kind = selectedCard.kind
+
+                    if(kind != turnKind):
+                        for card in hand:
+                            if( card.kind == turnKind ):
+                                return False
 
         return True
 
@@ -267,14 +276,19 @@ class IABelote(IAPlugin):
         return plugin.defAgentAction("none")
 
     def playCard(self, plugin):
-        card = plugin.getCurrentPlayerHand()[0]
+        if( plugin.getFirstPlayer() == plugin.currentTurn()):
+            card = plugin.getHandBestCard()
+        else:
+            card = plugin.getHandBestCard(plugin.getTable()[0].kind)
+            if(card == None):
+                card =plugin.getCurrentPlayerHand()[0]
         return plugin.defAgentAction("move", card)
 
 
     def choseTrumpPhase(self, plugin):
         card = plugin.getCardFromTable(0)
         cardValue = card.value
-        if( cardValue >= 13 ):
+        if( cardValue == 11 ):
             return plugin.defAgentAction("move", card)
         else:
             return plugin.defAgentAction("pass")

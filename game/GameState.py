@@ -38,7 +38,7 @@ class GameState:
             return self.plugin.GNextState(self, agent_action)
         else:
             logging.debug("Illegal move")
-            return self.copy()
+            return self
 
     def getCurrentPlayer(self):
         """ Renvoie le joueur courant

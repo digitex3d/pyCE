@@ -82,6 +82,7 @@ class Plugin:
         self.initState.initPlayers(nbPlayers)
 
 
+
     def GNextState(self, gameState, agent_action):
         """ Cette fonction fait une copie de l'état de jeu , affecte le gamestate et
             l'action au plugin puis apelle la fonction nextState du plugin.
@@ -347,6 +348,32 @@ class Plugin:
         :return:
         """
         return not self.getPlayerHand(pid)
+
+    def getHandBestCard(self, kind=None):
+        """ Renvoie la meilleure carte en main.
+            Si kind est specifié, renvoie la meilleure carte d'un type en particulier
+
+        :return (Card):
+        """
+        hand = self.getCurrentPlayerHand()
+
+        if( len(hand) <= 0 ):
+            raise PluginException("Hand is empty!")
+        firstCard = hand[0]
+        max = self.getValeurCarte(firstCard)
+        resu=None
+
+        for card in hand:
+            if( self.getValeurCarte(card) > max):
+                if(kind != None):
+                    if( card.kind == kind):
+                        max = self.getValeurCarte(card)
+                        resu = card
+                else:
+                    max = self.getValeurCarte(card)
+                    resu = card
+
+        return resu
 
     ######################## /Hand Functions ##################################
     def getTableCards(self):
