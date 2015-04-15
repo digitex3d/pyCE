@@ -31,7 +31,7 @@ class PluginInit(Plugin):
 
     def playPhase(self):
         self.playSelectedCard()
-        if(self.lastPlayerToPlay()):
+        if(self.iAmLastPlayerToPlay()):
             self.endTurnPhase()
         else:
             self.setCurrentPhase("Play")

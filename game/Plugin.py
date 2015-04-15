@@ -98,8 +98,9 @@ class Plugin:
             return self.gameState
         else:
             if( not self.isLost() and not self.isWin()):
-                if(  self.agentAction.type == "dialog" ):
-                    self.gameState.dialog.hideDialog()
+                if(  self.agentAction.originDrawable == "Dialog" ):
+                    self.hideDialogMessage()
+
                 self.nextState()
             else:
                 if(self.isWin()):
@@ -109,10 +110,12 @@ class Plugin:
         return self.gameState
 
     def GisLegalMove(self, gameState, agent_action):
-        new_state = gameState.copy()
-        self.gameState = new_state
+        self.gameState = gameState
         self.agentAction = agent_action
-        return self.isLegalMove()
+        if(self.agentAction == None or self.agentAction.type == "None"):
+            return True
+        else:
+            return self.isLegalMove()
 
     def lose(self):
         """ La partie est perdue
@@ -123,11 +126,7 @@ class Plugin:
     def getAction(self):
         return self.agentAction
 
-    def lastPlayerToPlay(self):
-        if( self.currentTurn() == self.getnbPlayers()-1):
-            return True
-        else:
-            return False
+
 
     def getTable(self):
         """
@@ -139,7 +138,22 @@ class Plugin:
     ###################### HUD #################################
 
     def showDialogMessage(self, title, message, buttonText):
-        self.gameState.dialog.popDialog(title, message, buttonText)
+        if(not self.gameState.dialog.visible):
+            self.gameState.dialog.popDialog(title, message, buttonText, "none")
+
+    def showDialogAction(self, title, message, buttonText, action):
+        if(not self.isPlayerTurn()):
+            raise PluginException("It's not the player turn")
+
+        self.gameState.dialog.popDialog(title, message, buttonText, action)
+
+
+    def hideDialogMessage(self):
+        if(self.gameState.dialog.visible):
+            self.gameState.dialog.hideDialog()
+
+
+
 
     def initDialog(self, title, msg, tbutton):
         self.initState.initDialog(title, msg, tbutton)
@@ -248,6 +262,11 @@ class Plugin:
 
     #########################        /Actions          ##########################
 
+    ######################## Cards Functions            #########################
+    def defCard(self, value, kind):
+        return Card(value, None, kind)
+
+    ######################## /Cards Functions            #########################
     ######################### Deck Functions ##################################
     def isDeckEmpty(self):
         return not len(self.getTableDeck())
@@ -293,6 +312,10 @@ class Plugin:
         """
         if( pid != 0 ):
             card.flipCard()
+
+        # Change le propriétaire
+        card.owner = pid
+
         self.getPlayerHand(pid).append(card)
 
     def appendCardToMyHand(self, card):
@@ -302,7 +325,15 @@ class Plugin:
         :param card( Card):
         :return:
         """
+
         self.appendCardToHand(self.currentTurn(), card)
+
+    def isPlayerHandEmpty(self, pid):
+        """ True si la main du joueur pid est vide, false sinon
+        :param pid:
+        :return:
+        """
+        return not self.getPlayerHand(pid)
 
     ######################## /Hand Functions ##################################
     def getTableCards(self):
@@ -394,10 +425,11 @@ class Plugin:
         else:
             card =   self.gameState.table.deck.pop()
 
-        self.gameState.getCurrentPlayerHand().append(card)
+        self.appendCardToMyHand(card)
+
 
     def isPlayerTurn(self):
-        return  self.gameState.turn == 0
+        return (self.gameState.turn == 0)
 
     def flushTable(self):
         """ Efface le contenu de la table
@@ -442,6 +474,8 @@ class Plugin:
         return self.gameState.cardValues[carte.value]
 
     def getAction(self):
+        if(self.agentAction == None):
+            return self.defAgentAction("none")
         return self.agentAction
 
     def next_turn(self):
@@ -506,10 +540,7 @@ class Plugin:
                     raise PluginException("Cannot pick, deck is empty")
             card = self.getTableDeck().pop()
 
-            # On cache la carte si c'est un opposant
-            if(pid != 0):
-                card.flipCard()
-            self.getPlayerHand(pid).append(card)
+            self.appendCardToHand(pid, card)
 
     def dealCards(self, nb_cards):
         """ Distribution de nb_cards en sens antihoraire
@@ -601,11 +632,77 @@ class Plugin:
 
         return resu
 
+    def getTableBestCardOwner(self):
+        """ Retourne le pid du joueur avec la carte de valeur plus haute
+            présent sur la table.
+
+            :return: pid (int):
+        """
+
+        table = self.getTable()
+        if( len(table) <= 0 ):
+            raise PluginException("Table is empty!")
+        firstCard = table[0]
+        max = self.getValeurCarte(firstCard)
+        pid = 0
+
+        for card in self.getTable():
+            if( self.getValeurCarte(card) > max):
+                max = self.getValeurCarte(card)
+                pid = card.owner
+
+        return pid
+
+
+
     def addPlayerScore(self, pid, score):
          self.getPlayer(pid).score += score
     ###################### /Score Functions #####################
 
     ###################### Turn Functions #######################
+    def getFirstPlayer(self):
+        for i in range(self.getnbPlayers()):
+            if (self.getPlayer(i).first):
+                return i
+        raise PluginException("No dealer defined")
+
+        return -1
+
+    def isPlayerTurn(self):
+        """ True si c'est le tour du joueur
+        :return: None
+        """
+        return (self.currentTurn() == 0)
+
+
+
+    def setFirstPlayer(self, pid):
+        """ Affecte le premier joueur au jouer pid
+        :param pid:
+        :return:
+        """
+
+        for i in range(self.getnbPlayers()):
+            if (i == pid):
+                self.getPlayer(i).first = True
+            else:
+                self.getPlayer(i).first = False
+
+    def iAmLastPlayerToPlay(self):
+        return self.getPlayer(self.currentTurn()).last
+
+    def setLastPlayer(self, pid):
+        """ Affecte le dernier joueur au joueur pid
+        :param pid:
+        :return:
+        """
+
+        for i in range(self.getnbPlayers()):
+            if (i == pid):
+                self.getPlayer(i).last = True
+            else:
+                self.getPlayer(i).last = False
+
     def setCurrentTurn(self, turn):
         """ Change current turn
 
@@ -619,14 +716,14 @@ class Plugin:
         :param pid (int):
         :return:
         """
-        return pid+1 % self.getnbPlayers()
+        return ((pid+1) % self.getnbPlayers())
 
     def getRightPlayerOf(self, pid):
         """ Renvoie le pid du joueur à la droite de pid
         :param pid (int):
         :return:
         """
-        return pid-1 % self.getnbPlayers()
+        return ((pid+1) % self.getnbPlayers())
     ###################### /Turn Functions #######################
 
 ######################      IA      ########################
@@ -732,6 +829,8 @@ class InitState:
         deck.shuffle()
         return deck
 
+    def setFirstPlayer(self, pid):
+        self.turn = pid
 
     def setCardValues(self, vals):
         self.cardValues = vals

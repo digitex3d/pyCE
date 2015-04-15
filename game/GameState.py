@@ -25,6 +25,7 @@ class GameState:
         self.paused = True
         self.dialog = init_state.dialog
 
+
     def nextState(self,agent_action):
         """
         Renvoie l'état de jeu étant donné une action
@@ -163,12 +164,3 @@ class GameState:
         """
         return self.table.players[pid]
 
-    def copy(self):
-        new_init = InitState()
-        new_init.turn = self.turn
-        new_init.table = self.table
-        new_init.win = self.win
-        new_init.cardValues = self.cardValues
-
-        state_copy = GameState(  new_init , self.plugin)
-        return state_copy

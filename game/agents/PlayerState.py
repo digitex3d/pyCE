@@ -19,3 +19,5 @@ class PlayerState:
         self.hand = hand
         self.deck = deck
         self.dealer = False
+        self.first = False
+        self.last = False

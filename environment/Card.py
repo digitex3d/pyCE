@@ -7,6 +7,7 @@ class Card:
         self.color = color
         self.kind = kind
         self.hidden = False
+        self.owner = -1
 
     def flipCard(self):
         """ Cacher/Monter la carte.
@@ -17,3 +18,4 @@ class Card:
         return "[ value =" + str(self.value) +\
                 " color =" + str(self.color) +\
                 " kind = " + str(self.kind) +"]"
+

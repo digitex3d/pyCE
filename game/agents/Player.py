@@ -9,7 +9,7 @@ class Player:
     def __init__(self, id=0):
         self.id = id
 
-    def getAction(self, agent_state, game_state, event=None):
+    def getAction(self, game_state, event=None):
         """ Renvoie une action de l'agent
         """
 
@@ -21,7 +21,8 @@ class Player:
             return move
         elif (hasattr(event.drawableClicked, 'name')):
             if ( event.drawableClicked.name == "Dialog" ):
-                dialog = AgentAction("dialog")
+                dialog = AgentAction(game_state.dialog.action)
+                dialog.originDrawable = event.drawableClicked.name
                 return dialog
         else:
             return AgentAction("None")

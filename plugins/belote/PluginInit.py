@@ -1,5 +1,6 @@
 """ Autheur Giuseppe Federico
 """
+from random import randint
 from game.Plugin import Plugin, IAPlugin
 
 
@@ -53,61 +54,145 @@ class PluginInit(Plugin):
         # Affecte la valeur des cartes
         self.setCardValues(self.cartesNAtout)
 
-        # Choisir un dealer au hazard
-        self.choseRandomDealer()
-
         # Les joueurs reçoivent chacun 5 cartes.
         self.dealCards(5)
+
+        self.choseRandomDealer()
 
         # Une carte est placée, face découverte, au milieu de la table de jeu.
         self.dealToTable(1)
 
-        # Choisit le joueur à la gauche du dealer comme prochain joueur
-        self.setCurrentTurn(
-            self.getLeftPlayerOf(
-                self.getDealerPID()))
-
-        self.showDialogMessage("Info", "End first dealing phase ", "Ok" )
-        self.setCurrentPhase("ChoseTrump")
-
-    def choseTrumpPhase(self):
+        # Le premier joueur à jouer
+        self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
+        self.setLastPlayer(self.getDealerPID())
+        self.setCurrentTurn(self.getLeftPlayerOf(self.getDealerPID()))
 
 
-    def takePhase(self):
+        self.showDialogMessage("Info", "Opponents Chosing", "ok" )
+        self.setCurrentPhase("Take")
+
+
+    def playerTakePhase(self):
         action = self.getAction()
+        print("Atction type:" + action.type)
+
+        if( action.type == "none" ):
+            self.showDialogAction("Info", "Chose this trump?", "no", "pass" )
+            return
+
+        print(" im playinggn"+str(self.currentTurn()))
+        print("Atction type after:" + action.type)
+
         if(action.type == "move"):
             card = self.getSelectedCard()
             self.atout = card.kind
-            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+
 
             # Distribution du reste des cartes
             for i in range(self.getnbPlayers()):
                 if (i != self.currentTurn()):
-                    self.dealTo(i, 4)
-                else:
                     self.dealTo(i, 3)
+                else:
+                    self.dealTo(i, 2)
                     card = self.getTable().pop()
                     self.appendCardToMyHand(card)
 
             self.setCurrentPhase("Play")
-            self.next_turn()
-        if(action.type == "dialog"):
-            if(self.lastPlayerToPlay()):
-                self.showDialogMessage("Info", "Trump has not been chosen, restarting.", "Ok")
-                self.resetTable()
-                self.initialPhase()
+            self.flushTable()
+            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+        if(action.type == "pass"):
+            if(self.iAmLastPlayerToPlay()):
+                self.setCurrentPhase("initTake2")
+                self.showDialogMessage("Info", "Chose trump manual", "ok" )
+                self.initTake2phase()
         self.next_turn()
 
 
+    def takePhase(self):
+        action = self.getAction()
+        print("Atction type:" + action.type)
+
+        print(" im playinggn"+str(self.currentTurn()))
+        print("Atction type after:" + action.type)
+
+
+        if(action.type == "move"):
+            card = self.getSelectedCard()
+            self.atout = card.kind
+
+
+            # Distribution du reste des cartes
+            for i in range(self.getnbPlayers()):
+                if (i != self.currentTurn()):
+                    self.dealTo(i, 3)
+                else:
+                    self.dealTo(i, 2)
+                    card = self.getTable().pop()
+                    self.appendCardToMyHand(card)
+
+            self.setCurrentPhase("Play")
+            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.flushTable()
+        if(action.type == "pass"):
+            if(self.iAmLastPlayerToPlay()):
+                self.setCurrentPhase("initTake2")
+                self.showDialogMessage("Info", "Chose trump manual", "ok" )
+                self.initTake2phase()
+        self.next_turn()
+
+    def playerTake2Phase(self):
+        action = self.getAction()
+        print("Atction type:" + action.type)
+
+        if( action.type == "none" ):
+            self.showDialogAction("Info", "Chose a trump or pass", "pass", "pass" )
+            return
+
+        print(" im playinggn"+str(self.currentTurn()))
+        print("Atction type after:" + action.type)
+
+        if(action.type == "move"):
+            card = self.getSelectedCard()
+            self.atout = card.kind
+            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.setCurrentPhase("Play")
+            self.flushTable()
+        if(action.type == "pass"):
+            if(self.iAmLastPlayerToPlay()):
+                self.resetTable()
+                self.setCurrentTurn(0)
+                self.getCurrentPhase("Start")
+                self.flushTable()
+                self.showDialogMessage("Info", "Trump has not been chosen restarting.", "Ok" )
+            self.showDialogMessage("Info", "Discarding.", "Ok" )
+        self.next_turn()
+
+    def take2Phase(self):
+        action = self.getAction()
+        print("Atction type:" + action.type)
+
+        if(action.type == "move"):
+            card = self.getSelectedCard()
+            self.atout = card.kind
+            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.setCurrentPhase("Play")
+        if(action.type == "pass"):
+            if(self.iAmLastPlayerToPlay()):
+                self.resetTable()
+                self.setCurrentTurn(0)
+                self.setCurrentPhase("Start")
+                self.flushTable()
+                self.showDialogMessage("Info", "Trump has not been chosen restarting.", "Ok" )
+        self.next_turn()
 
     def playPhase(self):
-        self.flushTable()
-        self.playSelectedCard()
-        if(self.lastPlayerToPlay()):
-            self.endTurnPhase()
-        else:
-            self.setCurrentPhase("Play")
+        action = self.getAction()
+        if( action.type == "none" ):
+            return
 
+        self.playSelectedCard()
+        if(self.iAmLastPlayerToPlay()):
+            self.setCurrentPhase("EndTurn")
         self.next_turn()
 
     def dealPhase(self):
@@ -115,41 +200,34 @@ class PluginInit(Plugin):
         self.setCurrentPhase("Play")
 
     def isWin(self):
-        if( self.isDeckEmpty() and self.IHaveBestScore()):
-            return True
-        else: False
+        return False
 
 
     def isLost(self):
-        if( self.isDeckEmpty() and not self.IHaveBestScore()):
-            return True
-        else: False
+        return False
 
     def endTurnPhase(self):
-        lastCards = self.getLastCards(2)
+        totalScore = self.getTableSumCardScore()
+        winner = self.getTableBestCardOwner()
+        self.addPlayerScore(winner, totalScore)
+        self.setFirstPlayer(winner)
+        self.setLastPlayer(self.getRightPlayerOf(winner))
+        self.setCurrentPhase("Play")
+        self.showDialogMessage("Info", "Hand winner is " + str(winner), "Ok" )
+        self.flushTable()
+        self.next_turn()
 
-        carte1Val = self.getValeurCarte(lastCards[0])
-        carte2Val = self.getValeurCarte(lastCards[1])
-
-        if((carte1Val != carte2Val)):
-            score = self.getTableSumCardScore()
-            if( carte1Val > carte2Val):
-                self.addPlayerScore(0, score)
-                self.showDialogMessage("End Turn", "Player 1 win turn. Points:"
-                                       + str(score), "Ok" )
-            else:
-                self.addPlayerScore(1, score)
-                self.showDialogMessage("End Turn", "Player 2 win turn. Points: "
-                                       + str( score ), "Ok" )
-            self.setCurrentPhase("Start")
-
-        else:
-            self.showDialogMessage("End Turn", "Draw", "Ok" )
-            self.setCurrentPhase("Deal")
-
-
-
-
+    def initTake2phase(self):
+        h = self.defCard(1,'h')
+        s = self.defCard(1,'s')
+        c = self.defCard(1,'c')
+        d = self.defCard(1,'d')
+        self.appendCardToTable(h)
+        self.appendCardToTable(s)
+        self.appendCardToTable(c)
+        self.appendCardToTable(d)
+        self.setCurrentPhase("Take2")
+        self.showDialogMessage("Info", "Manual chose.", "Ok" )
 
 
     def nextState(self):
@@ -160,18 +238,31 @@ class PluginInit(Plugin):
         # On récupere la phase de jeu actuelle
         phase = self.getCurrentPhase()
 
-        # Le jeu commence toujours par la phase Start
+
         if( phase == "Start"):
             self.initialPhase()
-
+            return
         if( phase == "Take"):
-            self.takePhase()
+          #  if( self.isPlayerTurn() ):
+            self.playerTakePhase()
+          #  else:
+          #      self.takePhase()
+            return
+        if( phase == "initTake2"):
+            return
+        if( phase == "Take2"):
+            #if( self.isPlayerTurn() ):
+            self.playerTake2Phase()
+            #else:
+            #    self.take2Phase()
+            return
+        if (phase == "Play"):
+            self.playPhase()
 
-        if( phase == "EndTurn"):
+            return
+        if ( phase == "EndTurn"):
             self.endTurnPhase()
-
-        if( phase == "Deal"):
-            self.dealPhase()
+            return
 
     def isLegalMove(self):
         #TODO: à implémenter
@@ -181,6 +272,12 @@ class PluginInit(Plugin):
         :param plugin:
         :return:
         """
+        #
+        # if(self.getCurrentPhase() == "Play"):
+        #     action = self.getAction()
+        #     card = action.originSprite
+        #     if(card.kind != self.atout):
+        #         return False
 
         return True
 
@@ -191,12 +288,27 @@ class IABelote(IAPlugin):
 
     def getAction(self, plugin):
         if(plugin.getCurrentPhase() == "Take"):
-            return self.takePhase(plugin)
+            return self.choseTrumpPhase(plugin)
+        if(plugin.getCurrentPhase() == "Play"):
+            return self.playCard(plugin)
+        if(plugin.getCurrentPhase() == "Take2"):
+            return self.choseTrumpPhase2(plugin)
+        return plugin.defAgentAction("none")
 
-    def takePhase(self, plugin):
+    def playCard(self, plugin):
+        card = plugin.getCurrentPlayerHand()[0]
+        return plugin.defAgentAction("move", card)
+
+
+    def choseTrumpPhase(self, plugin):
         card = plugin.getCardFromTable(0)
-        cardValue = plugin.getValeurCarte(card)
-        if( cardValue > 11 ):
+        cardValue = card.value
+        if( cardValue >= 13 ):
             return plugin.defAgentAction("move", card)
         else:
-            return plugin.defAgentAction("dialog", card)
+            return plugin.defAgentAction("pass")
+
+    def choseTrumpPhase2(self, plugin):
+        card = plugin.getCardFromTable(0)
+        return plugin.defAgentAction("move", card)
+

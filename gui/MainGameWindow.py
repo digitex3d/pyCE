@@ -34,8 +34,9 @@ class MainGameWindow(window.Window):
 
         while not (self.has_exit):
             self.dispatch_events()
-            self.clear()
 
+            self.clear()
+            self.game.updateGame()
             self.draw()
             #Tick the clock
             clock.tick()
@@ -48,7 +49,6 @@ class MainGameWindow(window.Window):
         print("Drawing screen")
         self.dispatch_events()
         self.clear()
-
 
         for component in self.components:
             component.update(game_state)
