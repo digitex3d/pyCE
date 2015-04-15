@@ -62,10 +62,7 @@ class PluginInit(Plugin):
         self.dealToTable(1)
 
         # Le premier joueur à jouer
-        self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
-        self.setLastPlayer(self.getDealerPID())
-        self.setCurrentTurn(self.getFirstPlayer())
-
+        self.setLabeloteFirstPlayer()
 
         self.showDialogMessage("Info", "Chosing trump phase.", "Ok" )
         self.setCurrentPhase("Take")
@@ -105,15 +102,14 @@ class PluginInit(Plugin):
                 self.showDialogMessage("Info", "Chose trump manual", "ok" )
                 print("Choix manual attout")
                 self.initTake2phase()
-        self.next_turn()
+                return
+            self.next_turn()
 
 
     def initPlayPhase(self):
          # Le premier joueur à jouer
         self.flushTable()
-        self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
-        self.setLastPlayer(self.getDealerPID())
-        self.setCurrentTurn(self.getFirstPlayer())
+        self.setLabeloteFirstPlayer()
         self.setCurrentPhase("Play")
 
     def take2Phase(self):
@@ -121,7 +117,7 @@ class PluginInit(Plugin):
         print("Atction type:" + action.type)
 
         if( action.type == "none" ):
-            self.showDialogAction("Info", "Chose a trump or pass", "pass", "pass" )
+            self.showDialogAction("Info", "Chose a trump or pass", "pass", "pass2" )
             return
 
         print(" im playinggn"+str(self.currentTurn()))
@@ -133,15 +129,16 @@ class PluginInit(Plugin):
             self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
             self.dealTrumpCards()
             self.initPlayPhase()
-        if(action.type == "pass"):
+        if(action.type == "pass2"):
             if(self.iAmLastPlayerToPlay()):
                 self.resetTable()
-                self.setCurrentTurn(0)
                 self.getCurrentPhase("Start")
                 self.flushTable()
                 self.showDialogMessage("Info", "Trump has not been chosen restarting.", "Ok" )
-            self.showDialogMessage("Info", "Discarding.", "Ok" )
-        self.next_turn()
+                return
+            self.next_turn()
+
+
 
     def playPhase(self):
         action = self.getAction()
@@ -186,11 +183,13 @@ class PluginInit(Plugin):
         self.appendCardToTable(c)
         self.appendCardToTable(d)
         self.setCurrentPhase("Take2")
+        self.setLabeloteFirstPlayer()
+
+
+    def setLabeloteFirstPlayer(self):
         self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
         self.setLastPlayer(self.getDealerPID())
         self.setCurrentTurn(self.getFirstPlayer())
-        self.showDialogMessage("Info", "Manual chose.", "Ok" )
-
 
     def getValeurCarte(self, carte):
         """ Renvoie la valeur de la carte selon les règles de la belote.

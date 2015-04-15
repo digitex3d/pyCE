@@ -95,13 +95,14 @@ class Plugin:
 
 
         if(  self.agentAction == None ):
-            return self.gameState
+            self.agentAction = self.defAgentAction("none")
         else:
             if( not self.isLost() and not self.isWin()):
                 if(self.currentTurn() == 0):
                     self.hideDialogMessage()
 
                 self.nextState()
+
             else:
                 if(self.isWin()):
                     self.showDialogMessage("Win", "You won", "Ok")
