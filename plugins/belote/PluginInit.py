@@ -53,9 +53,6 @@ class PluginInit(Plugin):
         # Enlève les cartes qui sont pas utilisées
         self.removeRangeOfCards(self.getTableDeck(), 2,6, ['h','c','s','d'] )
 
-        # Affecte la valeur des cartes
-        self.setCardValues(self.cartesNAtout)
-
         # Les joueurs reçoivent chacun 5 cartes.
         self.dealCards(5)
 
@@ -67,12 +64,22 @@ class PluginInit(Plugin):
         # Le premier joueur à jouer
         self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
         self.setLastPlayer(self.getDealerPID())
-        self.setCurrentTurn(self.getLeftPlayerOf(self.getDealerPID()))
+        self.setCurrentTurn(self.getFirstPlayer())
 
 
         self.showDialogMessage("Info", "Chosing trump phase.", "Ok" )
         self.setCurrentPhase("Take")
 
+
+    def dealTrumpCards(self):
+        # Distribution du reste des cartes
+        for i in range(self.getnbPlayers()):
+            if (i != self.currentTurn()):
+                self.dealTo(i, 3)
+            else:
+                self.dealTo(i, 2)
+                card = self.popCardFromTable()
+                self.appendCardToMyHand(card)
 
     def takePhase(self):
         action = self.getAction()
@@ -88,24 +95,13 @@ class PluginInit(Plugin):
         if(action.type == "move"):
             card = self.getSelectedCard()
             self.atout = card.kind
-
-
-            # Distribution du reste des cartes
-            for i in range(self.getnbPlayers()):
-                if (i != self.currentTurn()):
-                    self.dealTo(i, 3)
-                else:
-                    self.dealTo(i, 2)
-                    card = self.popCardFromTable()
-                    self.appendCardToMyHand(card)
-
+            self.dealTrumpCards()
             self.initPlayPhase()
             self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
             print("Atout choisi" + self.atout)
 
         if(action.type == "pass"):
             if(self.iAmLastPlayerToPlay()):
-                self.setCurrentPhase("initTake2")
                 self.showDialogMessage("Info", "Chose trump manual", "ok" )
                 print("Choix manual attout")
                 self.initTake2phase()
@@ -117,7 +113,7 @@ class PluginInit(Plugin):
         self.flushTable()
         self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
         self.setLastPlayer(self.getDealerPID())
-        self.setCurrentTurn(self.getLeftPlayerOf(self.getDealerPID()))
+        self.setCurrentTurn(self.getFirstPlayer())
         self.setCurrentPhase("Play")
 
     def take2Phase(self):
@@ -135,6 +131,7 @@ class PluginInit(Plugin):
             card = self.getSelectedCard()
             self.atout = card.kind
             self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.dealTrumpCards()
             self.initPlayPhase()
         if(action.type == "pass"):
             if(self.iAmLastPlayerToPlay()):
@@ -148,12 +145,15 @@ class PluginInit(Plugin):
 
     def playPhase(self):
         action = self.getAction()
+        print("Atction type ndaplay:" + action.type)
+        print(" im playinggn ndaplay"+str(self.currentTurn()))
         if( action.type == "none" ):
             return
 
         self.playSelectedCard()
         if(self.iAmLastPlayerToPlay()):
-            self.setCurrentPhase("EndTurn")
+            self.endTurnPhase()
+            return
         self.next_turn()
 
 
@@ -170,6 +170,7 @@ class PluginInit(Plugin):
         self.addPlayerScore(winner, totalScore)
         self.setFirstPlayer(winner)
         self.setLastPlayer(self.getRightPlayerOf(winner))
+        self.setCurrentTurn(winner)
         self.setCurrentPhase("Play")
         self.showDialogMessage("Info", "Hand winner is " + str(winner), "Ok" )
         self.flushTable()
@@ -185,6 +186,9 @@ class PluginInit(Plugin):
         self.appendCardToTable(c)
         self.appendCardToTable(d)
         self.setCurrentPhase("Take2")
+        self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
+        self.setLastPlayer(self.getDealerPID())
+        self.setCurrentTurn(self.getFirstPlayer())
         self.showDialogMessage("Info", "Manual chose.", "Ok" )
 
 
