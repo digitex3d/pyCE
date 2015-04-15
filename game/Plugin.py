@@ -98,7 +98,7 @@ class Plugin:
             return self.gameState
         else:
             if( not self.isLost() and not self.isWin()):
-                if(  self.agentAction.originDrawable == "Dialog" ):
+                if(self.currentTurn() == 0):
                     self.hideDialogMessage()
 
                 self.nextState()
@@ -226,6 +226,18 @@ class Plugin:
         """
 
         self.getTable().append(card)
+
+    def popCardFromTable(self, ind=0):
+        """ Prend la carte d'index ind de la table.
+
+        :param index (int): ( default 0)
+        :return: (Card)
+        """
+
+        if( not self.getTable() ):
+            raise PluginException("Cannot pop, empty table.")
+
+        return self.getTable().pop()
 
     def getCardFromTable(self, index):
         return self.getTable()[index]
@@ -471,6 +483,7 @@ class Plugin:
         :param carte (Card):
         :return: (int)
         """
+
         return self.gameState.cardValues[carte.value]
 
     def getAction(self):
@@ -723,7 +736,7 @@ class Plugin:
         :param pid (int):
         :return:
         """
-        return ((pid+1) % self.getnbPlayers())
+        return ((pid-1) % self.getnbPlayers())
     ###################### /Turn Functions #######################
 
 ######################      IA      ########################
