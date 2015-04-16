@@ -154,11 +154,17 @@ class PluginInit(Plugin):
 
 
     def isWin(self):
-        return False
+        if( self.allHandsEmpty() and
+                self.getPlayerScore(0) >
+                self.getPlayerScore(1)):
+            return True
 
 
     def isLost(self):
-        return False
+        if( self.allHandsEmpty() and
+                self.getPlayerScore(0) <
+                self.getPlayerScore(1)):
+            return False
 
     def endTurnPhase(self):
         totalScore = self.getTableSumCardScore()
@@ -235,7 +241,6 @@ class PluginInit(Plugin):
             return
 
     def isLegalMove(self):
-        #TODO: à implémenter
         """
         Renvoie True si l'action est legale dans l'état courant
         :param agent_action:
@@ -249,15 +254,14 @@ class PluginInit(Plugin):
                 if(action.type == "move"):
                     hand = self.getCurrentPlayerHand()
 
-                    turnKind = self.getTable()[0].kind
+                    turnKind =  self.getCardFromTable(0).kind
                     selectedCard=action.originSprite
 
                     kind = selectedCard.kind
 
                     if(kind != turnKind):
-                        for card in hand:
-                            if( card.kind == turnKind ):
-                                return False
+                        if( self.currentHandGotKind(turnKind) ):
+                            return False
 
         return True
 
@@ -279,9 +283,11 @@ class IABelote(IAPlugin):
         if( plugin.getFirstPlayer() == plugin.currentTurn()):
             card = plugin.getHandBestCard()
         else:
-            card = plugin.getHandBestCard(plugin.getTable()[0].kind)
-            if(card == None):
-                card =plugin.getCurrentPlayerHand()[0]
+            turnKind = plugin.getCardFromTable(0).kind
+            if( plugin.currentHandGotKind(turnKind)):
+                card = plugin.getHandBestCard(turnKind)
+            else:
+                card = plugin.getHandBestCard()
         return plugin.defAgentAction("move", card)
 
 

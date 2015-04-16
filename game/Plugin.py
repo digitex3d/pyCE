@@ -1,6 +1,7 @@
 """ Autheur Giuseppe Federico 
 """
 from random import randint
+import sys
 from environment.Card import Card
 from environment.CardStack import CardStack
 from environment.DeckGenerator import DeckGenerator
@@ -162,11 +163,6 @@ class Plugin:
 
     ############################################################
 
-    ######################### Hands Functions #################################
-
-
-
-    ######################### /Hands Functions ################################
 
     ########################## Fonctions de Jeu ###############################
 
@@ -242,6 +238,8 @@ class Plugin:
         return self.getTable().pop()
 
     def getCardFromTable(self, index):
+        if(len(self.getTable()) <= 0):
+            raise PluginException("Table is empty")
         return self.getTable()[index]
 
     def resetTable(self):
@@ -349,6 +347,19 @@ class Plugin:
         """
         return not self.getPlayerHand(pid)
 
+    def allHandsEmpty(self):
+        """ Renvoie true si tous les main des adversaires sont vides, false sinon
+
+        :return (boolean):
+        """
+
+        for pid in range(self.getnbPlayers()):
+            if( not self.isPlayerHandEmpty(pid) ):
+                return False
+
+        return True
+
+
     def getHandBestCard(self, kind=None):
         """ Renvoie la meilleure carte en main.
             Si kind est specifié, renvoie la meilleure carte d'un type en particulier
@@ -360,20 +371,63 @@ class Plugin:
         if( len(hand) <= 0 ):
             raise PluginException("Hand is empty!")
         firstCard = hand[0]
-        max = self.getValeurCarte(firstCard)
+        first = True
         resu=None
 
-        for card in hand:
-            if( self.getValeurCarte(card) > max):
-                if(kind != None):
-                    if( card.kind == kind):
+        if(kind != None):
+            for card in hand:
+                if( card.kind == kind):
+                    if(first):
                         max = self.getValeurCarte(card)
                         resu = card
-                else:
+
+                    elif( card.kind == kind and  self.getValeurCarte(card) > max):
+                        max = self.getValeurCarte(card)
+                        resu = card
+        else:
+            for card in hand:
+
+                if(first):
+                    max = self.getValeurCarte(card)
+                    resu = card
+
+                elif (  self.getValeurCarte(card) > max):
                     max = self.getValeurCarte(card)
                     resu = card
 
         return resu
+
+    def handGotKind(self,pid, kind):
+        """ Cette fonction renvoie true si la main du joueur 'pid' contient
+
+        une carte de type 'kind'.
+
+        :param pid (int):
+        :param kind (String):
+        :return: ( boolean )
+        """
+
+        hand = self.getPlayerHand(pid)
+
+        if( not hand ):
+            raise PluginException("Hand is empty.")
+
+        for card in hand:
+            if( card.kind == kind):
+                return True
+
+        return False
+
+    def currentHandGotKind(self, kind):
+        """ Renvoie true si la main du joueur courant contient une carte du type
+
+        'kind', false sinon.
+
+        :param kind (String):
+        :return:
+        """
+
+        return self.handGotKind(self.currentTurn(), kind)
 
     ######################## /Hand Functions ##################################
     def getTableCards(self):
@@ -715,7 +769,12 @@ class Plugin:
         """
         return (self.currentTurn() == 0)
 
+    def getTurnTableKind(self):
+        """ Renvoie le type de tour courant
 
+        :return (String):
+        """
+        return self.getCardFromTable(0).kind
 
     def setFirstPlayer(self, pid):
         """ Affecte le premier joueur au jouer pid
