@@ -15,9 +15,6 @@ class PluginInit(Plugin):
     def pluginInit(self):
         """ Cette fonction initialise l'état intitial du jeu
             La table et les joueurs.
-
-            Toutes les initialisations doivent modifier l'objet
-            initState.
         """
 
         self.initPlayers(2)
@@ -26,17 +23,22 @@ class PluginInit(Plugin):
 
     def initialPhase(self):
         self.flushTable()
+
+        # Distribution des cartes aux joueurs
         self.dealCards(1)
+        self.setFirstPlayer(0)
+        self.setLastPlayer(1)
         self.setCurrentPhase("Play")
 
     def playPhase(self):
-        self.playSelectedCard()
-        if(self.iAmLastPlayerToPlay()):
-            self.endTurnPhase()
-        else:
-            self.setCurrentPhase("Play")
+        if(self.agentAction.type == "move"):
+            self.playSelectedCard()
+            if(self.iAmLastPlayerToPlay()):
+                self.endTurnPhase()
+            else:
+                self.setCurrentPhase("Play")
 
-        self.next_turn()
+            self.next_turn()
 
     def dealPhase(self):
         self.dealCards(1)
@@ -61,23 +63,13 @@ class PluginInit(Plugin):
 
         if((carte1Val != carte2Val)):
             score = self.getTableSumCardScore()
-            if( carte1Val > carte2Val):
-                self.addPlayerScore(0, score)
-                self.showDialogMessage("End Turn", "Player 1 win turn. Points:"
-                                       + str(score), "Ok" )
-            else:
-                self.addPlayerScore(1, score)
-                self.showDialogMessage("End Turn", "Player 2 win turn. Points: "
-                                       + str( score ), "Ok" )
+            winner = 0 if (carte1Val > carte2Val) else 1
+            self.addPlayerScore(winner, score)
+            self.appendLogInfoMessage("Player " + str(winner) + " win turn. Points:" + str(score))
             self.setCurrentPhase("Start")
-
         else:
-            self.showDialogMessage("End Turn", "Draw", "Ok" )
+            self.appendLogInfoMessage("Draw")
             self.setCurrentPhase("Deal")
-
-
-
-
 
 
     def nextState(self):

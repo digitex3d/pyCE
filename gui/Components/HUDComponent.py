@@ -26,7 +26,7 @@ class HUDComponent(Component):
         self.drawables.append(WinLabel(100,200))
 
         # On ajoute le dialog
-        self.drawables.append(DialogDrawable(330, 20))
+        self.drawables.append(DialogDrawable(330, 60))
 
 
         # On ajoute le dialog
@@ -115,20 +115,20 @@ class DialogDrawable(Drawable):
         self.labelTitle = Label('PyCE',
                           font_name='Times New Roman',
                           font_size=38,
-                          x=x+(dialogImage.width)/3 ,
-                          y=y+(dialogImage.height) - 48)
+                          x=x+(dialogImage.width)/3+30 ,
+                          y=y+(dialogImage.height) - 70)
         self.sprites.append(self.labelTitle)
 
         self.labelMsg = Label('Start a new game',
                           font_name='Times New Roman',
                           font_size=28,
-                          x=x+10, y=y+(dialogImage.height)-100)
+                          x=x+40, y=y+(dialogImage.height)-100)
         self.sprites.append(self.labelMsg)
 
         self.labelButton = Label('Start',
                           font_name='Times New Roman',
                           font_size=28,
-                          x=x+(dialogImage.width)/3, y=y+45)
+                          x=x+(dialogImage.width)/3+10, y=y+75)
         self.sprites.append(self.labelButton)
 
 
