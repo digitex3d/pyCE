@@ -26,8 +26,15 @@ class PluginInit(Plugin):
 
         # Distribution des cartes aux joueurs
         self.dealCards(1)
+
+        # On affecte le premier joueur
         self.setFirstPlayer(0)
+
+
+        # On affecte le dérnier joueur
         self.setLastPlayer(1)
+
+        # On change de phase de jeu
         self.setCurrentPhase("Play")
 
     def playPhase(self):
@@ -40,9 +47,6 @@ class PluginInit(Plugin):
 
             self.next_turn()
 
-    def dealPhase(self):
-        self.dealCards(1)
-        self.setCurrentPhase("Play")
 
     def isWin(self):
         if( self.isDeckEmpty() and self.IHaveBestScore()):
@@ -69,7 +73,8 @@ class PluginInit(Plugin):
             self.setCurrentPhase("Start")
         else:
             self.appendLogInfoMessage("Draw")
-            self.setCurrentPhase("Deal")
+            self.dealCards(1)
+            self.setCurrentPhase("Play")
 
 
     def nextState(self):
@@ -90,15 +95,10 @@ class PluginInit(Plugin):
         if( phase == "EndTurn"):
             self.endTurnPhase()
 
-        if( phase == "Deal"):
-            self.dealPhase()
 
     def isLegalMove(self):
-        #TODO: à implémenter
         """
         Renvoie True si l'action est legale dans l'état courant
-        :param agent_action:
-        :param plugin:
         :return:
         """
 
