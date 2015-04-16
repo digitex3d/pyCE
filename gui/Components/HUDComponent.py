@@ -65,15 +65,17 @@ class GameInfo(Drawable):
 
     def update(self, gameState):
         dy = 0
-        if( self.y - (dy+50) < 0):
-            self.sprites.remove(0)
-            dy += 22
+        self.sprites = []
         for msg in gameState.infoLog:
             self.sprites.append(Label(msg,
                           font_name='Times New Roman',
                           font_size=18,
                           x=self.x,y=self.y+dy))
             dy -= 22
+
+        if ((self.y+dy) < 0):
+            gameState.infoLog.pop(0)
+
 
 class WinLabel(Drawable):
     """ Le label Win/Lose

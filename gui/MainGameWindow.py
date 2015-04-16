@@ -40,9 +40,6 @@ class MainGameWindow(window.Window):
             self.draw()
             #Tick the clock
             clock.tick()
-            #Gets fps and draw it
-            fps_text.text = ("fps: %d") % (clock.get_fps())
-            fps_text.draw()
             self.flip()
 
     def update(self, game_state=None):

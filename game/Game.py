@@ -1,4 +1,5 @@
 import time
+from game.agents.AgentAction import AgentAction
 
 
 class Game:
@@ -41,14 +42,15 @@ class Game:
     def updateGame(self):
         if( self.game_state.turn==0 ):
             if( not self.eventsQueue):
-                return
+                player_action = AgentAction("none")
             else:
                 player_action = self.agents[0].getAction(self.game_state, self.eventsQueue.pop())
-                 # Effectue l'action et met à jour l'état du jeu
-                self.game_state = self.game_state.nextState(player_action)
 
-                # On met à jour tous les observateurs du jeu
-                self.updateObserver()
+            # Effectue l'action et met à jour l'état du jeu
+            self.game_state = self.game_state.nextState(player_action)
+
+            # On met à jour tous les observateurs du jeu
+            self.updateObserver()
         else:
             turn = self.game_state.turn
             # L'etat de l'agent qui doit jouer

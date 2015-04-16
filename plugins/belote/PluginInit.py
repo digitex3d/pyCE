@@ -64,7 +64,7 @@ class PluginInit(Plugin):
         # Le premier joueur à jouer
         self.setLabeloteFirstPlayer()
 
-        self.showDialogMessage("Info", "Chosing trump phase.", "Ok" )
+        self.appendLogInfoMessage("Chosing trump...")
         self.setCurrentPhase("Take")
 
 
@@ -80,29 +80,49 @@ class PluginInit(Plugin):
 
     def takePhase(self):
         action = self.getAction()
-        print("Atction type:" + action.type)
 
-        if( action.type == "none" ):
-            self.showDialogAction("Info", "Chose this trump?", "no", "pass" )
-            return
-
-        print(" Is chosing atout"+str(self.currentTurn()))
-        print("Atction type after:" + action.type)
+        self.showDialogAction("Info", "Chose a trump or pass", "pass", "pass" )
 
         if(action.type == "move"):
             card = self.getSelectedCard()
             self.atout = card.kind
             self.dealTrumpCards()
             self.initPlayPhase()
-            self.appendLogInfoMessage("Trump has been chosen." + self.atout)
-            self.showDialogMessage("Info", "Trump has been chosen." + self.atout, "Ok" )
-            print("Atout choisi" + self.atout)
+            self.appendLogInfoMessage("Trump has been chosen ")
+            self.appendLogInfoMessage(self.kindToStr(self.atout) +
+                                      " by player " + str(self.currentTurn()))
 
         if(action.type == "pass"):
+            self.appendLogInfoMessage("Player " + str(self.currentTurn()) + " has passed.")
             if(self.iAmLastPlayerToPlay()):
-                self.appendLogInfoMessage("Choosing trump manually" + str(self.atout))
-                print("Choix manual attout")
+                self.appendLogInfoMessage("Choosing trump manually...")
                 self.initTake2phase()
+                return
+
+            self.next_turn()
+
+    def take2Phase(self):
+        action = self.getAction()
+
+        self.showDialogAction("Info", "Chose a trump or pass", "pass", "pass2" )
+
+
+        if(action.type == "move"):
+            card = self.getSelectedCard()
+            self.atout = card.kind
+
+            self.appendLogInfoMessage("Trump has been chosen ")
+            self.appendLogInfoMessage(self.kindToStr(self.atout) +
+                                  " by player " + str(self.currentTurn()))
+            self.dealTrumpCards()
+            self.initPlayPhase()
+        if(action.type == "pass2"):
+            if(self.iAmLastPlayerToPlay()):
+                self.resetTable()
+                self.getCurrentPhase("Start")
+                self.flushTable()
+                #self.showDialogMessage("Info", "Trump has not been chosen restarting.", "Ok" )
+                self.appendLogInfoMessage("Trump has not been chosen, restarting" + self.atout)
                 return
             self.next_turn()
 
@@ -113,33 +133,7 @@ class PluginInit(Plugin):
         self.setLabeloteFirstPlayer()
         self.setCurrentPhase("Play")
 
-    def take2Phase(self):
-        action = self.getAction()
-        print("Atction type:" + action.type)
 
-        if( action.type == "none" ):
-            self.showDialogAction("Info", "Chose a trump or pass", "pass", "pass2" )
-            return
-
-        print(" im playinggn"+str(self.currentTurn()))
-        print("Atction type after:" + action.type)
-
-        if(action.type == "move"):
-            card = self.getSelectedCard()
-            self.atout = card.kind
-            self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
-            self.appendLogInfoMessage("Trump has been chosen." + self.atout)
-            self.dealTrumpCards()
-            self.initPlayPhase()
-        if(action.type == "pass2"):
-            if(self.iAmLastPlayerToPlay()):
-                self.resetTable()
-                self.getCurrentPhase("Start")
-                self.flushTable()
-                self.showDialogMessage("Info", "Trump has not been chosen restarting.", "Ok" )
-                self.appendLogInfoMessage("Trump has not been chosen, restarting" + self.atout)
-                return
-            self.next_turn()
 
 
 
@@ -178,7 +172,7 @@ class PluginInit(Plugin):
         self.setLastPlayer(self.getRightPlayerOf(winner))
         self.setCurrentTurn(winner)
         self.setCurrentPhase("Play")
-        self.showDialogMessage("Info", "Hand winner is " + str(winner), "Ok" )
+        #self.showDialogMessage("Info", "Hand winner is " + str(winner), "Ok" )
         self.appendLogInfoMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
         self.flushTable()
 

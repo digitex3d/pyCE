@@ -98,18 +98,18 @@ class Plugin:
 
         if(  self.agentAction == None ):
             self.agentAction = self.defAgentAction("none")
+
+        if( not self.isLost() and not self.isWin()):
+            if(self.currentTurn() == 0):
+                self.hideDialogMessage()
+
+            self.nextState()
+
         else:
-            if( not self.isLost() and not self.isWin()):
-                if(self.currentTurn() == 0):
-                    self.hideDialogMessage()
-
-                self.nextState()
-
+            if(self.isWin()):
+                self.showDialogMessage("Win", "You won", "Ok")
             else:
-                if(self.isWin()):
-                    self.showDialogMessage("Win", "You won", "Ok")
-                else:
-                    self.showDialogMessage("Lose", "You lost", "Ok")
+                self.showDialogMessage("Lose", "You lost", "Ok")
         return self.gameState
 
     def GisLegalMove(self, gameState, agent_action):
@@ -145,10 +145,8 @@ class Plugin:
             self.gameState.dialog.popDialog(title, message, buttonText, "none")
 
     def showDialogAction(self, title, message, buttonText, action):
-        if(not self.isPlayerTurn()):
-            raise PluginException("It's not the player turn")
-
-        self.gameState.dialog.popDialog(title, message, buttonText, action)
+        if(self.isPlayerTurn() and self.agentAction.type == "none"):
+            self.gameState.dialog.popDialog(title, message, buttonText, action)
 
 
     def hideDialogMessage(self):
@@ -826,6 +824,21 @@ class Plugin:
         """
         return ((pid-1) % self.getnbPlayers())
     ###################### /Turn Functions #######################
+
+    ###################### Utils #################################
+
+    def kindToStr(self, kind):
+        kinds ={
+            's':"Spades",
+            'h':"Hearts",
+            'd':"Diamonds",
+            'c':"Clubs"
+
+        }
+
+        return kinds.get(kind)
+
+    ##############################################################
 
 ######################      IA      ########################
 
