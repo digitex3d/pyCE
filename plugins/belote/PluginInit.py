@@ -139,16 +139,13 @@ class PluginInit(Plugin):
 
     def playPhase(self):
         action = self.getAction()
-        print("Atction type ndaplay:" + action.type)
-        print(" im playinggn ndaplay"+str(self.currentTurn()))
-        if( action.type == "none" ):
-            return
+        if(action.type == "move"):
+            self.playSelectedCard()
 
-        self.playSelectedCard()
-        if(self.iAmLastPlayerToPlay()):
-            self.setCurrentPhase("EndTurn")
-            return
-        self.next_turn()
+            if(self.iAmLastPlayerToPlay()):
+                self.setCurrentPhase("EndTurn")
+                return
+            self.next_turn()
 
 
     def isWin(self):

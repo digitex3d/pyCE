@@ -32,10 +32,6 @@ class Game:
         if(event.type == "mouse_click"):
             self.handleClick(event)
 
-        # On met à jour tous les observateurs du jeu
-        self.updateObserver()
-
-
     def handleClick(self, event):
         self.eventsQueue.append(event)
 
@@ -49,8 +45,6 @@ class Game:
             # Effectue l'action et met à jour l'état du jeu
             self.game_state = self.game_state.nextState(player_action)
 
-            # On met à jour tous les observateurs du jeu
-            self.updateObserver()
         else:
             turn = self.game_state.turn
             # L'etat de l'agent qui doit jouer
@@ -59,7 +53,9 @@ class Game:
 
             # Effectue l'action et met à jour l'état du jeu
             self.game_state = self.game_state.nextState(agent_action)
-            self.updateObserver()
+
+        # On met à jour tous les observateurs du jeu
+        self.updateObserver()
 
 
     def updateObserver(self):
