@@ -24,6 +24,7 @@ class GameState:
         # Jeu en pause?
         self.paused = True
         self.dialog = init_state.dialog
+        self.infoLog = []
 
 
     def nextState(self,agent_action):

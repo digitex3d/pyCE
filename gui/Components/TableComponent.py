@@ -21,7 +21,7 @@ class TableComponent(Component):
         # Ajout de la table ( conteneur des cartes )
         rw = 1/3*w
         rh = 1/3*h
-        tableDrawable = TableDrawable(240,180,500,500)
+        tableDrawable = TableDrawable(240,145,500,500)
         self.addDrawable(tableDrawable)
 
     def setUp(self, gameState):

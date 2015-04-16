@@ -155,7 +155,8 @@ class Plugin:
         if(self.gameState.dialog.visible):
             self.gameState.dialog.hideDialog()
 
-
+    def appendLogInfoMessage(self, message):
+        self.gameState.infoLog.append(message)
 
 
     def initDialog(self, title, msg, tbutton):

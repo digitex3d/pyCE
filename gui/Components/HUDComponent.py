@@ -16,11 +16,11 @@ class HUDComponent(Component):
 
     def __init__(self, window):
         Component.__init__(self, window)
-
+        self.window = window
 
         # On ajoute le score au hud
-        self.drawables.append(ScoreLabel(100,100,0))
-        self.drawables.append(ScoreLabel(100,500 ,1))
+        self.drawables.append(ScoreLabel(780,730,0))
+        self.drawables.append(ScoreLabel(780,700 ,1))
 
         # On ajoute le label win
         self.drawables.append(WinLabel(100,200))
@@ -28,6 +28,9 @@ class HUDComponent(Component):
         # On ajoute le dialog
         self.drawables.append(DialogDrawable(330, 20))
 
+
+        # On ajoute le dialog
+        self.drawables.append(GameInfo(700, 80))
 
 
 
@@ -38,22 +41,38 @@ class ScoreLabel(Drawable):
         éventuelment affiché.
     """
 
-    #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
     def __init__(self, x , y, pid ):
         Drawable.__init__(self, x , y)
         self.label = Label('0',
                           font_name='Times New Roman',
-                          font_size=36,
+                          font_size=26,
                           x=x, y=y)
 
-        #TODO: c'est pas la bonne taille
-        self.height = 20
-        self.width =20
         self.pid = pid
         self.sprites.append(self.label)
 
     def update(self, gameState):
-        self.label.text = str(gameState.table.players[self.pid].score)
+        self.label.text ="Player " + str(self.pid) +":" + \
+                         str(gameState.table.players[self.pid].score)
+
+class GameInfo(Drawable):
+    """ Cette classe représente une partie du HUD où le score du joueur sera
+        éventuelment affiché.
+    """
+
+    def __init__(self, x , y ):
+        Drawable.__init__(self, x , y)
+
+    def update(self, gameState):
+        dy = 0
+        if( self.y - (dy+22) < 0):
+            self.sprites.remove(0)
+        for msg in gameState.infoLog:
+            self.sprites.append(Label(msg,
+                          font_name='Times New Roman',
+                          font_size=18,
+                          x=self.x,y=self.y+dy))
+            dy -= 22
 
 class WinLabel(Drawable):
     """ Le label Win/Lose

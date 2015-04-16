@@ -94,11 +94,13 @@ class PluginInit(Plugin):
             self.atout = card.kind
             self.dealTrumpCards()
             self.initPlayPhase()
+            self.appendLogInfoMessage("Trump has been chosen." + self.atout)
             self.showDialogMessage("Info", "Trump has been chosen." + self.atout, "Ok" )
             print("Atout choisi" + self.atout)
 
         if(action.type == "pass"):
             if(self.iAmLastPlayerToPlay()):
+                self.appendLogInfoMessage("Choosing trump manually" + str(self.atout))
                 print("Choix manual attout")
                 self.initTake2phase()
                 return
@@ -126,6 +128,7 @@ class PluginInit(Plugin):
             card = self.getSelectedCard()
             self.atout = card.kind
             self.showDialogMessage("Info", "Trump has been chosen."+ self.atout, "Ok" )
+            self.appendLogInfoMessage("Trump has been chosen." + self.atout)
             self.dealTrumpCards()
             self.initPlayPhase()
         if(action.type == "pass2"):
@@ -134,6 +137,7 @@ class PluginInit(Plugin):
                 self.getCurrentPhase("Start")
                 self.flushTable()
                 self.showDialogMessage("Info", "Trump has not been chosen restarting.", "Ok" )
+                self.appendLogInfoMessage("Trump has not been chosen, restarting" + self.atout)
                 return
             self.next_turn()
 
@@ -169,12 +173,13 @@ class PluginInit(Plugin):
     def endTurnPhase(self):
         totalScore = self.getTableSumCardScore()
         winner = self.getTableBestCardOwner()
-        self.addPlayerScore(winner, totalScore)
+        self.laBeloteAddPlayerScore(winner, totalScore)
         self.setFirstPlayer(winner)
         self.setLastPlayer(self.getRightPlayerOf(winner))
         self.setCurrentTurn(winner)
         self.setCurrentPhase("Play")
         self.showDialogMessage("Info", "Hand winner is " + str(winner), "Ok" )
+        self.appendLogInfoMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
         self.flushTable()
 
 
@@ -190,6 +195,12 @@ class PluginInit(Plugin):
         self.setCurrentPhase("Take2")
         self.setLabeloteFirstPlayer()
 
+
+    def laBeloteAddPlayerScore(self, pid, score):
+        if(pid == 0 or pid == 2):
+            self.addPlayerScore(0,score)
+        else:
+            self.addPlayerScore(1,score)
 
     def setLabeloteFirstPlayer(self):
         self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))

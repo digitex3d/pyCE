@@ -23,6 +23,7 @@ class DeckDrawable(Drawable):
         Drawable.__init__(self,x,y)
         self.pid = pid
         self.dir = dir
+        self.visible = False
         self.name = "Deck"
         # Image de la pile des cartes
         deck_image = pyglet.image.load(DATA_PATH + "cards/deck"+dir+".gif")
