@@ -82,14 +82,14 @@ class PluginInit(Plugin):
     def takePhase(self):
         action = self.getAction()
 
-        self.showDialogAction("Info", "Chose a trump or pass.", "Pass", "pass" )
+        self.showDialogAction("Info", "Select trump or pass.", "Pass", "pass" )
 
         # L'atout a été séléctionné
         if(action.type == "move"):
             self.choisirAtout()
 
 
-        # Le joueur à passé
+        # Le joueur a passé
         if(action.type == "pass"):
             self.appendLogInfoMessage("Player " + str(self.currentTurn()) + " has passed.")
             if(self.iAmLastPlayerToPlay()):
@@ -122,9 +122,10 @@ class PluginInit(Plugin):
         self.initPlayPhase()
 
         # Affiche les message d'infos
-        self.appendLogInfoMessage("Trump has been chosen ")
-        self.appendLogInfoMessage(self.kindToStr(self.atout) +
-                                  " by player " + str(self.currentTurn()))
+        self.showBlockingDialogMessage(self.kindToStr(self.atout) +
+                                  " has been chosen by player " + str(self.currentTurn()) + "as Trump.")
+        self.appendLogInfoMessage(self.kindToStr(self.atout) +" has been chosen ")
+        self.appendLogInfoMessage("by player " + str(self.currentTurn()))
 
     def take2Phase(self):
         action = self.getAction()
@@ -181,8 +182,11 @@ class PluginInit(Plugin):
         self.setLastPlayer(self.getRightPlayerOf(winner))
         self.setCurrentTurn(winner)
         self.setCurrentPhase("Play")
-        self.appendLogInfoMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
         self.flushTable()
+         # Affiche les message d'infos
+        self.showBlockingDialogMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
+        self.appendLogInfoMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
+
 
     def laBeloteAddPlayerScore(self, pid, score):
         if(pid == 0 or pid == 2):

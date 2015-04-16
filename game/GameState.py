@@ -22,7 +22,7 @@ class GameState:
         self.plugin = plugin
         self.cardValues = init_state.cardValues
         # Jeu en pause?
-        self.paused = True
+        self.paused = False
         self.dialog = init_state.dialog
         self.infoLog = []
 

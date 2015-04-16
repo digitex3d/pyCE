@@ -36,6 +36,14 @@ class Game:
         self.eventsQueue.append(event)
 
     def updateGame(self):
+        if(self.game_state.paused):
+            if( len(self.eventsQueue) > 0):
+                event = self.eventsQueue.pop()
+                if ( event.drawableClicked.name == "Dialog" and
+                     self.game_state.dialog.action == "unPause"):
+                    self.game_state.paused = False
+            else:
+                return
         if( self.game_state.turn==0 ):
             if( not self.eventsQueue):
                 player_action = AgentAction("none")

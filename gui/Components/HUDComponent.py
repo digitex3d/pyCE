@@ -119,11 +119,17 @@ class DialogDrawable(Drawable):
                           y=y+(dialogImage.height) - 70)
         self.sprites.append(self.labelTitle)
 
-        self.labelMsg = Label('Start a new game',
+        self.labelMsg1 = Label('Start a new game',
                           font_name='Times New Roman',
                           font_size=28,
                           x=x+40, y=y+(dialogImage.height)-100)
-        self.sprites.append(self.labelMsg)
+        self.sprites.append(self.labelMsg1)
+
+        self.labelMsg2 = Label('',
+                          font_name='Times New Roman',
+                          font_size=28,
+                          x=x+40, y=y+(dialogImage.height)-126)
+        self.sprites.append(self.labelMsg2)
 
         self.labelButton = Label('Start',
                           font_name='Times New Roman',
@@ -137,6 +143,12 @@ class DialogDrawable(Drawable):
     def update(self, gameState):
         self.visible = gameState.dialog.visible
         self.labelTitle.text = gameState.dialog.title
-        self.labelMsg.text = gameState.dialog.message
+
+        if(len(gameState.dialog.message) > 21):
+            self.labelMsg1.text = gameState.dialog.message[0:21]
+            self.labelMsg2.text = gameState.dialog.message[21:]
+        else:
+             self.labelMsg1.text = gameState.dialog.message
+
         self.labelButton.text = gameState.dialog.textButton
 

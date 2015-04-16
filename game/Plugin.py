@@ -107,9 +107,9 @@ class Plugin:
 
         else:
             if(self.isWin()):
-                self.showDialogMessage("Win", "You won", "Ok")
+                self.showBlockingDialogMessage("Win", "You won", "Ok")
             else:
-                self.showDialogMessage("Lose", "You lost", "Ok")
+                self.showBlockingDialogMessage("Lose", "You lost", "Ok")
         return self.gameState
 
     def GisLegalMove(self, gameState, agent_action):
@@ -140,9 +140,10 @@ class Plugin:
 
     ###################### HUD #################################
 
-    def showDialogMessage(self, title, message, buttonText):
+    def showBlockingDialogMessage(self, message,title="Info", buttonText="Ok"):
+        self.gameState.paused = True
         if(not self.gameState.dialog.visible):
-            self.gameState.dialog.popDialog(title, message, buttonText, "none")
+            self.gameState.dialog.popDialog(title, message, buttonText, "unPause")
 
     def showDialogAction(self, title, message, buttonText, action):
         if(self.isPlayerTurn() and self.agentAction.type == "none"):

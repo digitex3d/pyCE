@@ -14,12 +14,6 @@ import logging
 
 logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
-
-
-
-
-
-
 if len(sys.argv) > 1:
     plugin_name = str(sys.argv[1])
 else:
@@ -39,11 +33,6 @@ def my_import(name):
 mod = my_import("plugins.%s" % plugin_name +".PluginInit")
 plugin = mod.PluginInit()
 
-
-
-
-
-
 # On initialise le jeu
 game_state = GameState(plugin.initGameState(), plugin)
 game = Game(game_state)
@@ -62,8 +51,6 @@ table = TableComponent(window)
 
 window.add_component(table)
 window.add_component(hud)
-
-
 
 table.setUp(game_state)
 game.addObserver(window)
