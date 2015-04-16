@@ -39,6 +39,7 @@ class GameState:
             return self.plugin.GNextState(self, agent_action)
         else:
             logging.debug("Illegal move")
+            self.infoLog.append("Illegal Move!")
             return self
 
     def getCurrentPlayer(self):

@@ -65,8 +65,9 @@ class GameInfo(Drawable):
 
     def update(self, gameState):
         dy = 0
-        if( self.y - (dy+22) < 0):
+        if( self.y - (dy+50) < 0):
             self.sprites.remove(0)
+            dy += 22
         for msg in gameState.infoLog:
             self.sprites.append(Label(msg,
                           font_name='Times New Roman',
