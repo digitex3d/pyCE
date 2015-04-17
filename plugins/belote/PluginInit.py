@@ -60,20 +60,22 @@ class PluginInit(Plugin):
         # Enlève les cartes qui sont pas utilisées
         self.removeRangeOfCards(self.getTableDeck(), 2,6, ['h','c','s','d'] )
 
-        # Les joueurs reçoivent chacun 5 cartes.
-        self.dealCards(5)
-
         # On choisit un donneur au hazard
         self.choseRandomDealer()
+
+        # Choisir le premier et le dernier joueur par rapport
+        # au dealer
+        self.setFirstAndLastPlayers(self.getLeftPlayerOf(
+            self.getDealerPID()))
+
+        # Les joueurs reçoivent chacun 5 cartes.
+        self.dealCards(5)
 
         # Une carte est placée, face découverte, au milieu de la table de jeu.
         self.dealToTable(1)
 
-        # Le premier joueur à jouer
-        self.setLabeloteFirstPlayer()
-
         # On affiche des messages d'infos
-        self.appendLogInfoMessage("Chosing trump...")
+        self.appendLogInfoMessage("Choix de l'atout.")
 
         # Changement de phase
         self.setCurrentPhase("Take")
@@ -95,7 +97,7 @@ class PluginInit(Plugin):
         action = self.getAction()
 
         # Affiche choix de l'action
-        self.showDialogAction("Info", "Select trump or pass.", "Pass", "pass" )
+        self.showDialogAction("Info", "Selectionner l'atout ou passer", "Passer.", "pass" )
 
         # L'atout a été séléctionné
         if(action.type == "move"):
@@ -108,7 +110,7 @@ class PluginInit(Plugin):
 
             # Si on est le dernier à jouer
             if(self.iAmLastPlayerToPlay()):
-                self.appendLogInfoMessage("Choosing trump manually...")
+                self.appendLogInfoMessage("Choix de l'atout, 2ème phase")
                 self.initTake2phase()
                 return
 
@@ -189,6 +191,10 @@ class PluginInit(Plugin):
     def playPhase(self):
         """ Phase de jeu
         """
+
+        if(self.currentTurn() == self.getFirstPlayer()):
+            self.flushTable()
+
         action = self.getAction()
         if(action.type == "move"):
             self.playSelectedCard()
@@ -226,7 +232,7 @@ class PluginInit(Plugin):
         self.setLastPlayer(self.getRightPlayerOf(winner))
         self.setCurrentTurn(winner)
         self.setCurrentPhase("Play")
-        self.flushTable()
+
          # Affiche les message d'infos
         self.showBlockingDialogMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
         self.appendLogInfoMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))

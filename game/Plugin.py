@@ -58,11 +58,15 @@ class Plugin:
         """ Classe abstraite à implémenter dans le plugin.
         :return:
         """
+
         return None
 
     def initGameState(self):
         deck = self.initState.generateShuffledDeck()
         self.initState.setTableDeck(deck)
+
+
+
         self.pluginInit()
         return self.initState
 
@@ -155,6 +159,14 @@ class Plugin:
 
 
     ########################## Fonctions de Jeu ###############################
+
+    def pause(self):
+        self.gameState.paused = True
+
+    def unPause(self):
+        self.gameState.paused = False
+
+
 
     def restartGame(self):
         self.gameState.restart(self.initGameState())
@@ -782,6 +794,30 @@ class Plugin:
 
         return -1
 
+    def setFirstAndLastPlayers(self, first, last=None):
+        """ Affecte le premier et le dernier joueur.
+
+            Le dernier joueur est celui à  droite de 'first' si
+            'last' n'est pas spécifié, 'last' sinon.
+
+            :param first (int): pid
+            :param last (int): pid (default) None
+        """
+
+        nbp = self.getnbPlayers()
+
+        if( first >= nbp or first < 0):
+            raise PluginException("First pid out of range ")
+
+        self.setFirstPlayer(first)
+
+        if(last):
+            if( last >= nbp or last< 0):
+                raise PluginException("Last pid out of range ")
+            self.setLastPlayer(last)
+        else:
+            self.setLastPlayer(self.getRightPlayerOf(first))
+
     def isPlayerTurn(self):
         """ True si c'est le tour du joueur
         :return: None
@@ -943,6 +979,10 @@ class InitState:
 
     def initDialog(self, title, msg, tbutton):
         self.dialog.popDialog(title, msg,tbutton)
+
+
+
+
 
     def addPlayerState(self, hand=CardStack(), deck=CardStack()):
         """ Ajoute un joueur au jeu

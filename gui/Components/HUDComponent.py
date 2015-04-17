@@ -142,6 +142,7 @@ class DialogDrawable(Drawable):
             self.labelMsg2.text = gameState.dialog.message[25:]
         else:
              self.labelMsg1.text = gameState.dialog.message
+             self.labelMsg2.text = ""
 
         self.labelButton.text = gameState.dialog.textButton
 

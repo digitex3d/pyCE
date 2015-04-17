@@ -5,6 +5,7 @@ from pyglet import clock
 from pyglet import font
 import pyglet
 from pyglet.sprite import Sprite
+import time
 from game.Event import Event
 import logging
 from gui.Default import DATA_PATH
@@ -33,6 +34,7 @@ class MainGameWindow(window.Window):
             self.dispatch_events()
 
             self.clear()
+
             self.game.updateGame()
             self.draw()
             #Tick the clock

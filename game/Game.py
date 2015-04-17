@@ -13,6 +13,7 @@ class Game:
         self.agents = []
         self.eventsQueue = []
 
+
     def addAgent(self, agent):
         """ On ajoute un agent ici
         """
@@ -42,6 +43,7 @@ class Game:
                 if ( event.drawableClicked.name == "Dialog" and
                      self.game_state.dialog.action == "unPause"):
                     self.game_state.paused = False
+                    return
             else:
                 return
         if( self.game_state.turn==0 ):

@@ -23,6 +23,7 @@ class GameState:
         self.cardValues = init_state.cardValues
         # Jeu en pause?
         self.paused = False
+        self.pauseTime = 0
         self.dialog = init_state.dialog
         self.infoLog = []
         self.drawingStyle = 0
