@@ -235,7 +235,7 @@ class Plugin:
         if( not self.getTable() ):
             raise PluginException("Cannot pop, empty table.")
 
-        return self.getTable().pop()
+        return self.getTable().pop(0)
 
     def getCardFromTable(self, index):
         if(len(self.getTable()) <= 0):
@@ -429,8 +429,45 @@ class Plugin:
 
         return self.handGotKind(self.currentTurn(), kind)
 
+    def handHasCardValue(self, cardValue):
+        """ Renvoie true si la main du joueur courant contient la carte
+
+        de valeur 'cardValue', false sinon,
+
+        :param cardValue( int ):
+        :return:
+        """
+
+        hand = self.getCurrentPlayerHand()
+
+        for card in hand:
+            if( card.value == cardValue):
+                return True
+        return False
+
+    def getHandCard(self, value, kind=None):
+        """ Renvoie la carte de valeur 'value' ( de type kind si spécifié )
+
+        :param value (int):
+        :param kind (String):
+        :return: (Card)
+        """
+        if( not self.handHasCardValue(value)):
+            raise PluginException("The hand does not contains the card requested")
+
+        hand = self.getCurrentPlayerHand()
+        if(kind == None):
+            for card in hand:
+                if (card.value == value):
+                    return card
+        else:
+             for card in hand:
+                if (card.value == value and card.kind == kind):
+                    return card
+        return None
+
     ######################## /Hand Functions ##################################
-    def getTableCards(self):
+    def getTable(self):
         """
         Cette fonction renvoie les cartes de la table
         :return: CardStack
@@ -457,14 +494,6 @@ class Plugin:
 
         else:
             print(object + " ne contient pas un pid.")
-
-    def getTable(self):
-        """
-        Cette fonction renvoie la table de jeu
-        :return: CardStack
-        """
-        return  self.gameState.table.table
-
 
 
     def getPlayerHand(self, pid):

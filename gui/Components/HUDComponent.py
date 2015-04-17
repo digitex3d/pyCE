@@ -121,13 +121,13 @@ class DialogDrawable(Drawable):
 
         self.labelMsg1 = Label('Start a new game',
                           font_name='Times New Roman',
-                          font_size=28,
+                          font_size=24,
                           x=x+40, y=y+(dialogImage.height)-100)
         self.sprites.append(self.labelMsg1)
 
         self.labelMsg2 = Label('',
                           font_name='Times New Roman',
-                          font_size=28,
+                          font_size=24,
                           x=x+40, y=y+(dialogImage.height)-126)
         self.sprites.append(self.labelMsg2)
 
@@ -144,9 +144,9 @@ class DialogDrawable(Drawable):
         self.visible = gameState.dialog.visible
         self.labelTitle.text = gameState.dialog.title
 
-        if(len(gameState.dialog.message) > 21):
-            self.labelMsg1.text = gameState.dialog.message[0:21]
-            self.labelMsg2.text = gameState.dialog.message[21:]
+        if(len(gameState.dialog.message) > 25):
+            self.labelMsg1.text = gameState.dialog.message[0:25]
+            self.labelMsg2.text = gameState.dialog.message[25:]
         else:
              self.labelMsg1.text = gameState.dialog.message
 

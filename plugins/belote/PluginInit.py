@@ -307,6 +307,21 @@ class IABelote(IAPlugin):
             return plugin.defAgentAction("pass")
 
     def choseTrumpPhase2(self, plugin):
-        card = plugin.getCardFromTable(0)
-        return plugin.defAgentAction("move", card)
+        hand = plugin.getCurrentPlayerHand()
+        if( plugin.handHasCardValue(11)):
+            card = plugin.getHandCard(11)
+            if(card.kind == 'h'):
+                trump = plugin.getCardFromTable(1)
+                return plugin.defAgentAction("move", trump)
+            if(card.kind == 's'):
+                trump = plugin.getCardFromTable(2)
+                return plugin.defAgentAction("move", trump)
+            if(card.kind == 'c'):
+                trump = plugin.getCardFromTable(3)
+                return plugin.defAgentAction("move", trump)
+            if(card.kind == 'd'):
+                trump = plugin.getCardFromTable(4)
+                return plugin.defAgentAction("move", trump)
+        else:
+            return plugin.defAgentAction("pass2")
 
