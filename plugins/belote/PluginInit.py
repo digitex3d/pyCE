@@ -1,15 +1,16 @@
 """ Autheur Giuseppe Federico
 """
-from random import randint
+
 from game.Plugin import Plugin, IAPlugin
 
-
 class PluginInit(Plugin):
-    """ Cette classe représente un PluginBataille
+    """ Plugin pour 'La Bataille'
     """
 
     def __init__(self):
-        Plugin.__init__(self, "La Belote")
+        Plugin.__init__(self, "La Bataille")
+
+        # Atout courant
         self.atout=None
 
         self.cartesAtout = {
@@ -46,10 +47,11 @@ class PluginInit(Plugin):
         self.initPlayers(4)
         self.opponents.append(IABelote())
 
-
-
-
     def initialPhase(self):
+        """ La phase initiale de la belote.
+
+        """
+
         # Enlève les cartes qui sont pas utilisées
         self.removeRangeOfCards(self.getTableDeck(), 2,6, ['h','c','s','d'] )
 
@@ -65,7 +67,10 @@ class PluginInit(Plugin):
         # Le premier joueur à jouer
         self.setLabeloteFirstPlayer()
 
+        # On affiche des messages d'infos
         self.appendLogInfoMessage("Chosing trump...")
+
+        # Changement de phase
         self.setCurrentPhase("Take")
 
 
@@ -102,10 +107,18 @@ class PluginInit(Plugin):
     def initTake2phase(self):
         # Choix de l'atout
 
-        self.appendCardToTable(self.defCard(1,'h'))
-        self.appendCardToTable(self.defCard(1,'s'))
-        self.appendCardToTable(self.defCard(1,'c'))
-        self.appendCardToTable(self.defCard(1,'d'))
+        h = self.defCard(1,'h')
+        s = self.defCard(1,'s')
+        c = self.defCard(1,'c')
+        d = self.defCard(1,'d')
+        h.owner = 0
+        s.owner = 1
+        c.owner = 2
+        d.owner = 3
+        self.appendCardToTable(h)
+        self.appendCardToTable(s)
+        self.appendCardToTable(c)
+        self.appendCardToTable(d)
         self.setCurrentPhase("Take2")
         self.setLabeloteFirstPlayer()
 
@@ -251,10 +264,15 @@ class PluginInit(Plugin):
         :param plugin:
         :return:
         """
+        action = self.getAction()
+
+
 
         if(self.getCurrentPhase() == "Play"):
             if(len(self.getTable()) > 0):
-                action = self.getAction()
+                if( action.originDrawable == -1 ):
+                    return False
+
                 if(action.type == "move"):
                     hand = self.getCurrentPlayerHand()
 
@@ -266,6 +284,8 @@ class PluginInit(Plugin):
                     if(kind != turnKind):
                         if( self.currentHandGotKind(turnKind) ):
                             return False
+
+
 
         return True
 

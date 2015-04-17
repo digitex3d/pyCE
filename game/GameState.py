@@ -25,6 +25,7 @@ class GameState:
         self.paused = False
         self.dialog = init_state.dialog
         self.infoLog = []
+        self.drawingStyle = 0
 
 
     def nextState(self,agent_action):

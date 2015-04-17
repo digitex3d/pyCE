@@ -93,29 +93,6 @@ class GameInfo(Drawable):
             gameState.infoLog.pop(0)
 
 
-class WinLabel(Drawable):
-    """ Le label Win/Lose
-    """
-
-    #TODO: bien positioner le ScoreLabel par rapport à la résolution de l'écran
-    def __init__(self, x , y):
-        Drawable.__init__(self, x , y)
-        self.label = Label('',
-                          font_name='Times New Roman',
-                          font_size=42,
-                          x=x, y=y)
-
-        #TODO: c'est pas la bonne taille
-        self.height = 20
-        self.width =20
-        self.sprites.append(self.label)
-
-    def update(self, gameState):
-        if( gameState.win):
-            self.label.text = "WIN!!"
-        if( gameState.lose):
-            self.label.text = "LOST!!"
-
 class DialogDrawable(Drawable):
     """ Le bouton Start/End game.
     """

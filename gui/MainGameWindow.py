@@ -1,8 +1,5 @@
 """ Autheur Giuseppe Federico 
 """
-
-#TODO: TERMINER
-
 from pyglet import window
 from pyglet import clock
 from pyglet import font

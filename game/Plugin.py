@@ -1,7 +1,6 @@
 """ Autheur Giuseppe Federico 
 """
 from random import randint
-import sys
 from environment.Card import Card
 from environment.CardStack import CardStack
 from environment.DeckGenerator import DeckGenerator
@@ -10,17 +9,8 @@ from environment.Table import Table
 from game.agents.AgentAction import AgentAction
 from game.agents.Player import Player
 
-class PluginException(Exception):
-    """ Une exception du plugin
-    """
-    def __init__(self, value):
-        self.value = value
-
-    def __str__(self):
-        return repr(self.value)
-
 class Plugin:
-    """ Cette classe représente un Plugin 
+    """ Classe principale pour un Plugin
     """
 
 
@@ -35,6 +25,7 @@ class Plugin:
         self.agentAction = None
         # L'id de la phase courante
         self.phase = "Start"
+
         # Plugin name
         self.name = name
 
@@ -85,16 +76,15 @@ class Plugin:
 
 
     def GNextState(self, gameState, agent_action):
-        """ Cette fonction fait une copie de l'état de jeu , affecte le gamestate et
-            l'action au plugin puis apelle la fonction nextState du plugin.
-            actuel au plugin.
+        """ Cette fonction apelle la fonction nextState du plugin
+            actuel.
 
         :param gameState (GameState): game state courant
-        :param agent_action: Action courante
+        :param agent_action ( AgentAction): Action courante
         :return: Le nextState calculé par le plugin
         """
-        self.agentAction = agent_action
 
+        self.agentAction = agent_action
 
         if(  self.agentAction == None ):
             self.agentAction = self.defAgentAction("none")
@@ -985,3 +975,13 @@ class InitState:
         :return:
         """
         self.table.deck = deck
+
+
+class PluginException(Exception):
+    """ Une exception du plugin
+    """
+    def __init__(self, value):
+        self.value = value
+
+    def __str__(self):
+        return repr(self.value)
