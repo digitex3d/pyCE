@@ -23,13 +23,13 @@ class HUDComponent(Component):
         self.drawables.append(ScoreLabel(780,700 ,1))
 
         # On ajoute le dialog
-        self.drawables.append(DialogDrawable(330, 60))
+        self.drawables.append(DialogDrawable(70, 60))
 
         # On ajoute le gameInfo
         self.drawables.append(GameInfo(700, 80))
 
         # Turn label
-        self.drawables.append(TurnLabel(30, 80))
+        self.drawables.append(TurnLabel(20, 80))
 
 
 
