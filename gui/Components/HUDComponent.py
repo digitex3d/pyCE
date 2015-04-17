@@ -22,16 +22,14 @@ class HUDComponent(Component):
         self.drawables.append(ScoreLabel(780,730,0))
         self.drawables.append(ScoreLabel(780,700 ,1))
 
-        # On ajoute le label win
-        self.drawables.append(WinLabel(100,200))
-
         # On ajoute le dialog
         self.drawables.append(DialogDrawable(330, 60))
 
-
-        # On ajoute le dialog
+        # On ajoute le gameInfo
         self.drawables.append(GameInfo(700, 80))
 
+        # Turn label
+        self.drawables.append(TurnLabel(30, 80))
 
 
 
@@ -54,6 +52,24 @@ class ScoreLabel(Drawable):
     def update(self, gameState):
         self.label.text ="Player " + str(self.pid) +":" + \
                          str(gameState.table.players[self.pid].score)
+
+class TurnLabel(Drawable):
+    """ Cette classe représente une partie du HUD où le score du joueur sera
+        éventuelment affiché.
+    """
+
+    def __init__(self, x , y):
+        Drawable.__init__(self, x , y)
+        self.label = Label('Turn',
+                          font_name='Times New Roman',
+                          font_size=32,
+                          x=x, y=y)
+
+
+        self.sprites.append(self.label)
+
+    def update(self, gameState):
+        self.label.text ="Turn :" + str(gameState.currentTurn())
 
 class GameInfo(Drawable):
     """ Cette classe représente une partie du HUD où le score du joueur sera
