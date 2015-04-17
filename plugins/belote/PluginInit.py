@@ -13,6 +13,7 @@ class PluginInit(Plugin):
         # Atout courant
         self.atout=None
 
+        # Définition des valeurs des cartes atout
         self.cartesAtout = {
             1:11,
             7:0,
@@ -25,6 +26,7 @@ class PluginInit(Plugin):
 
         }
 
+        # Définition des valeurs des cartes non atout
         self.cartesNAtout = {
             1:11,
             7:0,
@@ -44,7 +46,10 @@ class PluginInit(Plugin):
 
         """
 
+        # Initialisation des joueurs
         self.initPlayers(4)
+
+        # Ajout l'IA des opposants
         self.opponents.append(IABelote())
 
     def initialPhase(self):
@@ -85,8 +90,11 @@ class PluginInit(Plugin):
                 self.appendCardToMyHand(card)
 
     def takePhase(self):
+        """ Premiere phase de choix de l'atout.
+        """
         action = self.getAction()
 
+        # Affiche choix de l'action
         self.showDialogAction("Info", "Select trump or pass.", "Pass", "pass" )
 
         # L'atout a été séléctionné
@@ -97,6 +105,8 @@ class PluginInit(Plugin):
         # Le joueur a passé
         if(action.type == "pass"):
             self.appendLogInfoMessage("Player " + str(self.currentTurn()) + " has passed.")
+
+            # Si on est le dernier à jouer
             if(self.iAmLastPlayerToPlay()):
                 self.appendLogInfoMessage("Choosing trump manually...")
                 self.initTake2phase()
@@ -105,8 +115,12 @@ class PluginInit(Plugin):
             self.next_turn()
 
     def initTake2phase(self):
-        # Choix de l'atout
+        """ Initialisation de la 2ème phase de choix de l'atout
+        :return:
+        """
 
+        # Si l'on selectionne une des ces cartes
+        # on selectionne le type associé comme atout
         h = self.defCard(1,'h')
         s = self.defCard(1,'s')
         c = self.defCard(1,'c')
@@ -119,11 +133,15 @@ class PluginInit(Plugin):
         self.appendCardToTable(s)
         self.appendCardToTable(c)
         self.appendCardToTable(d)
+
+
         self.setCurrentPhase("Take2")
         self.setLabeloteFirstPlayer()
 
 
     def choisirAtout(self):
+        """ Mémoriser l'atout et afficher des messages d'infos
+        """
         card = self.getSelectedCard()
 
         # Mémorise l'atout choisi
@@ -141,6 +159,9 @@ class PluginInit(Plugin):
         self.appendLogInfoMessage("by player " + str(self.currentTurn()))
 
     def take2Phase(self):
+        """ 2ème phase de choix de l'atout
+
+        """
         action = self.getAction()
 
         self.showDialogAction("Info", "Chose a trump or pass.", "pass", "pass2" )
@@ -157,6 +178,8 @@ class PluginInit(Plugin):
 
 
     def initPlayPhase(self):
+        """ Initialisation de la phase de jeu
+        """
          # Le premier joueur à jouer
         self.flushTable()
         self.setLabeloteFirstPlayer()
@@ -164,6 +187,8 @@ class PluginInit(Plugin):
 
 
     def playPhase(self):
+        """ Phase de jeu
+        """
         action = self.getAction()
         if(action.type == "move"):
             self.playSelectedCard()
@@ -175,6 +200,8 @@ class PluginInit(Plugin):
 
 
     def isWin(self):
+        """ On vérifie la condition de victoire
+        """
         if( self.allHandsEmpty() and
                 self.getPlayerScore(0) >
                 self.getPlayerScore(1)):
@@ -182,12 +209,16 @@ class PluginInit(Plugin):
 
 
     def isLost(self):
+        """ On vérifie la condition de perte
+        """
         if( self.allHandsEmpty() and
                 self.getPlayerScore(0) <
                 self.getPlayerScore(1)):
             return False
 
     def endTurnPhase(self):
+        """ Fin du tour, on calcule et affecte le score
+        """
         totalScore = self.getTableSumCardScore()
         winner = self.getTableBestCardOwner()
         self.laBeloteAddPlayerScore(winner, totalScore)
@@ -202,12 +233,16 @@ class PluginInit(Plugin):
 
 
     def laBeloteAddPlayerScore(self, pid, score):
+        """ On affecte le score à la team et non au joueur ( comportement par défaut)
+        """
         if(pid == 0 or pid == 2):
             self.addPlayerScore(0,score)
         else:
             self.addPlayerScore(1,score)
 
     def setLabeloteFirstPlayer(self):
+        """ Le premier joueur est celui à la gauche du donneur
+        """
         self.setFirstPlayer(self.getLeftPlayerOf(self.getDealerPID()))
         self.setLastPlayer(self.getDealerPID())
         self.setCurrentTurn(self.getFirstPlayer())
@@ -290,11 +325,16 @@ class PluginInit(Plugin):
         return True
 
 class IABelote(IAPlugin):
+    """ Un opposant
+    """
+
     def __init__(self):
         IAPlugin.__init__(self, 1)
 
 
     def getAction(self, plugin):
+        """ On reçoit une action en fonction de la phase de jeu
+        """
         if(plugin.getCurrentPhase() == "Take"):
             return self.choseTrumpPhase(plugin)
 
@@ -307,6 +347,8 @@ class IABelote(IAPlugin):
         return plugin.defAgentAction("none")
 
     def playCard(self, plugin):
+        """ Joue une carte avec des algorithmes simples.
+        """
         if( plugin.getFirstPlayer() == plugin.currentTurn()):
             card = plugin.getHandBestCard()
         else:
@@ -319,6 +361,8 @@ class IABelote(IAPlugin):
 
 
     def choseTrumpPhase(self, plugin):
+        """ Choix de l'atout avec des conditions simples.
+        """
         card = plugin.getCardFromTable(0)
         cardValue = card.value
         if( cardValue == 11 ):
@@ -327,6 +371,8 @@ class IABelote(IAPlugin):
             return plugin.defAgentAction("pass")
 
     def choseTrumpPhase2(self, plugin):
+        """ Choix de l'atout dans la 2éme phase avec des conditions simples.
+        """
         hand = plugin.getCurrentPlayerHand()
         if( plugin.handHasCardValue(11)):
             card = plugin.getHandCard(11)
