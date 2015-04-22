@@ -98,6 +98,7 @@ class Plugin:
                 self.hideDialogMessage()
 
             self.nextState()
+            self.sortAllHandsByValue()
 
         else:
             if(self.isWin()):
@@ -317,6 +318,34 @@ class Plugin:
     ######################### /Deck Functions ##################################
 
     ######################## Hand Functions ##################################
+    def sortAllHandsByValue(self):
+        for pid in range(self.getnbPlayers()):
+            self.sortHandByValue(pid)
+
+    def sortHandByValue(self, pid):
+        hand = self.getPlayerHand(pid)
+
+        valueList =[]
+
+        i = 0
+        # Ajout des cartes avec position initiale
+        for card in hand:
+            valueList.append((i, self.getValeurCarte(card)))
+            i += 1
+
+        valueListSorted = sorted(valueList, key=lambda tup: tup[1])
+
+        resu = []
+        for value in valueListSorted:
+            posInit = value[0]
+            card = hand[posInit]
+            resu.append(card)
+
+        self.getPlayer(pid).hand = resu
+
+
+
+
     def appendCardToHand(self, pid,card):
         """ Ajoute card à la main du joueur pid.
 
@@ -770,7 +799,7 @@ class Plugin:
             raise PluginException("Table is empty!")
         firstCard = table[0]
         max = self.getValeurCarte(firstCard)
-        pid = 0
+        pid = firstCard.owner
 
         for card in self.getTable():
             if( self.getValeurCarte(card) > max):
