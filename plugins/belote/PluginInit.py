@@ -160,7 +160,6 @@ class PluginInit(Plugin):
         self.appendLogInfoMessage(self.kindToStr(self.atout) +" a été choisi par le joueur "
                                   + str(self.currentTurn()))
 
-
     def take2Phase(self):
         """ 2ème phase de choix de l'atout
 
