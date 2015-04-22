@@ -31,6 +31,30 @@ class HUDComponent(Component):
         # Turn label
         self.drawables.append(TurnLabel(20, 80))
 
+        # Les PIDs des joueurs
+        self.drawables.append(PlayerId(465, 110, 0))
+        self.drawables.append(PlayerId(135, 400, 1))
+        self.drawables.append(PlayerId(465, 635, 2))
+        self.drawables.append(PlayerId(860, 400, 3))
+
+class PlayerId(Drawable):
+    """ Cette classe représente une partie du HUD où le pid du joueur sera
+        affiché.
+    """
+
+    def __init__(self, x , y, pid ):
+        Drawable.__init__(self, x , y)
+        self.label = Label('0',
+                           font_name='Times New Roman',
+                           font_size=26,
+                           x=x, y=y)
+
+        self.pid = pid
+        self.sprites.append(self.label)
+
+    def update(self, gameState):
+        if( gameState.getnbPlayers() >= self.pid):
+            self.label.text = "P:" + str(self.pid)
 
 
 
