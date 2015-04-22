@@ -885,10 +885,10 @@ class Plugin:
 
     def kindToStr(self, kind):
         kinds ={
-            's':"Spades",
-            'h':"Hearts",
-            'd':"Diamonds",
-            'c':"Clubs"
+            's':"Piques",
+            'h':"Coeurs",
+            'd':"Carrés",
+            'c':"Trèfles"
 
         }
 

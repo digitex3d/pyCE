@@ -137,9 +137,11 @@ class DialogDrawable(Drawable):
         self.visible = gameState.dialog.visible
         self.labelTitle.text = gameState.dialog.title
 
-        if(len(gameState.dialog.message) > 25):
-            self.labelMsg1.text = gameState.dialog.message[0:25]
-            self.labelMsg2.text = gameState.dialog.message[25:]
+        lineLen = 28
+
+        if(len(gameState.dialog.message) > lineLen ):
+            self.labelMsg1.text = gameState.dialog.message[0:lineLen ]
+            self.labelMsg2.text = gameState.dialog.message[lineLen:]
         else:
              self.labelMsg1.text = gameState.dialog.message
              self.labelMsg2.text = ""

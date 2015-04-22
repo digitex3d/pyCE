@@ -97,7 +97,7 @@ class PluginInit(Plugin):
         action = self.getAction()
 
         # Affiche choix de l'action
-        self.showDialogAction("Info", "Selectionner l'atout ou passer", "Passer.", "pass" )
+        self.showDialogAction("Info", "Selectionner l'atout ou passer", "Passer", "pass" )
 
         # L'atout a été séléctionné
         if(action.type == "move"):
@@ -106,11 +106,11 @@ class PluginInit(Plugin):
 
         # Le joueur a passé
         if(action.type == "pass"):
-            self.appendLogInfoMessage("Player " + str(self.currentTurn()) + " has passed.")
+            self.appendLogInfoMessage("Le joueur " + str(self.currentTurn()) + " a passé.")
 
             # Si on est le dernier à jouer
             if(self.iAmLastPlayerToPlay()):
-                self.appendLogInfoMessage("Choix de l'atout, 2ème phase")
+                self.appendLogInfoMessage("Choix de l'atout, 2ème phase.")
                 self.initTake2phase()
                 return
 
@@ -156,9 +156,10 @@ class PluginInit(Plugin):
 
         # Affiche les message d'infos
         self.showBlockingDialogMessage(self.kindToStr(self.atout) +
-                                  " has been chosen by player " + str(self.currentTurn()) + "as Trump.")
-        self.appendLogInfoMessage(self.kindToStr(self.atout) +" has been chosen ")
-        self.appendLogInfoMessage("by player " + str(self.currentTurn()))
+                                  " a été choisi par le joueur " + str(self.currentTurn()) + " comme atout.")
+        self.appendLogInfoMessage(self.kindToStr(self.atout) +" a été choisi par le joueur "
+                                  + str(self.currentTurn()))
+
 
     def take2Phase(self):
         """ 2ème phase de choix de l'atout
@@ -166,7 +167,7 @@ class PluginInit(Plugin):
         """
         action = self.getAction()
 
-        self.showDialogAction("Info", "Chose a trump or pass.", "pass", "pass2" )
+        self.showDialogAction("Info", "Choisir un atout ou passer le tour", "Passer", "pass2" )
 
         if(action.type == "move"):
             self.choisirAtout()
@@ -174,7 +175,7 @@ class PluginInit(Plugin):
             if(self.iAmLastPlayerToPlay()):
                 self.resetTable()
                 self.getCurrentPhase("Start")
-                self.appendLogInfoMessage("Trump has not been chosen, restarting" + self.atout)
+                self.appendLogInfoMessage("L'atout n'a pas été choisi, on redémarre le jeu." + self.atout)
                 return
             self.next_turn()
 
@@ -234,8 +235,8 @@ class PluginInit(Plugin):
         self.setCurrentPhase("Play")
 
          # Affiche les message d'infos
-        self.showBlockingDialogMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
-        self.appendLogInfoMessage("Hand winner is " + str(winner) + " with score :" + str(totalScore))
+        self.showBlockingDialogMessage("Le gagnant est " + str(winner) + " avec un score de :" + str(totalScore))
+        self.appendLogInfoMessage("Le gagnant est " + str(winner) + " avec un score de :" + str(totalScore))
 
 
     def laBeloteAddPlayerScore(self, pid, score):
