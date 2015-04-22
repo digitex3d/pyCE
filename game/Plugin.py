@@ -102,9 +102,9 @@ class Plugin:
 
         else:
             if(self.isWin()):
-                self.showBlockingDialogMessage("Win", "You won", "Ok")
+                self.showBlockingDialogMessage("Victoire", "Vous avez gangé.", "Ok")
             else:
-                self.showBlockingDialogMessage("Lose", "You lost", "Ok")
+                self.showBlockingDialogMessage("Perdu", "Vous avez perdu.", "Ok")
         return self.gameState
 
     def GisLegalMove(self, gameState, agent_action):

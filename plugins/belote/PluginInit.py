@@ -307,14 +307,11 @@ class PluginInit(Plugin):
         """
         action = self.getAction()
 
-
-
         if(self.getCurrentPhase() == "Play"):
             if(len(self.getTable()) > 0):
-                if( action.originDrawable == -1 ):
-                    return False
-
                 if(action.type == "move"):
+                    if( action.originDrawable == -1 ):
+                        return False
                     hand = self.getCurrentPlayerHand()
 
                     turnKind =  self.getCardFromTable(0).kind
