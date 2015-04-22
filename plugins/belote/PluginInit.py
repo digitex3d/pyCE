@@ -80,17 +80,6 @@ class PluginInit(Plugin):
         # Changement de phase
         self.setCurrentPhase("Take")
 
-
-    def dealRestCards(self):
-        # Distribution du reste des cartes
-        for i in range(self.getnbPlayers()):
-            if (i != self.currentTurn()):
-                self.dealTo(i, 3)
-            else:
-                self.dealTo(i, 2)
-                card = self.popCardFromTable()
-                self.appendCardToMyHand(card)
-
     def takePhase(self):
         """ Premiere phase de choix de l'atout.
         """
@@ -102,8 +91,7 @@ class PluginInit(Plugin):
         # L'atout a été séléctionné
         if(action.type == "move"):
             self.choisirAtout()
-
-
+            return
         # Le joueur a passé
         if(action.type == "pass"):
             self.appendLogInfoMessage("Le joueur " + str(self.currentTurn()) + " a passé.")
@@ -115,6 +103,19 @@ class PluginInit(Plugin):
                 return
 
             self.next_turn()
+
+
+    def dealRestCards(self):
+        # Distribution du reste des cartes
+        for i in range(self.getnbPlayers()):
+            if (i != self.currentTurn()):
+                self.dealTo(i, 3)
+            else:
+                self.dealTo(i, 2)
+                card = self.popCardFromTable()
+                self.appendCardToMyHand(card)
+
+
 
     def initTake2phase(self):
         """ Initialisation de la 2ème phase de choix de l'atout
@@ -170,6 +171,7 @@ class PluginInit(Plugin):
 
         if(action.type == "move"):
             self.choisirAtout()
+            return
         if(action.type == "pass2"):
             if(self.iAmLastPlayerToPlay()):
                 self.resetTable()
@@ -228,6 +230,7 @@ class PluginInit(Plugin):
         totalScore = self.getTableSumCardScore()
         winner = self.getTableBestCardOwner()
         self.laBeloteAddPlayerScore(winner, totalScore)
+        self.setFirstAndLastPlayers(winner)
         self.setFirstPlayer(winner)
         self.setLastPlayer(self.getRightPlayerOf(winner))
         self.setCurrentTurn(winner)
@@ -376,7 +379,7 @@ class IABelote(IAPlugin):
     def choseTrumpPhase2(self, plugin):
         """ Choix de l'atout dans la 2éme phase avec des conditions simples.
         """
-        hand = plugin.getCurrentPlayerHand()
+
         if( plugin.handHasCardValue(11)):
             card = plugin.getHandCard(11)
             if(card.kind == 'h'):

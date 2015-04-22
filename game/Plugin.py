@@ -477,7 +477,8 @@ class Plugin:
         return False
 
     def getHandCard(self, value, kind=None):
-        """ Renvoie la carte de valeur 'value' ( de type kind si spécifié )
+        """ Renvoie la carte de valeur 'value' ( de type kind si spécifié,
+         une au hazard sinon )
 
         :param value (int):
         :param kind (String):
@@ -819,7 +820,7 @@ class Plugin:
         for i in range(self.getnbPlayers()):
             if (self.getPlayer(i).first):
                 return i
-        raise PluginException("No dealer defined")
+        raise PluginException("No first player defined")
 
         return -1
 
