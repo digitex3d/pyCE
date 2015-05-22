@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ Cette classe représente une Table """
 
 from environment.CardStack import CardStack

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ Cette classe représente une main affichable"""
 from gui.Drawables.Drawable import Drawable
 from gui.SpriteFactory import SpriteFactory

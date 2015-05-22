@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """ Autheur Giuseppe Federico 
 """
 import pyglet

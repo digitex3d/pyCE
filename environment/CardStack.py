@@ -1,4 +1,6 @@
+# -*- coding: utf-8 -*-
 """ Cette classe représente un jeu de cartes """
+
 
 from random import shuffle
 

@@ -1,3 +1,4 @@
+  # -*- coding: latin-1 -*-
 from game.agents.AgentAction import AgentAction
 from gui.Drawables.CardStackDrawable import CardStackDrawable
 from gui.Drawables.DeckDrawable import DeckDrawable

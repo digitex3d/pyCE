@@ -1,5 +1,5 @@
-""" Autheur Giuseppe Federico 
-"""
+# -*- coding: utf-8 -*-
+
 from random import randint
 from environment.Card import Card
 from environment.CardStack import CardStack

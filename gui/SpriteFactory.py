@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from gui.Sprites.CardSprite import CardSprite
 
 IMG_FORMAT="gif"

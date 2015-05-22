@@ -1,4 +1,4 @@
-
+# -*- coding: utf-8 -*-
 
 from environment import Card
 from pyglet.sprite import Sprite
