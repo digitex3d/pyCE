@@ -11,7 +11,7 @@ class Game:
         self.observers = []
         self.game_state = state
         self.agents = []
-        self.eventsQueue = []
+        self.lastEvent = None
 
 
     def addAgent(self, agent):
@@ -33,30 +33,34 @@ class Game:
         if(event.type == "mouse_click"):
             self.handleClick(event)
 
+    def handleLastEvent(self):
+        tmp = self.lastEvent
+        self.lastEvent = None
+        return tmp
+
     def handleClick(self, event):
-        self.eventsQueue.append(event)
+        self.lastEvent = event
 
     def updateGame(self):
         if(self.game_state.paused):
-            if( len(self.eventsQueue) == 0): return;
-            event = self.eventsQueue.pop()
-            if ( event.drawableClicked.name == "Dialog" and
+            if( self.lastEvent == None): return
+            if ( self.lastEvent.drawableClicked.name == "Dialog" and
                     self.game_state.dialog.action == "unPause"):
                 self.game_state.paused = False
+                self.lastEvent = None
+
                 return
 
         if( self.game_state.turn==0 ):
-            if( not self.eventsQueue):
+            if( self.lastEvent == None):
                 player_action = AgentAction("none")
             else:
-                player_action = self.agents[0].getAction(self.game_state, self.eventsQueue.pop())
+                player_action = self.agents[0].getAction(self.game_state, self.handleLastEvent())
         else:
-            turn = self.game_state.turn
-
             # L'etat de l'agent qui doit jouer
-            a_state = self.game_state.table.players[turn]
-
-            player_action = self.agents[self.game_state.turn].PgetAction(a_state, self.game_state.plugin)
+            turn = self.game_state.turn
+            pstate = self.game_state.table.players[turn]
+            player_action = self.agents[self.game_state.turn].PgetAction(pstate, self.game_state.plugin)
 
         # Effectue l'action et met à jour l'état du jeu
         self.game_state = self.game_state.nextState(player_action)
