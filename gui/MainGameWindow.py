@@ -40,20 +40,11 @@ class MainGameWindow(window.Window):
             #Tick the clock
             clock.tick()
             self.flip()
+            time.sleep(0.5)
 
     def update(self, game_state=None):
-        print("Drawing screen")
-        self.dispatch_events()
-        self.clear()
-
         for component in self.components:
             component.update(game_state)
-
-
-        self.draw()
-        #Tick the clock
-        clock.tick()
-        self.flip()
 
     """ ############	Event Handlers      ############
     """
