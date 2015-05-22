@@ -30,8 +30,8 @@ def my_import(name):
         mod = getattr(mod, comp)
     return mod
 
-mod = my_import("plugins.%s" % plugin_name +".PluginInit")
-plugin = mod.PluginInit()
+mod = my_import("plugins.%s" % plugin_name +".Plugin")
+plugin = mod.Plugin()
 
 # On initialise le jeu
 game_state = GameState(plugin.initGameState(), plugin)

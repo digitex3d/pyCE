@@ -3,7 +3,7 @@
 
 from game.PluginManager import PluginManager, IAPlugin
 
-class PluginInit(PluginManager):
+class Plugin(PluginManager):
     """ Plugin pour 'La Bataille'
     """
 
@@ -325,8 +325,6 @@ class PluginInit(PluginManager):
                     if(kind != turnKind):
                         if( self.currentHandGotKind(turnKind) ):
                             return False
-
-
 
         return True
 

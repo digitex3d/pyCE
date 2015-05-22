@@ -3,7 +3,7 @@
 from game.PluginManager import PluginManager, IAPlugin
 
 
-class PluginInit(PluginManager):
+class Plugin(PluginManager):
     """ Cette classe représente un PluginBataille
     """
 

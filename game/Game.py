@@ -44,8 +44,7 @@ class Game:
     def updateGame(self):
         if(self.game_state.paused):
             if( self.lastEvent == None): return
-            if ( self.lastEvent.drawableClicked.name == "Dialog" and
-                    self.game_state.dialog.action == "unPause"):
+            if ( self.lastEvent.drawableClicked.name == "Dialog"):
                 self.game_state.paused = False
                 self.lastEvent = None
 
@@ -53,17 +52,17 @@ class Game:
 
         if( self.game_state.turn==0 ):
             if( self.lastEvent == None):
-                player_action = AgentAction("none")
+                action = AgentAction("none")
             else:
-                player_action = self.agents[0].getAction(self.game_state, self.handleLastEvent())
+                action = self.agents[0].getAction(self.game_state, self.handleLastEvent())
         else:
             # L'etat de l'agent qui doit jouer
             turn = self.game_state.turn
             pstate = self.game_state.table.players[turn]
-            player_action = self.agents[self.game_state.turn].PgetAction(pstate, self.game_state.plugin)
+            action = self.agents[self.game_state.turn].PgetAction(pstate, self.game_state.plugin)
 
         # Effectue l'action et met à jour l'état du jeu
-        self.game_state = self.game_state.nextState(player_action)
+        self.game_state = self.game_state.nextState(action)
 
         # On met à jour tous les observateurs du jeu
         self.updateObserver()

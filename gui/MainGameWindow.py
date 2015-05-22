@@ -37,6 +37,7 @@ class MainGameWindow(window.Window):
 
             self.game.updateGame()
             self.draw()
+
             #Tick the clock
             clock.tick()
             self.flip()

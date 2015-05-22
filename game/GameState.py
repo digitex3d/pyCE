@@ -35,7 +35,7 @@ class GameState:
         :param agent_action: AgentAction l'action du joueur
         :return:
         """
-
+        if( agent_action== None ): return self
         if( self.plugin.GisLegalMove(self, agent_action)):
 
             return self.plugin.GNextState(self, agent_action)

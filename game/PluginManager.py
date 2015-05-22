@@ -128,7 +128,9 @@ class PluginManager:
 
         self.gameState = gameState
         self.agentAction = agent_action
-        if (self.agentAction == None or self.agentAction.type == "None"):
+        if (self.agentAction == None or
+            self.agentAction.type == "None" or
+            self.agentAction.type == ""):
             return True
         else:
             return self.isLegalMove()
@@ -167,7 +169,7 @@ class PluginManager:
 
         self.gameState.paused = True
         if (not self.gameState.dialog.visible):
-            self.gameState.dialog.popDialog(title, message, buttonText, "unPause")
+            self.gameState.dialog.popDialog(title, message, buttonText, "none")
 
     def showDialogAction(self, title, message, buttonText, action):
         """Affiche un dialog message enregistre une action.

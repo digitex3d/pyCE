@@ -5,7 +5,7 @@ from gui.Drawables.DeckDrawable import DeckDrawable
 
 
 class Player:
-    """ Cette classe reprÃ©sente un Agent """
+    """ Cette classe représente un Agent """
 
     def __init__(self, id=0):
         self.id = id
@@ -23,7 +23,7 @@ class Player:
         elif (hasattr(event.drawableClicked, 'name')):
             if ( event.drawableClicked.name == "Dialog" ):
                 dialog = AgentAction(game_state.dialog.action)
-                dialog.originDrawable = event.drawableClicked.name
+
                 return dialog
         else:
             return AgentAction("None")
