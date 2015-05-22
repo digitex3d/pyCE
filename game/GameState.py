@@ -3,7 +3,7 @@ import logging
 from environment.Dialog import Dialog
 from environment.Table import Table
 
-from game.Plugin import InitState
+from game.PluginManager import InitState
 from gui.Default import TABLE_PID
 
 

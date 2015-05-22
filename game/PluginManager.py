@@ -9,20 +9,22 @@ from environment.Table import Table
 from game.agents.AgentAction import AgentAction
 from game.agents.Player import Player
 
-class Plugin:
-    """ Classe principale pour un Plugin
+class PluginManager:
+    """ La classe pluginManager fais office de couche d'abstraction entre le moteur de jeu et le plugin.
+        On y retrouve toutes les fonctions utiles pour définir les réglés du jeu à l’intérieur du plugin.
     """
 
 
     def __init__(self, name):
-        test = True
         self.TABLE_PID = -1
         self.PLAYER_PID = 0
         self.opponents = []
+
         # Initialisation du jeu
         self.initState = InitState()
         self.gameState = None
         self.agentAction = None
+
         # L'id de la phase courante
         self.phase = "Start"
 
@@ -49,29 +51,36 @@ class Plugin:
     ###################################################################
 
     def nextState(self, gameState, agent_action):
-        """ Classe abstraite à implémenter dans le plugin.
+        """ Fonction nextState abstraite à implémenter dans le plugin.
         :return:
         """
         return None
 
     def pluginInit(self):
-        """ Classe abstraite à implémenter dans le plugin.
+        """ Fonction init abstraite à implémenter dans le plugin.
         :return:
         """
 
         return None
 
     def initGameState(self):
+        """ Initialise le jeu de cartes et appele la fonction
+            pluginInit redéfinie dans le plugin.
+
+        :return: InitState
+        """
+
         deck = self.initState.generateShuffledDeck()
         self.initState.setTableDeck(deck)
 
-
-
+        # Appel à la fonction pluginInit()  redéfinie dans le plugin
         self.pluginInit()
+
         return self.initState
 
     def initPlayers(self, nbPlayers):
-        """ Initialise le numero de joueurs
+        """ Initialise le numero de joueurs.
+
         :param nbPlayers (int) : Le numero de joueurs
         :return: None
         """
@@ -108,6 +117,15 @@ class Plugin:
         return self.gameState
 
     def GisLegalMove(self, gameState, agent_action):
+        """
+        Dans cette fonction on va vérifier si l'action
+        passé en paramètre est une action valide.
+
+        :param gameState: GameState
+        :param agent_action: AgentAction
+        :return: boolean
+        """
+
         self.gameState = gameState
         self.agentAction = agent_action
         if(self.agentAction == None or self.agentAction.type == "None"):
@@ -116,12 +134,18 @@ class Plugin:
             return self.isLegalMove()
 
     def lose(self):
-        """ La partie est perdue
+        """ True si la partie est perdue, false sinon.
         :return:
         """
         self.gameState.lose = True
 
     def getAction(self):
+        """
+        Récupere la dernière action d'un joueur.
+        :return:
+        """
+
+
         return self.agentAction
 
 
@@ -136,24 +160,48 @@ class Plugin:
     ###################### HUD #################################
 
     def showBlockingDialogMessage(self, message,title="Info", buttonText="Ok"):
+        """ Affiche un dialog message qui met le jeu en pause.
+        :param message: Le message
+        :param title: Le titre
+        :param buttonText: le texte du bouton
+        :return: None
+        """
+
         self.gameState.paused = True
         if(not self.gameState.dialog.visible):
             self.gameState.dialog.popDialog(title, message, buttonText, "unPause")
 
     def showDialogAction(self, title, message, buttonText, action):
+        """Affiche un dialog message enregistre une action.
+        """
+
+
         if(self.isPlayerTurn() and self.agentAction.type == "none"):
             self.gameState.dialog.popDialog(title, message, buttonText, action)
 
 
     def hideDialogMessage(self):
+        """
+        Cache le dernier dialog message.
+        :return:
+        """
         if(self.gameState.dialog.visible):
             self.gameState.dialog.hideDialog()
 
     def appendLogInfoMessage(self, message):
+        """
+        Ajoute un message au log en bas à droite.
+        :param message: texte du message à afficher
+        :return:
+        """
         self.gameState.infoLog.append(message)
 
 
     def initDialog(self, title, msg, tbutton):
+        """
+        Initialise le dialog.
+
+        """
         self.initState.initDialog(title, msg, tbutton)
 
     ############################################################
@@ -162,17 +210,30 @@ class Plugin:
     ########################## Fonctions de Jeu ###############################
 
     def pause(self):
+        """ Met le jeu en pause.
+        """
+
         self.gameState.paused = True
 
     def unPause(self):
+        """ Remet le jeu en éxécution.
+        """
+
         self.gameState.paused = False
 
 
 
     def restartGame(self):
+        """ Réinitialise le jeu.
+        :return:
+        """
         self.gameState.restart(self.initGameState())
 
     def playSelectedCard(self):
+        """ Joue la carte selectionné.
+        :return:
+        """
+
         action = self.getAction()
         card = action.originSprite
         if( card.hidden ):
@@ -194,6 +255,9 @@ class Plugin:
         return currentHand[0]
 
     def getCurrentPlayerPID(self):
+        """ Renvoie le PID du joueur courant.
+        :return:
+        """
         return self.currentTurn()
 
     ###########################################################################
@@ -206,7 +270,7 @@ class Plugin:
         :param nb (int):
         :return: CardStack
         """
-        table = self.getTableCards()
+        table = self.getTable()
 
         return table[len(table)-nb:len(table)]
 
@@ -241,6 +305,10 @@ class Plugin:
         return self.getTable().pop(0)
 
     def getCardFromTable(self, index):
+        """ Récupère la carte 'index' de la talbe
+        :param (int) index: L'index de la table
+        :return:
+        """
         if(len(self.getTable()) <= 0):
             raise PluginException("Table is empty")
         return self.getTable()[index]
@@ -279,11 +347,19 @@ class Plugin:
 
     ######################## Cards Functions            #########################
     def defCard(self, value, kind):
+        """ Définit une carte manuellement
+        :param value: la valeur de la carte
+        :param kind: le type de la carte
+        :return:
+        """
         return Card(value, None, kind)
 
     ######################## /Cards Functions            #########################
     ######################### Deck Functions ##################################
     def isDeckEmpty(self):
+        """ Renvoie false si le jeu de cartes est non vide, true sinon
+        :return:
+        """
         return not len(self.getTableDeck())
 
     def removeRangeOfCards(self, cardStack, inf=0, sup=13, kinds=[]):
@@ -319,10 +395,15 @@ class Plugin:
 
     ######################## Hand Functions ##################################
     def sortAllHandsByValue(self):
+        """ Trie tous les main par valeur en ordre croissant.
+        :return:
+        """
         for pid in range(self.getnbPlayers()):
             self.sortHandByValue(pid)
 
     def sortHandByValue(self, pid):
+        """ Trie la main de 'pid' par valeur en ordre croissant.
+        """
         hand = self.getPlayerHand(pid)
 
         valueList =[]
@@ -593,6 +674,12 @@ class Plugin:
         self.gameState.table.flush()
 
     def playCard(self, card):
+        """ Joue la carte 'card'
+
+        :param int card:
+        :return:
+        """
+
         oc = card
         od = self.currentTurn()
         dd = self.TABLE_PID
@@ -600,9 +687,15 @@ class Plugin:
         self.gameState.moveCard(oc, od, dd)
 
     def isLost(self):
+        """ Renvoie true si la partie est perdue, false sinon
+        :return:
+        """
         return self.gameState.lose
 
     def isWin(self):
+        """ Renvoie true si la partie est gagné, false sinon
+         :return:
+        """
         return self.gameState.win
 
     def getCurrentPlayerHand(self):
@@ -630,6 +723,10 @@ class Plugin:
         return self.gameState.cardValues[carte.value]
 
     def getAction(self):
+        """ récoupère l'action courante
+
+        :return:
+        """
         if(self.agentAction == None):
             return self.defAgentAction("none")
         return self.agentAction
@@ -713,9 +810,18 @@ class Plugin:
 
     ###################### Score Functions #####################
     def getPlayerScore(self, pid):
+        """ Le score du joueur de pid 'pid'
+
+        :param (int) pid:
+        :return:
+        """
         return self.getPlayer(pid).score
 
     def hasBestScore(self, pid):
+        """ Renvoie true si 'pid' a le meilleure score, false sinon.
+        :param pid:
+        :return:
+        """
         resu = True
         ps = self.getPlayerScore(pid)
         for i in range(self.getnbPlayers()):
@@ -724,6 +830,9 @@ class Plugin:
         return resu
 
     def IHaveBestScore(self):
+        """ Renvoi true si le joueur courant a le meilleur score, false sinon.
+        :return: boolean
+        """
         return self.hasBestScore(self.getCurrentPlayerPID())
 
     def getCurrentPlayerScore(self):
@@ -812,11 +921,20 @@ class Plugin:
 
 
     def addPlayerScore(self, pid, score):
-         self.getPlayer(pid).score += score
+        """ Ajoute le score 'score' au joueur 'pid'
+        :param (int) pid:
+        :param (int) score:
+        :return: None
+        """
+        self.getPlayer(pid).score += score
     ###################### /Score Functions #####################
 
     ###################### Turn Functions #######################
     def getFirstPlayer(self):
+        """ Renvoie le pid du premier joueur à jouer
+
+        :return:
+        """
         for i in range(self.getnbPlayers()):
             if (self.getPlayer(i).first):
                 return i
@@ -874,6 +992,9 @@ class Plugin:
                 self.getPlayer(i).first = False
 
     def iAmLastPlayerToPlay(self):
+        """ Renvoie true si le joueur courant est le dérnier joueur du tour.
+        :return:
+        """
         return self.getPlayer(self.currentTurn()).last
 
     def setLastPlayer(self, pid):
@@ -914,6 +1035,10 @@ class Plugin:
     ###################### Utils #################################
 
     def kindToStr(self, kind):
+        """ Traduit un type de carte en String,
+        :param kind:
+        :return:
+        """
         kinds ={
             's':"Piques",
             'h':"Coeurs",
@@ -946,10 +1071,10 @@ class Plugin:
 
 ######################      /IA      #######################
     def setCardValues(self, cardValues):
-        """ Set the value of every card
-
-        :param cardValues {card:value}
-        :return: None
+        """
+         Set the value of every card
+        :param cardValues:
+        :return:
         """
         self.gameState.cardValues = cardValues
 
@@ -959,7 +1084,7 @@ class IAPlugin(Player):
         Player.__init__(self, id)
 
     def getAction(self, plugin):
-        """ A implémenter dans le plugin.
+        """ Reçois l'action de l'adversaire, à implémenter dans le plugin.
         """
         return None
 
@@ -1002,12 +1127,18 @@ class InitState:
 
 
     def initPlayers(self, nbPlayers):
+        """
+        Initialise le nombre de joueurs
+        :param (int) nbPlayers:
+        """
         if( nbPlayers <= 0 ):
             raise PluginException("The number of players must be greater than 0.")
         for i in range(0,nbPlayers):
             self.addPlayerState(CardStack(), CardStack())
 
     def initDialog(self, title, msg, tbutton):
+        """ Initialise le dialog
+        """
         self.dialog.popDialog(title, msg,tbutton)
 
 
@@ -1034,9 +1165,14 @@ class InitState:
         return deck
 
     def setFirstPlayer(self, pid):
+        """ Initialise le premier joueur à  jouer.
+        """
         self.turn = pid
 
     def setCardValues(self, vals):
+        """ Initialise le tableau des valeurs des cartes
+
+        """
         self.cardValues = vals
 
     def setTableDeck(self, deck):

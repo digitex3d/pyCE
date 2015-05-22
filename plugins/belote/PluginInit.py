@@ -1,14 +1,14 @@
 """ Autheur Giuseppe Federico
 """
 
-from game.Plugin import Plugin, IAPlugin
+from game.PluginManager import PluginManager, IAPlugin
 
-class PluginInit(Plugin):
+class PluginInit(PluginManager):
     """ Plugin pour 'La Bataille'
     """
 
     def __init__(self):
-        Plugin.__init__(self, "La Bataille")
+        PluginManager.__init__(self, "La Bataille")
 
         # Atout courant
         self.atout=None
