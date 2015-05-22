@@ -129,7 +129,7 @@ class PluginManager:
         self.gameState = gameState
         self.agentAction = agent_action
         if (self.agentAction == None or
-            self.agentAction.type == "None" or
+            self.agentAction.type == "none" or
             self.agentAction.type == ""):
             return True
         else:

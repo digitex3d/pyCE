@@ -17,6 +17,7 @@ class Plugin(PluginManager):
             La table et les joueurs.
         """
 
+
         self.initPlayers(2)
         self.opponents.append(IABataille())
 

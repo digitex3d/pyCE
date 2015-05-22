@@ -322,7 +322,7 @@ class Plugin(PluginManager):
 
                     kind = selectedCard.kind
 
-                    if(kind != turnKind):
+                    if(kind != turnKind and self.currentTurn() == 0):
                         if( self.currentHandGotKind(turnKind) ):
                             return False
 
@@ -382,16 +382,17 @@ class IABelote(IAPlugin):
             card = plugin.getHandCard(11)
             if(card.kind == 'h'):
                 trump = plugin.getCardFromTable(1)
-                return plugin.defAgentAction("move", trump)
+
             if(card.kind == 's'):
                 trump = plugin.getCardFromTable(2)
-                return plugin.defAgentAction("move", trump)
+
             if(card.kind == 'c'):
                 trump = plugin.getCardFromTable(3)
-                return plugin.defAgentAction("move", trump)
+
             if(card.kind == 'd'):
                 trump = plugin.getCardFromTable(4)
-                return plugin.defAgentAction("move", trump)
+            return plugin.defAgentAction("move", trump)
+
         else:
             return plugin.defAgentAction("pass2")
 
