@@ -9,6 +9,7 @@ from environment.Table import Table
 from game.agents.AgentAction import AgentAction
 from game.agents.Player import Player
 
+
 class PluginManager:
     """ La classe pluginManager fais office de couche d'abstraction entre le moteur de jeu et le plugin.
         On y retrouve toutes les fonctions utiles pour définir les réglés du jeu à l’intérieur du plugin.
@@ -41,7 +42,7 @@ class PluginManager:
         """
         return self.phase
 
-    def setCurrentPhase(self,  phaseName):
+    def setCurrentPhase(self, phaseName):
         """ Affecte la phase de jeu courante.
 
         :return: None
@@ -87,7 +88,6 @@ class PluginManager:
         self.initState.initPlayers(nbPlayers)
 
 
-
     def GNextState(self, gameState, agent_action):
         """ Cette fonction apelle la fonction nextState du plugin
             actuel.
@@ -99,18 +99,18 @@ class PluginManager:
 
         self.agentAction = agent_action
 
-        if(  self.agentAction == None ):
+        if (  self.agentAction == None ):
             self.agentAction = self.defAgentAction("none")
 
-        if( not self.isLost() and not self.isWin()):
-            if(self.currentTurn() == 0):
+        if ( not self.isLost() and not self.isWin()):
+            if (self.currentTurn() == 0):
                 self.hideDialogMessage()
 
             self.nextState()
             self.sortAllHandsByValue()
 
         else:
-            if(self.isWin()):
+            if (self.isWin()):
                 self.showBlockingDialogMessage("Victoire", "Vous avez gangé.", "Ok")
             else:
                 self.showBlockingDialogMessage("Perdu", "Vous avez perdu.", "Ok")
@@ -128,7 +128,7 @@ class PluginManager:
 
         self.gameState = gameState
         self.agentAction = agent_action
-        if(self.agentAction == None or self.agentAction.type == "None"):
+        if (self.agentAction == None or self.agentAction.type == "None"):
             return True
         else:
             return self.isLegalMove()
@@ -145,9 +145,7 @@ class PluginManager:
         :return:
         """
 
-
         return self.agentAction
-
 
 
     def getTable(self):
@@ -159,7 +157,7 @@ class PluginManager:
 
     ###################### HUD #################################
 
-    def showBlockingDialogMessage(self, message,title="Info", buttonText="Ok"):
+    def showBlockingDialogMessage(self, message, title="Info", buttonText="Ok"):
         """ Affiche un dialog message qui met le jeu en pause.
         :param message: Le message
         :param title: Le titre
@@ -168,15 +166,14 @@ class PluginManager:
         """
 
         self.gameState.paused = True
-        if(not self.gameState.dialog.visible):
+        if (not self.gameState.dialog.visible):
             self.gameState.dialog.popDialog(title, message, buttonText, "unPause")
 
     def showDialogAction(self, title, message, buttonText, action):
         """Affiche un dialog message enregistre une action.
         """
 
-
-        if(self.isPlayerTurn() and self.agentAction.type == "none"):
+        if (self.isPlayerTurn() and self.agentAction.type == "none"):
             self.gameState.dialog.popDialog(title, message, buttonText, action)
 
 
@@ -185,7 +182,7 @@ class PluginManager:
         Cache le dernier dialog message.
         :return:
         """
-        if(self.gameState.dialog.visible):
+        if (self.gameState.dialog.visible):
             self.gameState.dialog.hideDialog()
 
     def appendLogInfoMessage(self, message):
@@ -222,7 +219,6 @@ class PluginManager:
         self.gameState.paused = False
 
 
-
     def restartGame(self):
         """ Réinitialise le jeu.
         :return:
@@ -236,7 +232,7 @@ class PluginManager:
 
         action = self.getAction()
         card = action.originSprite
-        if( card.hidden ):
+        if ( card.hidden ):
             card.flipCard()
         self.playCard(action.originSprite)
 
@@ -249,7 +245,7 @@ class PluginManager:
 
         currentHand = self.getCurrentPlayerHand()
 
-        if( len(currentHand) <= 0 ):
+        if ( len(currentHand) <= 0 ):
             raise PluginException("The number of players must be greater than 0.")
 
         return currentHand[0]
@@ -272,7 +268,7 @@ class PluginManager:
         """
         table = self.getTable()
 
-        return table[len(table)-nb:len(table)]
+        return table[len(table) - nb:len(table)]
 
     def getNbTableCards(self):
         """ Renvoie le nombre de cartes sur la table.
@@ -299,7 +295,7 @@ class PluginManager:
         :return: (Card)
         """
 
-        if( not self.getTable() ):
+        if ( not self.getTable() ):
             raise PluginException("Cannot pop, empty table.")
 
         return self.getTable().pop(0)
@@ -309,7 +305,7 @@ class PluginManager:
         :param (int) index: L'index de la table
         :return:
         """
-        if(len(self.getTable()) <= 0):
+        if (len(self.getTable()) <= 0):
             raise PluginException("Table is empty")
         return self.getTable()[index]
 
@@ -338,7 +334,7 @@ class PluginManager:
         """
 
         sprite = self.getAction().originSprite
-        if( not isinstance(sprite, Card) ):
+        if ( not isinstance(sprite, Card) ):
             raise PluginException("I can select only cards.")
         else:
             return sprite
@@ -374,16 +370,15 @@ class PluginManager:
         :return: Un CardStack modifié.
         """
 
-
-        if( cardStack.isEmpty()):
+        if ( cardStack.isEmpty()):
             raise PluginException("CardStack is empty, cannot remove cards.")
 
         toRemove = []
         for card in cardStack:
-            if( card.value <= sup and
-                card.value >= inf):
+            if ( card.value <= sup and
+                         card.value >= inf):
                 for kind in kinds:
-                    if( card.kind == kind):
+                    if ( card.kind == kind):
                         toRemove.append(card)
 
         for card in toRemove:
@@ -406,7 +401,7 @@ class PluginManager:
         """
         hand = self.getPlayerHand(pid)
 
-        valueList =[]
+        valueList = []
 
         i = 0
         # Ajout des cartes avec position initiale
@@ -425,16 +420,14 @@ class PluginManager:
         self.getPlayer(pid).hand = resu
 
 
-
-
-    def appendCardToHand(self, pid,card):
+    def appendCardToHand(self, pid, card):
         """ Ajoute card à la main du joueur pid.
 
         :param pid (int):
         :param card( Card):
         :return:
         """
-        if( pid != 0 ):
+        if ( pid != 0 ):
             card.flipCard()
 
         # Change le propriétaire
@@ -466,7 +459,7 @@ class PluginManager:
         """
 
         for pid in range(self.getnbPlayers()):
-            if( not self.isPlayerHandEmpty(pid) ):
+            if ( not self.isPlayerHandEmpty(pid) ):
                 return False
 
         return True
@@ -480,26 +473,26 @@ class PluginManager:
         """
         hand = self.getCurrentPlayerHand()
 
-        if( len(hand) <= 0 ):
+        if ( len(hand) <= 0 ):
             raise PluginException("Hand is empty!")
         firstCard = hand[0]
         first = True
-        resu=None
+        resu = None
 
-        if(kind != None):
+        if (kind != None):
             for card in hand:
-                if( card.kind == kind):
-                    if(first):
+                if ( card.kind == kind):
+                    if (first):
                         max = self.getValeurCarte(card)
                         resu = card
 
-                    elif( card.kind == kind and  self.getValeurCarte(card) > max):
+                    elif ( card.kind == kind and self.getValeurCarte(card) > max):
                         max = self.getValeurCarte(card)
                         resu = card
         else:
             for card in hand:
 
-                if(first):
+                if (first):
                     max = self.getValeurCarte(card)
                     resu = card
 
@@ -509,7 +502,7 @@ class PluginManager:
 
         return resu
 
-    def handGotKind(self,pid, kind):
+    def handGotKind(self, pid, kind):
         """ Cette fonction renvoie true si la main du joueur 'pid' contient
 
         une carte de type 'kind'.
@@ -521,11 +514,11 @@ class PluginManager:
 
         hand = self.getPlayerHand(pid)
 
-        if( not hand ):
+        if ( not hand ):
             raise PluginException("Hand is empty.")
 
         for card in hand:
-            if( card.kind == kind):
+            if ( card.kind == kind):
                 return True
 
         return False
@@ -553,7 +546,7 @@ class PluginManager:
         hand = self.getCurrentPlayerHand()
 
         for card in hand:
-            if( card.value == cardValue):
+            if ( card.value == cardValue):
                 return True
         return False
 
@@ -565,16 +558,16 @@ class PluginManager:
         :param kind (String):
         :return: (Card)
         """
-        if( not self.handHasCardValue(value)):
+        if ( not self.handHasCardValue(value)):
             raise PluginException("The hand does not contains the card requested")
 
         hand = self.getCurrentPlayerHand()
-        if(kind == None):
+        if (kind == None):
             for card in hand:
                 if (card.value == value):
                     return card
         else:
-             for card in hand:
+            for card in hand:
                 if (card.value == value and card.kind == kind):
                     return card
         return None
@@ -595,14 +588,12 @@ class PluginManager:
         return self.gameState.getPlayer(self.currentTurn())
 
 
-
-
     def pid(self, object):
         """ Renvoie le pid d'un objet
         :param object:
         :return: (int) pid
         """
-        if( hasattr(object,"getPid()") ):
+        if ( hasattr(object, "getPid()") ):
             return object.getPid()
 
         else:
@@ -615,15 +606,15 @@ class PluginManager:
         :param pid: int
         :return: CardStack
         """
-        if (pid == -1 ): return  self.gameState.table.table
-        return  self.gameState.table.getPlayerHand(pid)
+        if (pid == -1 ): return self.gameState.table.table
+        return self.gameState.table.getPlayerHand(pid)
 
     def getCurrentPlayerDeck(self):
         """ Renvoie le jeu de cartes du joueur
         :return (int):
         """
 
-        return  self.gameState.table.players[self.currentTurn()].deck
+        return self.gameState.table.players[self.currentTurn()].deck
 
     def getTableDeck(self):
         """ Retour le jeu de cartes principal
@@ -644,10 +635,10 @@ class PluginManager:
         Renvoie le tour courrant
         :return:
         """
-        return  self.gameState.turn
+        return self.gameState.turn
 
     def getnbPlayers(self):
-        return  self.gameState.table.nbPlayers
+        return self.gameState.table.nbPlayers
 
 
     def pickCardFrom(self, pid):
@@ -656,10 +647,10 @@ class PluginManager:
         :param pid (int): Le pid du joueur résponsable de l'action
         :return:
         """
-        if(pid != -1):
-            card =   self.gameState.getPlayer(pid).deck.pop()
+        if (pid != -1):
+            card = self.gameState.getPlayer(pid).deck.pop()
         else:
-            card =   self.gameState.table.deck.pop()
+            card = self.gameState.table.deck.pop()
 
         self.appendCardToMyHand(card)
 
@@ -703,7 +694,7 @@ class PluginManager:
 
         :return: un CardStack
         """
-        return  self.gameState.getPlayerHand(self.currentTurn())
+        return self.gameState.getPlayerHand(self.currentTurn())
 
     def getPlayer(self, pid):
         """ Retourne un le PlayerState du joueur (pid)
@@ -711,7 +702,7 @@ class PluginManager:
         :param pid (int): Le pid du joueur que l'on veut obtenir
         :return: un PlayerState
         """
-        return  self.gameState.table.players[pid]
+        return self.gameState.table.players[pid]
 
     def getValeurCarte(self, carte):
         """ Renvoie la valeur de la carte selon les régles du jeu.
@@ -727,7 +718,7 @@ class PluginManager:
 
         :return:
         """
-        if(self.agentAction == None):
+        if (self.agentAction == None):
             return self.defAgentAction("none")
         return self.agentAction
 
@@ -735,9 +726,10 @@ class PluginManager:
         """ Fonction qui passe le tourne
         """
         nb = self.gameState.getnbPlayers()
-        tmp = (self.gameState.turn+1)
+        tmp = (self.gameState.turn + 1)
         resu = tmp % nb
         self.gameState.turn = resu
+
     ############################### Dealing functions ##########################
 
     def choseRandomDealer(self):
@@ -745,7 +737,7 @@ class PluginManager:
         :return: None
         """
 
-        self.setDealer(randint(0,self.getnbPlayers()-1))
+        self.setDealer(randint(0, self.getnbPlayers() - 1))
 
     def setDealer(self, pid):
         """ Designe le distributeur des cartes (pid).
@@ -789,8 +781,8 @@ class PluginManager:
         """
 
         for i in range(nbCards):
-            if( self.isDeckEmpty()):
-                    raise PluginException("Cannot pick, deck is empty")
+            if ( self.isDeckEmpty()):
+                raise PluginException("Cannot pick, deck is empty")
             card = self.getTableDeck().pop()
 
             self.appendCardToHand(pid, card)
@@ -825,7 +817,7 @@ class PluginManager:
         resu = True
         ps = self.getPlayerScore(pid)
         for i in range(self.getnbPlayers()):
-            if(ps < self.getPlayerScore(i)):
+            if (ps < self.getPlayerScore(i)):
                 resu = False
         return resu
 
@@ -840,7 +832,7 @@ class PluginManager:
         :return (int):
         """
 
-        return  self.gameState.getCurrentPlayer().score
+        return self.gameState.getCurrentPlayer().score
 
     def getTableCardsPoints(self, inf=0, sup=None):
         """ Affecte au score du joueur courant la somme des valeurs des
@@ -852,7 +844,7 @@ class PluginManager:
         :return: None
         """
         if ( sup == None):
-            sup=self.getNbTableCards()
+            sup = self.getNbTableCards()
         sum = self.getTableSumCardScore(inf, sup)
         self.addPlayerScore(self.getCurrentPlayerPID(), sum)
 
@@ -866,7 +858,7 @@ class PluginManager:
         """
         for card in cards:
             self.addPlayerScore(pid,
-                self.getValeurCarte(card))
+                                self.getValeurCarte(card))
 
     def getCardsValueSum(self, cards):
         """ Renvoie la somme de la valeur cartes dans la liste
@@ -887,12 +879,10 @@ class PluginManager:
         :return (int):
         """
         if ( sup == None):
-            sup=self.getNbTableCards()
+            sup = self.getNbTableCards()
         resu = 0
 
-
-
-        for i in range( inf, sup):
+        for i in range(inf, sup):
             resu += self.getValeurCarte(self.getTable()[i])
 
         return resu
@@ -905,19 +895,18 @@ class PluginManager:
         """
 
         table = self.getTable()
-        if( len(table) <= 0 ):
+        if ( len(table) <= 0 ):
             raise PluginException("Table is empty!")
         firstCard = table[0]
         max = self.getValeurCarte(firstCard)
         pid = firstCard.owner
 
         for card in self.getTable():
-            if( self.getValeurCarte(card) > max):
+            if ( self.getValeurCarte(card) > max):
                 max = self.getValeurCarte(card)
                 pid = card.owner
 
         return pid
-
 
 
     def addPlayerScore(self, pid, score):
@@ -927,6 +916,7 @@ class PluginManager:
         :return: None
         """
         self.getPlayer(pid).score += score
+
     ###################### /Score Functions #####################
 
     ###################### Turn Functions #######################
@@ -954,13 +944,13 @@ class PluginManager:
 
         nbp = self.getnbPlayers()
 
-        if( first >= nbp or first < 0):
+        if ( first >= nbp or first < 0):
             raise PluginException("First pid out of range ")
 
         self.setFirstPlayer(first)
 
-        if(last):
-            if( last >= nbp or last< 0):
+        if (last):
+            if ( last >= nbp or last < 0):
                 raise PluginException("Last pid out of range ")
             self.setLastPlayer(last)
         else:
@@ -1022,14 +1012,15 @@ class PluginManager:
         :param pid (int):
         :return:
         """
-        return ((pid+1) % self.getnbPlayers())
+        return ((pid + 1) % self.getnbPlayers())
 
     def getRightPlayerOf(self, pid):
         """ Renvoie le pid du joueur à la droite de pid
         :param pid (int):
         :return:
         """
-        return ((pid-1) % self.getnbPlayers())
+        return ((pid - 1) % self.getnbPlayers())
+
     ###################### /Turn Functions #######################
 
     ###################### Utils #################################
@@ -1039,19 +1030,19 @@ class PluginManager:
         :param kind:
         :return:
         """
-        kinds ={
-            's':"Piques",
-            'h':"Coeurs",
-            'd':"Carrés",
-            'c':"Trèfles"
+        kinds = {
+            's': "Piques",
+            'h': "Coeurs",
+            'd': "Carrés",
+            'c': "Trèfles"
 
         }
 
         return kinds.get(kind)
 
-    ##############################################################
+        ##############################################################
 
-######################      IA      ########################
+    ######################      IA      ########################
 
     def defAgentAction(self, type,
                        originSprite=None, originDrawable=None):
@@ -1063,13 +1054,13 @@ class PluginManager:
         :return: (Action): Une action.
         """
 
-        action =  AgentAction( type)
+        action = AgentAction(type)
         action.originSprite = originSprite
         action.originDrawable = originDrawable
 
         return action
 
-######################      /IA      #######################
+    ######################      /IA      #######################
     def setCardValues(self, cardValues):
         """
          Set the value of every card
@@ -1092,9 +1083,6 @@ class IAPlugin(Player):
         return self.getAction(plugin)
 
 
-
-
-
 ################################### Init State ###################################
 
 class InitState:
@@ -1108,22 +1096,21 @@ class InitState:
         self.dialog = Dialog()
 
         self.cardValues = {
-            1:1,
-            2:2,
-            3:3,
-            4:4,
-            5:5,
-            6:6,
-            7:7,
-            8:8,
-            9:9,
-            10:10,
-            11:11,
-            12:12,
-            13:13,
-            14:14
+            1: 1,
+            2: 2,
+            3: 3,
+            4: 4,
+            5: 5,
+            6: 6,
+            7: 7,
+            8: 8,
+            9: 9,
+            10: 10,
+            11: 11,
+            12: 12,
+            13: 13,
+            14: 14
         }
-
 
 
     def initPlayers(self, nbPlayers):
@@ -1131,18 +1118,15 @@ class InitState:
         Initialise le nombre de joueurs
         :param (int) nbPlayers:
         """
-        if( nbPlayers <= 0 ):
+        if ( nbPlayers <= 0 ):
             raise PluginException("The number of players must be greater than 0.")
-        for i in range(0,nbPlayers):
+        for i in range(0, nbPlayers):
             self.addPlayerState(CardStack(), CardStack())
 
     def initDialog(self, title, msg, tbutton):
         """ Initialise le dialog
         """
-        self.dialog.popDialog(title, msg,tbutton)
-
-
-
+        self.dialog.popDialog(title, msg, tbutton)
 
 
     def addPlayerState(self, hand=CardStack(), deck=CardStack()):
@@ -1152,7 +1136,7 @@ class InitState:
         :return:
         """
 
-        self.table.addPlayer( hand, deck)
+        self.table.addPlayer(hand, deck)
 
     def generateShuffledDeck(self):
         """ Générer un jeu de cartes mélangé.
@@ -1186,6 +1170,7 @@ class InitState:
 class PluginException(Exception):
     """ Une exception du plugin
     """
+
     def __init__(self, value):
         self.value = value
 
