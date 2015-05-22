@@ -38,31 +38,28 @@ class Game:
 
     def updateGame(self):
         if(self.game_state.paused):
-            if( len(self.eventsQueue) > 0):
-                event = self.eventsQueue.pop()
-                if ( event.drawableClicked.name == "Dialog" and
-                     self.game_state.dialog.action == "unPause"):
-                    self.game_state.paused = False
-                    return
-            else:
+            if( len(self.eventsQueue) == 0): return;
+            event = self.eventsQueue.pop()
+            if ( event.drawableClicked.name == "Dialog" and
+                    self.game_state.dialog.action == "unPause"):
+                self.game_state.paused = False
                 return
+
         if( self.game_state.turn==0 ):
             if( not self.eventsQueue):
                 player_action = AgentAction("none")
             else:
                 player_action = self.agents[0].getAction(self.game_state, self.eventsQueue.pop())
-
-            # Effectue l'action et met à jour l'état du jeu
-            self.game_state = self.game_state.nextState(player_action)
-
         else:
             turn = self.game_state.turn
+
             # L'etat de l'agent qui doit jouer
             a_state = self.game_state.table.players[turn]
-            agent_action = self.agents[self.game_state.turn].PgetAction(a_state, self.game_state.plugin)
 
-            # Effectue l'action et met à jour l'état du jeu
-            self.game_state = self.game_state.nextState(agent_action)
+            player_action = self.agents[self.game_state.turn].PgetAction(a_state, self.game_state.plugin)
+
+        # Effectue l'action et met à jour l'état du jeu
+        self.game_state = self.game_state.nextState(player_action)
 
         # On met à jour tous les observateurs du jeu
         self.updateObserver()
