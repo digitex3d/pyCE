@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 from environment.Card import Card
 from game.agents.PlayerState import PlayerState
 from game.GameState import GameState
