@@ -65,7 +65,7 @@ class MainGameWindow(window.Window):
                         self.last_event.spriteClicked = sprite
 
         logging.info('Mouse press: X:%s Y:%s',x ,y )
-        logging.debug(self.last_event)
+        #logging.debug(self.last_event)
 
     def on_mouse_release(self, x, y, button, modifiers):
         for component in self.components:
@@ -79,7 +79,7 @@ class MainGameWindow(window.Window):
                            sprite.isClicked(x,y)):
                         self.last_event.spriteReleased = sprite
 
-        logging.debug(self.last_event)
+        #logging.debug(self.last_event)
         logging.info('Mouse release: X:%s Y:%s',x ,y )
         self.game.eventHandler(self.last_event)
         self.last_event = None
