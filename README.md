@@ -4,9 +4,13 @@ Installation
 Prérequis :
 
 -pyglet
+
 -pip3
+
 -git
+
 -Python3
+
 
 Assurez vous d'avoir installé Python3 sur votre machine.
 
