@@ -24,4 +24,5 @@ Téléchargez maintenant le code source du projet avec le gestionnaire git :
 $ git clone https://github.com/digitex3d/pyCE.git
 
 Déplacez vous dans le répertoire pyCE et exécutez le moteur avec un plugin au choix parmi « belote » ou « bataille » ainsi :
+
 $ ./pyce belote
