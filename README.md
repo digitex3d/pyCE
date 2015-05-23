@@ -1,5 +1,6 @@
 # pyCE
-6.12  Installation
+Installation
+
 Prérequis :
 pyglet
 pip3
